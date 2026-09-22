@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hỗ Trợ & Trợ Giúp - KV Apps</title>
+    <meta name="description" content="Trung tâm hỗ trợ và giải đáp thắc mắc cho người dùng các ứng dụng iOS của Khanh Vu.">
+    <style>
+        :root {
+            --bg: #090d16;
+            --surface: #121826;
+            --surface-border: #232f48;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8;
+            --link: #60a5fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.7;
+            padding: 40px 20px 80px;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            background: var(--surface);
+            padding: 48px;
+            border-radius: 20px;
+            border: 1px solid var(--surface-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 24px;
+            }
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        p.intro {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-bottom: 32px;
+        }
+
+        .contact-box {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(99, 102, 241, 0.08));
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 40px;
+        }
+
+        .contact-box h2 {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .contact-box p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .email-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #38bdf8;
+            color: #090d16;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .email-button:hover {
+            background: #7dd3fc;
+            transform: translateY(-1px);
+        }
+
+        h2.section-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--surface-border);
+            padding: 20px 0;
+        }
+
+        .faq-item:first-of-type {
+            border-top: 1px solid var(--surface-border);
+        }
+
+        .faq-question {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .faq-answer {
+            color: var(--text-secondary);
+            font-size: 0.98rem;
+        }
+
+        footer-note {
+            margin-top: 40px;
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Quay lại Trang Chủ</a>
+
+        <h1>Trung Tâm Hỗ Trợ (Support)</h1>
+        <p class="intro">Chúng tôi cam kết mang đến trải nghiệm ứng dụng tốt nhất. Nếu bạn có câu hỏi, gặp lỗi kỹ thuật hoặc muốn đề xuất tính năng mới, hãy liên hệ với chúng tôi.</p>
+
+        <div class="contact-box">
+            <h2>📩 Gửi Email Hỗ Trợ</h2>
+            <p>Đội ngũ phát triển sẽ phản hồi trong vòng 24 - 48 giờ làm việc.</p>
+            <a href="mailto:vuvankhanh022002@gmail.com?subject=[Hỗ Trợ Ứng Dụng iOS]" class="email-button">
+                ✉️ Gửi Email: vuvankhanh022002@gmail.com
+            </a>
+        </div>
+
+        <h2 class="section-title">Câu Hỏi Thường Gặp (FAQ)</h2>
+
+        <div class="faq-item">
+            <div class="faq-question">1. Dữ liệu của tôi được lưu trữ ở đâu?</div>
+            <div class="faq-answer">Mọi dữ liệu (ghi chú, tập tin, hình ảnh) được mã hóa và lưu trực tiếp trong bộ nhớ riêng tư trên thiết bị của bạn. Chúng tôi không thu thập hoặc tải dữ liệu lên bất kỳ máy chủ bên ngoài nào.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">2. Nếu tôi quên mã PIN hoặc mật mã vault thì sao?</div>
+            <div class="faq-answer">Vì ứng dụng áp dụng mô hình bảo mật Zero-Knowledge, chúng tôi không lưu giữ khóa khôi phục của bạn. Nếu ứng dụng có hỗ trợ xác thực Face ID / Touch ID, bạn có thể mở khóa bằng sinh trắc học đã cài đặt.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">3. Tôi có thể chuyển dữ liệu sang thiết bị mới không?</div>
+            <div class="faq-answer">Khi bạn chuyển sang máy iPhone/iPad mới bằng tính năng Quick Start hoặc khôi phục từ bản sao lưu iCloud/Finder của Apple, dữ liệu trong ứng dụng sẽ tự động được chuyển sang thiết bị mới.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">4. Làm thế nào để đóng góp ý kiến hoặc báo lỗi?</div>
+            <div class="faq-answer">Vui lòng đính kèm thông tin thiết bị (dòng máy iPhone, phiên bản iOS) và ảnh chụp màn hình (nếu có) khi gửi email tới địa chỉ ở trên để chúng tôi hỗ trợ xử lý nhanh nhất.</div>
+        </div>
+
+        <span class="footer-note" style="margin-top: 36px; display: block; color: var(--text-secondary); font-size: 0.88rem;">
+            © 2026 Khanh Vu (KV Apps). All rights reserved.
+        </span>
+    </div>
+</body>
+</html>
