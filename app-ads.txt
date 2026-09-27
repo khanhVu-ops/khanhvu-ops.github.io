@@ -8,4 +8,4 @@
 # 4. Thay thế "pub-XXXXXXXXXXXXXXXX" bên dưới bằng Publisher ID của bạn.
 # ==============================================================================
 
-google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+google.com, pub-9348465509961809, DIRECT, f08c47fec0942fa0
