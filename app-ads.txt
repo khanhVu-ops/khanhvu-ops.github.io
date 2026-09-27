@@ -1,11 +1,1 @@
-# ==============================================================================
-# Google AdMob app-ads.txt
-# 
-# HƯỚNG DẪN:
-# 1. Mở trang quản trị AdMob (https://admob.google.com)
-# 2. Vào Cài đặt (Settings) -> Thông tin tài khoản (Account information)
-# 3. Lấy Publisher ID của bạn (dạng: pub-XXXXXXXXXXXXXXXX)
-# 4. Thay thế "pub-XXXXXXXXXXXXXXXX" bên dưới bằng Publisher ID của bạn.
-# ==============================================================================
-
 google.com, pub-9348465509961809, DIRECT, f08c47fec0942fa0
