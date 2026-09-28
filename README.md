@@ -13,6 +13,7 @@ Thư mục này chứa toàn bộ mã nguồn website tĩnh dùng cho việc:
 KVApps-Landing/
 ├── index.html        # Trang chủ giới thiệu app
 ├── privacy.html      # Chính sách bảo mật (Chuẩn Apple Review 5.1.1 & AdMob)
+├── terms.html        # Điều khoản sử dụng & EULA (Chuẩn Apple Review 3.1.2)
 ├── support.html      # Trang trung tâm hỗ trợ & FAQ
 ├── app-ads.txt       # File xác thực Google AdMob
 ├── .gitignore
@@ -70,11 +71,13 @@ Nếu bạn đã mua domain (ví dụ `kvapps.dev` hoặc `khanhvu.io`):
 
 ## 📋 Điền link vào App Store Connect & Google AdMob
 
-Sau khi web chạy (ví dụ domain là `https://yourdomain.com` hoặc `https://username.github.io/repo`):
+Sau khi web chạy (ví dụ domain là `https://khanhvu-ops.github.io` hoặc `https://yourdomain.com`):
 
 | Nền tảng | Vị trí điền | URL cần điền |
 |---|---|---|
-| **App Store Connect** | **Privacy Policy URL** | `https://yourdomain.com/privacy.html` |
-| **App Store Connect** | **Support URL** | `https://yourdomain.com/support.html` |
-| **App Store Connect** | **Marketing URL** *(Tùy chọn)* | `https://yourdomain.com/` |
-| **Google AdMob** | Tự động quét | AdMob sẽ đọc Marketing URL trên App Store và tự tìm tới `https://yourdomain.com/app-ads.txt` |
+| **App Store Connect** | **Privacy Policy URL** | `https://khanhvu-ops.github.io/privacy.html` |
+| **App Store Connect** | **Terms of Use / EULA** | `https://khanhvu-ops.github.io/terms.html` |
+| **App Store Connect** | **Support URL** | `https://khanhvu-ops.github.io/support.html` |
+| **App Store Connect** | **Marketing URL** *(Tùy chọn)* | `https://khanhvu-ops.github.io/` |
+| **Google AdMob** | Tự động quét | AdMob sẽ đọc Marketing URL trên App Store và tự tìm tới `https://khanhvu-ops.github.io/app-ads.txt` |
+
