@@ -137,60 +137,78 @@
             font-size: 0.98rem;
         }
 
-        footer-note {
+        .footer-note {
             margin-top: 40px;
             display: block;
             color: var(--text-secondary);
             font-size: 0.9rem;
         }
+        body { overflow-wrap: anywhere; }
+        .email-button { max-width: 100%; }
+        .page-nav { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 32px; }
+        a { color: var(--accent); }
+        .email-button { color: #090d16; }
+        a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+        @media (max-width: 400px) { .contact-box { padding: 20px; } .email-button { padding: 12px; } }
     </style>
 </head>
 <body>
-    <div class="container">
+    <main class="container">
         <a href="index.html" class="back-link">← Quay lại Trang Chủ</a>
-
-        <h1>Trung Tâm Hỗ Trợ (Support)</h1>
-        <p class="intro">Chúng tôi cam kết mang đến trải nghiệm ứng dụng tốt nhất. Nếu bạn có câu hỏi, gặp lỗi kỹ thuật hoặc muốn đề xuất tính năng mới, hãy liên hệ với chúng tôi.</p>
-
+        <h1>Hỗ trợ các ứng dụng KV Apps</h1>
+        <p class="intro">Một địa chỉ hỗ trợ cho các ứng dụng của Khanh Vu. Vui lòng ghi rõ tên ứng dụng để chúng tôi kiểm tra đúng sản phẩm. Tính năng và cách xử lý dữ liệu có thể khác nhau giữa các app.</p>
         <div class="contact-box">
-            <h2>📩 Gửi Email Hỗ Trợ</h2>
-            <p>Đội ngũ phát triển sẽ phản hồi trong vòng 24 - 48 giờ làm việc.</p>
-            <a href="mailto:khanhvu.dev@gmail.com?subject=[Hỗ Trợ Ứng Dụng iOS]" class="email-button">
-                ✉️ Gửi Email: khanhvu.dev@gmail.com
-            </a>
+            <h2>Liên hệ hỗ trợ / Contact support</h2>
+            <p>Gửi câu hỏi, báo lỗi, yêu cầu về giao dịch hoặc quyền riêng tư qua email. Thời gian phản hồi phụ thuộc nội dung và số lượng yêu cầu.</p>
+            <a href="mailto:khanhvu.dev@gmail.com?subject=KV%20Apps%20Support" class="email-button">khanhvu.dev@gmail.com</a>
         </div>
-
-        <h2 class="section-title">Câu Hỏi Thường Gặp (FAQ)</h2>
-
-        <div class="faq-item">
-            <div class="faq-question">1. Dữ liệu của tôi được lưu trữ ở đâu?</div>
-            <div class="faq-answer">Mọi dữ liệu (ghi chú, tập tin, hình ảnh) được mã hóa và lưu trực tiếp trong bộ nhớ riêng tư trên thiết bị của bạn. Chúng tôi không thu thập hoặc tải dữ liệu lên bất kỳ máy chủ bên ngoài nào.</div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question">2. Nếu tôi quên mã PIN hoặc mật mã vault thì sao?</div>
-            <div class="faq-answer">Vì ứng dụng áp dụng mô hình bảo mật Zero-Knowledge, chúng tôi không lưu giữ khóa khôi phục của bạn. Nếu ứng dụng có hỗ trợ xác thực Face ID / Touch ID, bạn có thể mở khóa bằng sinh trắc học đã cài đặt.</div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question">3. Tôi có thể chuyển dữ liệu sang thiết bị mới không?</div>
-            <div class="faq-answer">Khi bạn chuyển sang máy iPhone/iPad mới bằng tính năng Quick Start hoặc khôi phục từ bản sao lưu iCloud/Finder của Apple, dữ liệu trong ứng dụng sẽ tự động được chuyển sang thiết bị mới.</div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question">4. Làm thế nào để đóng góp ý kiến hoặc báo lỗi?</div>
-            <div class="faq-answer">Vui lòng đính kèm thông tin thiết bị (dòng máy iPhone, phiên bản iOS) và ảnh chụp màn hình (nếu có) khi gửi email tới địa chỉ ở trên để chúng tôi hỗ trợ xử lý nhanh nhất.</div>
-        </div>
-
-        <div style="margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--surface-border); display: flex; gap: 16px; flex-wrap: wrap;">
-            <a href="privacy.html" style="font-size: 0.9rem;">Chính sách bảo mật (Privacy Policy)</a>
-            <span style="color: var(--surface-border);">•</span>
-            <a href="terms.html" style="font-size: 0.9rem;">Điều khoản sử dụng (Terms of Use)</a>
-        </div>
-
-        <span class="footer-note" style="margin-top: 20px; display: block; color: var(--text-secondary); font-size: 0.88rem;">
-            © 2026 Khanh Vu (KV Apps). All rights reserved.
-        </span>
-    </div>
+        <section lang="en" aria-labelledby="english-help">
+            <h2 class="section-title" id="english-help">Support in English</h2>
+            <p class="intro">Email us in English or Vietnamese. Include the app name, version, device, iOS version and steps to reproduce the issue. Do not send passwords, PINs or private content. For eligible purchases, try Restore Purchases in the same app with the Apple Account used to buy. <a href="https://apps.apple.com/account/subscriptions" target="_blank" rel="noopener noreferrer">Manage subscriptions with Apple</a>; deleting an app does not cancel a subscription. <a href="https://reportaproblem.apple.com/" target="_blank" rel="noopener noreferrer">Request Apple-billed refunds here</a>.</p>
+        </section>
+        <h2 class="section-title">Câu hỏi thường gặp</h2>
+        <section class="faq-item">
+            <h3 class="faq-question">1. Dữ liệu được lưu ở đâu? Có được mã hoá không?</h3>
+            <p class="faq-answer">Cách lưu trữ phụ thuộc từng ứng dụng và tính năng. Tính năng xử lý trên thiết bị dùng dữ liệu local; nếu có dịch vụ online hoặc đồng bộ, hãy đọc thông báo riêng của ứng dụng. Không phải app nào cũng có vault, PIN hoặc mã hoá tập tin. Xem <a href="privacy.html">Privacy Policy</a> để biết thêm.</p>
+        </section>
+        <section class="faq-item">
+            <h3 class="faq-question">2. Tôi muốn xoá dữ liệu hoặc chuyển sang máy mới.</h3>
+            <p class="faq-answer">Dùng chức năng xoá/xuất/sao lưu mà app thực sự hỗ trợ. Xoá app thường xoá dữ liệu trong bộ nhớ riêng của app, nhưng ảnh đã xuất, bản sao lưu, dữ liệu đồng bộ hoặc Keychain có thể vẫn còn. Offload App không giống Delete App. Kiểm tra bản sao lưu hoặc file xuất trước khi xoá; không mặc định rằng Quick Start/iCloud sẽ phục hồi được mọi dữ liệu.</p>
+        </section>
+        <section class="faq-item">
+            <h3 class="faq-question">3. Tôi đã mua Pro nhưng chưa được mở khoá.</h3>
+            <p class="faq-answer">Kiểm tra đúng ứng dụng và Apple Account đã mua, kết nối mạng rồi chọn Restore Purchases / Khôi phục giao dịch nếu có. Gói mua trong app này không mặc định dùng được trong app khác. Gói đăng ký cần còn hiệu lực; vật phẩm tiêu hao thường không khôi phục như gói trọn đời. Nếu vẫn lỗi, gửi tên app, tên gói và thông báo lỗi; không gửi mật khẩu Apple Account.</p>
+        </section>
+        <section class="faq-item">
+            <h3 class="faq-question">4. Làm sao huỷ đăng ký hoặc xin hoàn tiền?</h3>
+            <p class="faq-answer">Vào <a href="https://apps.apple.com/account/subscriptions" target="_blank" rel="noopener noreferrer">quản lý đăng ký Apple</a> để huỷ trước kỳ gia hạn tiếp theo. Xoá app không huỷ subscription. Yêu cầu hoàn tiền cho giao dịch Apple gửi tại <a href="https://reportaproblem.apple.com/" target="_blank" rel="noopener noreferrer">reportaproblem.apple.com</a>; việc chấp thuận phụ thuộc Apple và quyền lợi theo luật áp dụng.</p>
+        </section>
+        <section class="faq-item">
+            <h3 class="faq-question">5. Tôi có thể dùng ứng dụng cho công việc thương mại không?</h3>
+            <p class="faq-answer">Có. Bạn có thể dùng công cụ cho công việc cá nhân hoặc thương mại theo giấy phép áp dụng, quyền lợi gói và quyền sử dụng nội dung đầu vào. Bạn giữ quyền với tác phẩm của mình; việc này không cho phép bán lại app hoặc sử dụng tài sản của bên thứ ba khi chưa có quyền. Xem <a href="terms.html#license">Terms of Use</a>.</p>
+        </section>
+        <section class="faq-item">
+            <h3 class="faq-question">6. Tôi muốn thay đổi quyền camera, ảnh hoặc quảng cáo.</h3>
+            <p class="faq-answer">Mở Settings của iPhone/iPad để xem quyền của app và mục Privacy &amp; Security → Tracking. Nếu app có mục Privacy Options / Tuỳ chọn quyền riêng tư, dùng mục đó để xem lựa chọn quảng cáo theo khu vực. Từ chối tracking không đồng nghĩa mọi xử lý dữ liệu quảng cáo đều dừng. Không gửi mã định danh quảng cáo khi liên hệ hỗ trợ.</p>
+        </section>
+        <section class="faq-item">
+            <h3 class="faq-question">7. Nếu app có PIN hoặc Face ID mà tôi không mở được thì sao?</h3>
+            <p class="faq-answer">Hãy xem hướng dẫn khôi phục của chính app đó. Không phải mọi ứng dụng KV Apps đều có khoá hoặc cùng cách khôi phục. Đừng xoá app để thử sửa lỗi khi chưa có bản sao dữ liệu cần giữ. Chúng tôi không yêu cầu bạn gửi PIN, mật khẩu hoặc khoá khôi phục qua email.</p>
+        </section>
+        <section class="faq-item">
+            <h3 class="faq-question">8. Color Meter: camera hoặc ảnh không lấy được màu.</h3>
+            <p class="faq-answer">Kiểm tra quyền Camera/Photos trong Settings và thử chọn một ảnh khác. Camera cần thử trên thiết bị thật. Kết quả màu phụ thuộc ánh sáng và xử lý ảnh; CMYK là giá trị chuyển đổi gần đúng. Collections được lưu local; Color Meter không có vault/PIN hoặc dịch vụ cloud-sync của KV Apps.</p>
+        </section>
+        <section class="faq-item">
+            <h3 class="faq-question">9. Color Meter: Color Wheel hoặc giao dịch gặp lỗi.</h3>
+            <p class="faq-answer">Kiểm tra phiên bản mới nhất đang có trên App Store rồi mở lại app. Nếu vẫn lỗi, gửi tên thiết bị, phiên bản iOS, phiên bản Color Meter và các bước tái hiện. Không cần xoá app vì có thể mất collections local. Với giao dịch Pro, thử Restore Purchases trong màn hình nâng cấp.</p>
+        </section>
+        <section class="faq-item">
+            <h3 class="faq-question">10. Làm sao báo lỗi hoặc yêu cầu về dữ liệu cá nhân?</h3>
+            <p class="faq-answer">Gửi tên app, phiên bản, thiết bị/iOS, các bước xảy ra lỗi và ảnh chụp đã che thông tin riêng tư nếu cần. Với yêu cầu truy cập hoặc xoá thông tin chúng tôi giữ, ghi rõ yêu cầu trong email. Dữ liệu chỉ nằm trên thiết bị không thể được chúng tôi đọc hoặc xoá từ xa.</p>
+        </section>
+        <nav class="page-nav" aria-label="Liên kết KV Apps"><a href="index.html">Trang chủ</a><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Use</a></nav>
+        <p class="footer-note">© 2026 Khanh Vu (KV Apps). All rights reserved.</p>
+    </main>
 </body>
 </html>

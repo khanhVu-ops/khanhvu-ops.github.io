@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KV Apps - Private, Secure & Fast iOS Applications</title>
-    <meta name="description" content="Khám phá các ứng dụng iOS bảo mật, tối ưu trải nghiệm và quyền riêng tư từ Khanh Vu.">
+    <title>KV Apps — Công cụ iOS cho công việc và sáng tạo</title>
+    <meta name="description" content="Các ứng dụng iOS của Khanh Vu: công cụ cho công việc và sáng tạo, thông tin quyền riêng tư, điều khoản và hỗ trợ.">
     <style>
         :root {
             --bg: #090d16;
@@ -255,6 +255,15 @@
             color: #64748b;
             font-size: 0.85rem;
         }
+        body { overflow-wrap: anywhere; }
+        a:focus-visible { outline: 2px solid #38bdf8; outline-offset: 4px; }
+        .brand-logo { flex-shrink: 0; white-space: nowrap; }
+        .nav-links { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+        .nav-links a { margin-left: 0; white-space: nowrap; }
+        @media (max-width: 640px) {
+            .nav-container { align-items: flex-start; flex-direction: column; gap: 16px; }
+            .nav-links { gap: 12px 20px; }
+        }
     </style>
 </head>
 <body>
@@ -289,33 +298,31 @@
                 </svg>
             </div>
 
-            <h1>iOS Vault & Utilities</h1>
-            <p class="tagline">Trải nghiệm ứng dụng iOS riêng tư, bảo mật tối đa và thiết kế tối ưu mượt mà cho trải nghiệm người dùng.</p>
+            <h1>Công cụ nhỏ. Ý tưởng lớn.</h1>
+            <p class="tagline">Ứng dụng iOS của Khanh Vu dành cho công việc và sáng tạo hằng ngày. Tìm thông tin hỗ trợ, quyền riêng tư và điều khoản dùng chung của KV Apps tại đây.</p>
 
             <div class="badge-group">
-                <a href="https://apps.apple.com/" class="app-store-btn" target="_blank" rel="noopener noreferrer">
-                    <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us" alt="Download on the App Store">
-                </a>
+                <a href="support.html" class="app-store-btn" style="color: #f8fafc; padding: 14px 24px; border: 1px solid #38bdf8; border-radius: 12px; text-decoration: none;">Hỗ trợ ứng dụng</a>
             </div>
         </section>
 
         <section class="grid-features">
             <div class="card">
-                <span class="card-icon">🔐</span>
-                <h3>Bảo Mật Cấp Cao</h3>
-                <p>Mã hóa dữ liệu ngay trên thiết bị bằng chuẩn mã hóa phần cứng của Apple. Không lưu trữ dữ liệu nhạy cảm trên máy chủ bên thứ ba.</p>
+                <span class="card-icon">🎨</span>
+                <h3>Công cụ cho sáng tạo</h3>
+                <p>Từ lấy màu tham khảo đến các tiện ích hằng ngày. Xem tính năng và quyền lợi cụ thể trong từng ứng dụng; không cần cùng một gói cho mọi nhu cầu.</p>
             </div>
 
             <div class="card">
                 <span class="card-icon">⚡</span>
-                <h3>Tốc Độ & Ổn Định</h3>
-                <p>Được xây dựng thuần với Swift 6 & SwiftUI hiện đại, mang lại hiệu năng cao nhất và tối ưu hóa mức tiêu thụ pin.</p>
+                <h3>Dùng cho công việc của bạn</h3>
+                <p>Dùng công cụ cho dự án cá nhân hoặc thương mại theo giấy phép áp dụng và quyền sử dụng nội dung. Bạn giữ quyền với tác phẩm của mình.</p>
             </div>
 
             <div class="card">
                 <span class="card-icon">🛡️</span>
                 <h3>Tôn Trọng Quyền Riêng Tư</h3>
-                <p>Không theo dõi thông tin nhận dạng cá nhân. Mọi quyền truy cập nhạy cảm (Face ID, Camera, Photos) đều được kiểm soát bởi bạn.</p>
+                <p>Tìm hiểu dữ liệu được xử lý và quyền truy cập của từng tính năng. Các app có quảng cáo hoặc dịch vụ online sẽ có thông tin và lựa chọn tương ứng.</p>
             </div>
         </section>
     </main>

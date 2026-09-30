@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - KV Apps</title>
-    <meta name="description" content="Chính sách quyền riêng tư cho các ứng dụng iOS của Khanh Vu (KV Apps).">
+    <meta name="description" content="Privacy information for KV Apps: app content, purchases, advertising, permissions and deletion choices.">
     <style>
         :root {
             --bg: #090d16;
@@ -116,63 +116,80 @@
         .contact-card strong {
             color: var(--text-primary);
         }
+
+        html { scroll-behavior: smooth; }
+        body { overflow-wrap: anywhere; }
+        .page-nav { display: flex; flex-wrap: wrap; gap: 12px 20px; margin: 24px 0; }
+        a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 3px; }
+        h2[id] { scroll-margin-top: 24px; }
+        @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-link">← Quay lại Trang Chủ</a>
-
+    <main class="container">
+        <a href="index.html" class="back-link">← KV Apps home</a>
         <h1>Privacy Policy</h1>
-        <div class="last-updated">Last Updated: September 2026</div>
+        <p class="last-updated">Last updated: September 30, 2026 · Developer: Khanh Vu (KV Apps)</p>
+        <p>This policy explains how Khanh Vu ("KV Apps", "we", "us") handles information in the apps that link to this policy and on this website. It is shared across our apps. Features, permissions, purchases and advertising differ by app; a description of an optional feature below does not mean that every app includes it.</p>
+        <p>Read this policy together with the app's privacy notices and App Store privacy information. An app-specific notice provides details for that app and identifies any different practices. We will explain new data uses before enabling features that require them and request permission or consent where required.</p>
+        <nav class="page-nav" aria-label="Privacy policy sections"><a href="#content">Your content</a><a href="#advertising">Advertising</a><a href="#deletion">Deletion &amp; choices</a><a href="#color-meter">Color Meter</a><a href="#contact">Contact</a></nav>
 
-        <p>This Privacy Policy describes how <strong>Khanh Vu ("KV Apps", "we", "us", or "our")</strong> handles and protects your information across our iOS applications.</p>
-
-        <h2>1. Overview and Core Philosophy</h2>
-        <p>We believe your personal data belongs to you. Our applications are designed with privacy-by-architecture principles:</p>
+        <h2 id="content">1. App content and permissions</h2>
+        <p>Our apps process the information needed for the features you choose, such as a photo you open, a color you sample, or an item you save. Content used by an on-device feature is processed on your device. If a feature sends content to an online service or offers account-based storage or sync, its notice will identify what is sent, why, and the service involved before you use it. This policy does not imply that every app offers a cloud service or an account.</p>
         <ul>
-            <li>No account registration is required to use our applications.</li>
-            <li>Your sensitive files, notes, vaults, and photos are encrypted and stored <strong>locally on your device</strong>.</li>
-            <li>We do not host or operate backend servers to inspect, collect, or sell your personal content.</li>
+            <li><strong>Camera and photos:</strong> where available, these permissions let you capture, choose, edit or save content. Permission to access a photo does not by itself mean that the photo is uploaded to us.</li>
+            <li><strong>Files and other device access:</strong> access is used for the feature described in the app's permission request. You can review or revoke permissions in your device's Settings; a feature that depends on a permission may then stop working.</li>
+            <li><strong>Device authentication:</strong> if an app uses Face ID or Touch ID through Apple's authentication services, Apple handles the biometric check; the app receives the authentication result, not your biometric templates. An app-specific PIN or password is a separate feature with its own storage and recovery behavior.</li>
         </ul>
+        <p>Device storage protections are not the same as app-level file encryption. Encryption, app locks, recovery keys and backup support apply only where the particular app documents them; we do not claim that every KV Apps app is an encrypted vault.</p>
 
-        <h2>2. Information We Collect and Process</h2>
-        <p>Depending on how you use our app, the following data may be processed:</p>
+        <h2 id="purchases">2. Purchases</h2>
+        <p>For purchases made through Apple's In-App Purchase system, Apple handles payment and your payment card details. The app can receive product and transaction information, purchase status and entitlement information to unlock features, check subscription access and restore eligible purchases. We do not receive your full payment card details from Apple.</p>
+
+        <h2 id="advertising">3. Advertising and technical data</h2>
+        <p>Apps that display advertising may use Google AdMob. In those apps, the Google Mobile Ads SDK can process IP addresses, approximate location derived from IP addresses, device or other identifiers, app and ad interactions, and diagnostic information such as crash and performance data. Google uses this information for ad delivery, measurement, fraud prevention and its other disclosed advertising purposes. Data handling depends on the SDK configuration, region and your choices.</p>
+        <p>When tracking permission is required, we request it through Apple's App Tracking Transparency prompt. If you deny permission, the Google Mobile Ads SDK does not send the IDFA in its ad requests. Denying tracking does not mean all ad-related data processing stops. Regional advertising consent and privacy controls are separate from the system tracking permission; use the app's privacy options where available and review tracking permissions in iOS Settings.</p>
+        <p>For Google's practices and controls, see <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google's Privacy Policy</a> and <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">Google advertising information</a>. If an app uses additional analytics, advertising or online service providers, its app-specific notice will identify them and explain their data uses. An ad-free purchase removes ads as described in that app; it does not necessarily disable purchase verification or all diagnostics.</p>
+
+        <h2 id="support">4. Support messages and this website</h2>
+        <p>If you email us, we receive your email address and the information or attachments you choose to send. We use them to answer your request, investigate problems and maintain support records. Please do not send passwords, PINs, payment card details or private files that are not needed for your request.</p>
+        <p>This static website does not contain an analytics or advertising script. It is hosted on GitHub Pages, which logs visitor IP addresses for security purposes and processes technical request information to provide the service. See the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Privacy Statement</a>. Following an external link takes you to a service with its own privacy practices.</p>
+
+        <h2 id="sharing">5. Sharing and processing locations</h2>
+        <p>Information is processed by the services involved in the feature you use: Apple for App Store payments, Google for advertising in ad-supported apps, and our email and hosting providers for support and this website. Information you choose to share or export also goes to the destination you select. We may disclose information we hold where necessary to comply with law, address abuse or protect legal rights.</p>
+        <p>Service providers may process information in countries other than your own, subject to their applicable privacy terms and safeguards. We do not sell content you create in our apps. Ad-related data sharing and any applicable opt-out choices are described in the advertising section and the app's consent notices.</p>
+
+        <h2 id="deletion">6. Retention, deletion and your choices</h2>
         <ul>
-            <li><strong>On-Device Local Data:</strong> Any files, photos, or text you create within the app remain exclusively in the app's secure sandbox on your iOS device.</li>
-            <li><strong>Biometrics / Authentication:</strong> If you secure the app using Face ID, Touch ID, or Passcode, authentication is handled natively by Apple's LocalAuthentication framework. We never have access to your biometric samples or raw passcode.</li>
+            <li><strong>Local app content:</strong> keep it for as long as you need it. Use the delete or export controls available in that app. Deleting an app generally removes its local app container; offloading an app is different and can preserve its documents and data.</li>
+            <li><strong>Other copies:</strong> exported files, photos saved to your library, device backups, synced copies and items stored separately, such as in the system Keychain, may remain after app deletion. Manage those copies through the relevant app, device settings or service. Reinstalling an app is not a guaranteed reset of every setting or a way to recover lost content.</li>
+            <li><strong>Support correspondence:</strong> we retain it as needed to resolve the request and related follow-up, and for applicable recordkeeping or legal obligations. You can ask us to delete information we hold; we will explain any information we need to retain and why.</li>
+            <li><strong>Provider records:</strong> Apple, Google and other services involved retain their records under their own policies and applicable requirements. Deleting our app does not cancel a subscription or delete a provider's independent records.</li>
         </ul>
+        <p>Depending on your location, you may have rights to access, correct, delete or obtain a copy of personal information, restrict or object to processing, or withdraw consent. Contact us to exercise applicable rights or ask how a particular app handles your data. We may need information to verify the request, but will not ask for your app PIN or Apple Account password. Where available, you may also raise a concern with your local data protection authority.</p>
+        <p>For content held only on your device, we cannot access or delete it remotely. If an app offers an account, use its account-deletion controls and app-specific notice for the corresponding online data.</p>
 
-        <h2>3. Third-Party Services & Advertising (Google AdMob)</h2>
-        <p>We may display advertisements provided by <strong>Google AdMob</strong> to support the development and maintenance of our free apps.</p>
-        <p>To serve relevant ads or monitor ad delivery performance, Google Mobile Ads SDK may collect technical diagnostic data, including:</p>
-        <ul>
-            <li>Device identifiers (such as IDFA, subject to your permission via Apple's App Tracking Transparency prompt).</li>
-            <li>IP address, approximate location, device manufacturer, model, and OS version.</li>
-            <li>Ad interaction statistics and crash diagnostics.</li>
-        </ul>
-        <p>If you choose to opt out of tracking via Apple's App Tracking Transparency (ATT) prompt, you will only receive contextual, non-personalized advertisements.</p>
-        <p>For more details on how Google processes ad data, please review: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">Google Privacy & Terms</a>.</p>
+        <h2 id="security">7. Security and backups</h2>
+        <p>We take reasonable measures appropriate to the information and features involved. No app, device or online service can guarantee absolute security or uninterrupted access. Keep your device secure and use the app's documented export or backup options for content you need to preserve. Do not assume that every app supports cloud sync, encrypted backups or PIN recovery.</p>
 
-        <h2>4. Data Retention and Deletion</h2>
-        <p>Because your content is stored solely on your physical device:</p>
-        <ul>
-            <li>Deleting the application from your iOS device will permanently remove all associated local data and vaults.</li>
-            <li>You can also delete individual files or clear app data anytime inside the app settings.</li>
-        </ul>
+        <h2 id="children">8. Children</h2>
+        <p>This shared policy is for our general-audience apps. It is not a notice for a service specifically directed to children. Review each app's age rating and features before use. If you believe a child has provided personal information to us without any consent required by law, contact us so we can investigate and address the request. A child-directed app would require its own appropriate privacy notice and safeguards.</p>
 
-        <h2>5. Children's Privacy</h2>
-        <p>Our applications are not directed to children under the age of 13. We do not knowingly collect or solicit personal information from children.</p>
+        <h2 id="color-meter">9. App-specific details: Color Meter</h2>
+        <p>Color Meter uses camera frames or an image you select to sample colors on your device. Saved colors, collections and preferences are stored locally; its color-picking features do not upload your photos or collections to a KV Apps server, and no KV Apps account is required. Sharing or saving an image to your photo library creates a copy at the destination you choose.</p>
+        <p>Color Meter includes advertising and optional Pro purchases, so the advertising and purchase sections above apply. Its collections are not a PIN-protected or app-encrypted vault. It does not provide a KV Apps cloud-sync or remote-recovery service for your collections.</p>
 
-        <h2>6. Changes to This Privacy Policy</h2>
-        <p>We may periodically update this Privacy Policy to reflect app updates or regulatory requirements. Any modifications will be posted directly to this URL with an updated revision date.</p>
+        <h2 id="changes">10. Changes to this policy</h2>
+        <p>We will publish updates on this page with a revised date. For material changes that affect your choices, we will provide an appropriate notice in the affected app and obtain consent where required. An update to this page does not itself grant a new device permission.</p>
 
-        <h2>7. Contact Information</h2>
+        <h2 id="contact">11. Contact</h2>
         <div class="contact-card">
-            <p>If you have any questions, feedback, or data privacy inquiries regarding our apps, please reach out directly:</p>
-            <p><strong>Email:</strong> <a href="mailto:khanhvu.dev@gmail.com">khanhvu.dev@gmail.com</a></p>
-            <p><strong>Developer:</strong> Khanh Vu</p>
-            <p><strong>Terms of Use:</strong> <a href="terms.html">Terms of Use (Điều khoản sử dụng)</a></p>
+            <p><strong>Developer:</strong> Khanh Vu (KV Apps)</p>
+            <p><strong>Privacy and support:</strong> <a href="mailto:khanhvu.dev@gmail.com">khanhvu.dev@gmail.com</a></p>
+            <p>Please include the app name and version so we can address the right product.</p>
         </div>
-    </div>
+
+        <nav class="page-nav" aria-label="KV Apps pages"><a href="index.html">Home</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="support.html">Support</a></nav>
+    </main>
 </body>
 </html>
