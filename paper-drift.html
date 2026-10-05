@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Drift — Một dòng nước. Một lối về bến.</title>
+    <meta name="description" content="Paper Drift là game puzzle thuyền giấy 2D cho iOS: 1.000 màn offline, dòng chảy đổi hướng và một bến thư để thắp sáng. Đang phát triển bởi Khanh Vu, KV Apps.">
+    <link rel="canonical" href="https://khanhvu-ops.github.io/paper-drift.html">
+    <meta property="og:title" content="Paper Drift — Một dòng nước. Một lối về bến.">
+    <meta property="og:description" content="Game puzzle thuyền giấy cho iOS, đang phát triển bởi KV Apps.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://khanhvu-ops.github.io/paper-drift.html">
+    <meta property="og:image" content="https://khanhvu-ops.github.io/assets/paper-drift/icon.png">
+    <meta name="theme-color" content="#174c47">
+    <style>
+        :root { --ink: #174c47; --muted: #4a6f63; --paper: #fff8df; --gold: #ffd267; --line: #d7e4ce; }
+        * { box-sizing: border-box; }
+        body { margin: 0; color: var(--ink); background: var(--paper); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.65; overflow-wrap: anywhere; }
+        a { color: inherit; text-underline-offset: 4px; }
+        a:focus-visible { outline: 3px solid #ba6824; outline-offset: 5px; border-radius: 4px; }
+        .skip { position: absolute; top: -100px; padding: 12px; background: var(--paper); z-index: 2; }
+        .skip:focus { top: 8px; }
+        header { border-bottom: 1px solid var(--line); }
+        .nav { max-width: 1120px; margin: auto; padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+        .brand { text-decoration: none; font-weight: 800; letter-spacing: -0.03em; }
+        nav { display: flex; flex-wrap: wrap; gap: 12px 24px; font-size: 0.9rem; }
+        main { max-width: 1120px; margin: auto; padding: 0 28px; }
+        .hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: center; gap: 48px; padding: 66px 0 76px; }
+        .icon { width: 96px; height: 96px; border-radius: 24px; box-shadow: 0 10px 24px #174c4720; }
+        .eyebrow { margin: 26px 0 14px; font-size: 0.77rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+        h1 { margin: 0; font-size: clamp(3.5rem, 7.5vw, 6.2rem); line-height: 0.98; letter-spacing: -0.065em; }
+        .tagline { font-size: clamp(1.35rem, 2.5vw, 1.8rem); font-weight: 700; line-height: 1.3; margin: 26px 0 16px; max-width: 430px; }
+        .intro { max-width: 475px; color: var(--muted); font-size: 1.05rem; }
+        .actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin: 26px 0; }
+        .button { display: inline-block; text-decoration: none; background: var(--gold); padding: 12px 21px; border-radius: 14px; font-weight: 800; border: 1px solid #be9444; box-shadow: 0 3px 0 #be9444; }
+        .status { font-size: 0.85rem; color: var(--muted); }
+        .phone-stage { position: relative; display: grid; place-items: center; padding: 24px; border-radius: 48% 48% 38% 38%; background: radial-gradient(ellipse, #59c0ac 0%, #b9dfc8 64%, #fff8df 72%); }
+        .phone { display: block; width: min(100%, 260px); height: auto; border: 7px solid #174c47; border-radius: 36px; box-shadow: 0 25px 60px #174c472a; }
+        .preview-note { text-align: center; font-size: 0.78rem; color: var(--muted); margin: 16px 0 0; }
+        .chapter { padding: 56px 0; border-top: 1px solid var(--line); }
+        h2 { font-size: clamp(1.8rem, 3.6vw, 2.8rem); letter-spacing: -0.045em; line-height: 1.15; margin: 0 0 18px; }
+        .chapter > p { color: var(--muted); max-width: 650px; }
+        .features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 30px; }
+        .feature { padding: 25px; background: #f0efcf; border: 1px solid var(--line); border-radius: 24px; }
+        .number { color: #986120; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.12em; }
+        h3 { margin: 12px 0; font-size: 1.15rem; line-height: 1.4; }
+        .feature p { margin: 0; color: var(--muted); }
+        .dock { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 60px; }
+        .dock .phone { width: min(100%, 230px); margin: auto; }
+        .note { border-left: 3px solid #c39335; padding-left: 18px; color: var(--muted); }
+        .help { padding: 30px; background: var(--ink); color: var(--paper); border-radius: 28px; }
+        .help p { color: #d7e4ce; }
+        .help .actions { margin-bottom: 0; }
+        .help .button { color: var(--ink); }
+        footer { max-width: 1120px; margin: auto; padding: 34px 28px; font-size: 0.85rem; color: var(--muted); }
+        footer nav { margin: 20px 0; }
+        @media (max-width: 720px) { .hero, .dock { grid-template-columns: minmax(0, 1fr); gap: 32px; } .hero { padding: 40px 0; } .hero-preview { max-width: 380px; justify-self: center; width: 100%; } .features { grid-template-columns: minmax(0, 1fr); } .chapter { padding: 40px 0; } .dock .phone { width: 210px; } main, .nav, footer { padding-left: 22px; padding-right: 22px; } }
+    </style>
+</head>
+<body>
+    <a class="skip" href="#main">Đi tới nội dung</a>
+    <header><div class="nav"><a class="brand" href="index.html">KV Apps / Paper Drift</a><nav aria-label="Điều hướng Paper Drift"><a href="support.html#paper-drift">Hỗ trợ</a><a href="privacy.html#paper-drift">Privacy</a><a href="terms.html#paper-drift">Terms</a></nav></div></header>
+    <main id="main">
+        <section class="hero" aria-labelledby="game-title">
+            <div>
+                <img class="icon" src="assets/paper-drift/icon.png" width="96" height="96" alt="Icon Paper Drift: thuyền giấy vàng và san hô trên mặt nước">
+                <p class="eyebrow">Một game nhỏ của Khanh Vu</p>
+                <h1 id="game-title">Paper<br>Drift</h1>
+                <p class="tagline">Một dòng nước.<br>Một lối về bến.</p>
+                <p class="intro">Có một lá thư chưa tới nhà. Gấp một chiếc thuyền, đọc dòng nước và tìm lối đưa những lời thương qua đầm.</p>
+                <div class="actions"><a class="button" href="#how-to-play">Khám phá cách chơi</a><a href="support.html#paper-drift">Hỏi về game →</a></div>
+                <p class="status">iOS 17+ · Bản hiện tại đang phát triển<br>Chưa có đường dẫn tải trên App Store.</p>
+            </div>
+            <div class="hero-preview"><div class="phone-stage"><img class="phone" src="assets/paper-drift/gameplay.png" width="1206" height="2622" alt="Màn chơi Paper Drift với thuyền giấy nhiều màu và hàng 4 hướng dòng nước"></div><p class="preview-note">Ảnh từ bản game đang phát triển.</p></div>
+        </section>
+        <section class="chapter" id="how-to-play" aria-labelledby="play-title">
+            <p class="eyebrow">Đọc hướng. Chọn lối. Thả trôi.</p>
+            <h2 id="play-title">Nhìn thì nhẹ nhàng.<br>Nghĩ thêm một nước.</h2>
+            <p>Mỗi chiếc thuyền chỉ đi thẳng theo mũi giấy. Khi một chiếc rời đầm, dòng nước đẩy những chiếc còn lại và đổi hướng. Lối thoát vừa mở có thể trở thành một bài toán mới.</p>
+            <div class="features">
+                <article class="feature"><span class="number">01 / LỐI VỀ</span><h3>1.000 chuyến qua đầm</h3><p>Bàn thuyền dày hơn, màn mở đầu có chỉ dẫn và một hành trình qua 10 vùng nước để khám phá theo từng lượt.</p></article>
+                <article class="feature"><span class="number">02 / NHỊP NƯỚC</span><h3>Một dòng chảy có nhịp</h3><p>Nhìn trước 4 hướng nước. Thuyền giấy, vệt nước và đèn soi đường giúp bạn theo dõi từng chuyển động.</p></article>
+                <article class="feature"><span class="number">03 / KHOẢNG NGHỈ</span><h3>Chơi ở bất cứ đâu</h3><p>Puzzle và tiến độ lưu offline. Bản hiện tại không cần tài khoản, không bật ads và có tuỳ chọn giảm chuyển động.</p></article>
+            </div>
+        </section>
+        <section class="chapter dock" aria-labelledby="dock-title">
+            <div><p class="eyebrow">Bến vẫn chờ bạn</p><h2 id="dock-title">Mang một chút sáng<br>về phía nhà.</h2><p>Nhận giọt sáng khi đưa thư tới bến, ghé lấy thư daily và thêm đèn giấy, sen nổi, chuông gió cho bến của mình. Mỗi món có một chút chuyển động, một tiếng chạm riêng.</p><p class="note">Bản hiện tại lưu tiến độ trên thiết bị. Chưa có cloud sync hoặc khôi phục save từ phía nhà phát triển; xem thông tin hỗ trợ trước khi xoá app hoặc đổi máy.</p></div>
+            <div><img class="phone" src="assets/paper-drift/home.png" width="1206" height="2622" loading="lazy" alt="Bến thư Paper Drift, đèn giấy và quà điểm danh trên mặt nước xanh"></div>
+        </section>
+        <section class="chapter" aria-labelledby="help-title"><div class="help"><h2 id="help-title">Một chiếc thuyền bị kẹt?</h2><p>FAQ giải thích gợi ý 8 giọt, phiếu hành trình, lượt hồi, daily và cách báo lỗi. Bạn có thể viết cho chúng tôi bằng tiếng Việt hoặc tiếng Anh.</p><div class="actions"><a class="button" href="support.html#paper-drift">Mở hỗ trợ game</a><a href="mailto:khanhvu.dev@gmail.com?subject=Paper%20Drift%20Support">Gửi email</a></div></div></section>
+        <section class="chapter" lang="en" aria-labelledby="english-title"><h2 id="english-title">Paper Drift, in a few words.</h2><p>An offline paper-boat puzzle for iOS. Send each boat out along its pointed direction, then plan around currents that shift the remaining boats. The current development build includes 1,000 levels, a dock to decorate and daily rewards, with no account, live ads or paid purchases. There is no App Store download link yet.</p><p><a href="privacy.html#paper-drift">Privacy notice</a> · <a href="terms.html#paper-drift">Game terms</a> · <a href="support.html#paper-drift">Support</a></p></section>
+    </main>
+    <footer><nav aria-label="Liên kết cuối trang"><a href="index.html">KV Apps</a><a href="privacy.html#paper-drift">Privacy Policy</a><a href="terms.html#paper-drift">Terms of Use</a><a href="support.html#paper-drift">Support</a></nav><p>© 2026 Khanh Vu (KV Apps). Paper Drift đang phát triển.</p></footer>
+</body>
+</html>

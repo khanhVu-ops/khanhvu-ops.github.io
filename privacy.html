@@ -129,10 +129,10 @@
     <main class="container">
         <a href="index.html" class="back-link">← KV Apps home</a>
         <h1>Privacy Policy</h1>
-        <p class="last-updated">Last updated: September 30, 2026 · Developer: Khanh Vu (KV Apps)</p>
+        <p class="last-updated">Last updated: October 5, 2026 · Developer: Khanh Vu (KV Apps)</p>
         <p>This policy explains how Khanh Vu ("KV Apps", "we", "us") handles information in the apps that link to this policy and on this website. It is shared across our apps. Features, permissions, purchases and advertising differ by app; a description of an optional feature below does not mean that every app includes it.</p>
         <p>Read this policy together with the app's privacy notices and App Store privacy information. An app-specific notice provides details for that app and identifies any different practices. We will explain new data uses before enabling features that require them and request permission or consent where required.</p>
-        <nav class="page-nav" aria-label="Privacy policy sections"><a href="#content">Your content</a><a href="#advertising">Advertising</a><a href="#deletion">Deletion &amp; choices</a><a href="#color-meter">Color Meter</a><a href="#contact">Contact</a></nav>
+        <nav class="page-nav" aria-label="Privacy policy sections"><a href="#paper-drift">Paper Drift</a><a href="#content">Your content</a><a href="#advertising">Advertising</a><a href="#deletion">Deletion &amp; choices</a><a href="#color-meter">Color Meter</a><a href="#contact">Contact</a></nav>
 
         <h2 id="content">1. App content and permissions</h2>
         <p>Our apps process the information needed for the features you choose, such as a photo you open, a color you sample, or an item you save. Content used by an on-device feature is processed on your device. If a feature sends content to an online service or offers account-based storage or sync, its notice will identify what is sent, why, and the service involved before you use it. This policy does not imply that every app offers a cloud service or an account.</p>
@@ -175,14 +175,27 @@
         <h2 id="children">8. Children</h2>
         <p>This shared policy is for our general-audience apps. It is not a notice for a service specifically directed to children. Review each app's age rating and features before use. If you believe a child has provided personal information to us without any consent required by law, contact us so we can investigate and address the request. A child-directed app would require its own appropriate privacy notice and safeguards.</p>
 
-        <h2 id="color-meter">9. App-specific details: Color Meter</h2>
+        <h2 id="paper-drift">9. App-specific details: Paper Drift</h2>
+        <p><strong>Scope:</strong> this notice describes the current offline build of Paper Drift, in development as of October 5, 2026. It is a paper-boat puzzle game; no KV Apps account is required.</p>
+        <ul>
+            <li><strong>On-device game data:</strong> progress, the current puzzle and undo history, light-drop balance, hint tickets, owned decorations, attempts and refill times, daily check-in dates and streak, story progress and sound/haptic preferences are saved in the app's local storage. The game reads the device clock and time zone for daily rewards and attempt refills.</li>
+            <li><strong>Collection and sharing:</strong> the current game does not send gameplay or identifiers to a KV Apps server and has no advertising, analytics, crash-reporting, account or cloud-sync SDK. It does not request camera, photos, microphone, contacts or location access. We do not collect personal information through the current gameplay.</li>
+            <li><strong>Retention and deletion:</strong> saved progress remains on your device until removed. Deleting Paper Drift through iOS removes its local app container; offloading preserves app data. Copies in device backups may remain and are managed through Apple's settings. There is no in-game reset/export or KV Apps remote-recovery service in the current build. We cannot read, restore or delete your local save remotely.</li>
+            <li><strong>External links and support:</strong> opening a website uses your browser and that site's privacy practices; GitHub Pages may process request information as described above. Emailing support shares only the information you choose to send with our support email service. This is separate from playing offline.</li>
+        </ul>
+        <p>Advertising reward hooks in the current code do not load ads or send ad requests. If a future version enables advertising, analytics, purchases or online services, we will update this notice and the App Store privacy disclosures to describe the active providers and data practices before that version is offered, and obtain permission or consent where required. General advertising and purchase descriptions elsewhere on this page apply only when those features are actually enabled in an app.</p>
+        <p>For gameplay questions, see <a href="support.html#paper-drift">Paper Drift support</a>. See <a href="terms.html#paper-drift">Paper Drift game terms</a> for virtual rewards and saved progress.</p>
+
+        <h2 id="color-meter">10. App-specific details: Color Meter</h2>
         <p>Color Meter uses camera frames or an image you select to sample colors on your device. Saved colors, collections and preferences are stored locally; its color-picking features do not upload your photos or collections to a KV Apps server, and no KV Apps account is required. Sharing or saving an image to your photo library creates a copy at the destination you choose.</p>
+        <p>Versions of Color Meter configured with Firebase use Google Firebase Analytics to understand feature usage and purchase outcomes, Firebase Crashlytics to diagnose crashes and errors, and Firebase Remote Config to deliver advertising settings. These services can process app-installation identifiers, device and app information, interaction events, and diagnostic data. The app does not send camera frames, selected photos, color values, collection names or purchase receipts in its custom analytics events. Google may also collect information automatically through its SDKs.</p>
+        <p>In versions that include these controls, open Settings → Privacy &amp; diagnostics to turn off usage analytics or crash reports. These choices apply to future collection by the corresponding service; they do not erase reports already sent. Remote Config remains available to deliver app settings. Advertising privacy options are separate and appear when required by the consent service. See <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener noreferrer">Firebase privacy and security information</a>. Pro removes ads; it does not automatically turn off analytics or diagnostics.</p>
         <p>Color Meter includes advertising and optional Pro purchases, so the advertising and purchase sections above apply. Its collections are not a PIN-protected or app-encrypted vault. It does not provide a KV Apps cloud-sync or remote-recovery service for your collections.</p>
 
-        <h2 id="changes">10. Changes to this policy</h2>
+        <h2 id="changes">11. Changes to this policy</h2>
         <p>We will publish updates on this page with a revised date. For material changes that affect your choices, we will provide an appropriate notice in the affected app and obtain consent where required. An update to this page does not itself grant a new device permission.</p>
 
-        <h2 id="contact">11. Contact</h2>
+        <h2 id="contact">12. Contact</h2>
         <div class="contact-card">
             <p><strong>Developer:</strong> Khanh Vu (KV Apps)</p>
             <p><strong>Privacy and support:</strong> <a href="mailto:khanhvu.dev@gmail.com">khanhvu.dev@gmail.com</a></p>

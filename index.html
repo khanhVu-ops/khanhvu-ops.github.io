@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KV Apps — Công cụ iOS cho công việc và sáng tạo</title>
-    <meta name="description" content="Các ứng dụng iOS của Khanh Vu: công cụ cho công việc và sáng tạo, thông tin quyền riêng tư, điều khoản và hỗ trợ.">
+    <title>KV Apps — Ứng dụng và game iOS của Khanh Vu</title>
+    <meta name="description" content="Khám phá ứng dụng và game iOS của Khanh Vu: Paper Drift, Color Meter, thông tin quyền riêng tư, điều khoản và hỗ trợ.">
+    <link rel="canonical" href="https://khanhvu-ops.github.io/">
     <style>
         :root {
             --bg: #090d16;
@@ -260,9 +261,22 @@
         .brand-logo { flex-shrink: 0; white-space: nowrap; }
         .nav-links { display: flex; flex-wrap: wrap; gap: 12px 24px; }
         .nav-links a { margin-left: 0; white-space: nowrap; }
+        .app-feature { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 28px; align-items: center; padding: 36px; border: 1px solid #2b6661; border-radius: 28px; background: linear-gradient(130deg, #153c3d, #121826); }
+        .app-feature img { width: 112px; height: 112px; border-radius: 26px; }
+        .app-feature h2 { font-size: 2rem; letter-spacing: -0.04em; margin: 8px 0; }
+        .app-feature p { color: #c3d8d3; max-width: 650px; }
+        .app-status { color: #ffe4a0; font-size: 0.8rem; font-weight: 600; }
+        .app-actions { display: flex; gap: 12px 22px; flex-wrap: wrap; margin-top: 20px; }
+        .app-actions a { color: #b7eee3; text-underline-offset: 4px; }
+        .app-actions .primary-link { color: #183e38; padding: 9px 16px; background: #ffe4a0; border-radius: 10px; text-decoration: none; font-weight: 700; }
+        .app-actions a:not(.primary-link) { align-self: center; }
+        .section-intro { color: var(--text-secondary); margin: 12px 0 24px; }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
         @media (max-width: 640px) {
             .nav-container { align-items: flex-start; flex-direction: column; gap: 16px; }
             .nav-links { gap: 12px 20px; }
+            .app-feature { grid-template-columns: minmax(0, 1fr); padding: 24px; gap: 18px; }
+            .app-feature img { width: 88px; height: 88px; border-radius: 22px; }
         }
     </style>
 </head>
@@ -285,7 +299,7 @@
     </header>
 
     <main>
-        <section class="hero" id="apps">
+        <section class="hero">
             <div class="app-icon-wrapper">
                 <svg viewBox="0 0 24 24">
                     <defs>
@@ -298,12 +312,26 @@
                 </svg>
             </div>
 
-            <h1>Công cụ nhỏ. Ý tưởng lớn.</h1>
-            <p class="tagline">Ứng dụng iOS của Khanh Vu dành cho công việc và sáng tạo hằng ngày. Tìm thông tin hỗ trợ, quyền riêng tư và điều khoản dùng chung của KV Apps tại đây.</p>
+            <h1>Ứng dụng nhỏ.<br>Niềm vui mỗi ngày.</h1>
+            <p class="tagline">Ứng dụng và game iOS của Khanh Vu, cho công việc, sáng tạo và một chút thư giãn. Khám phá sản phẩm và tìm hỗ trợ, quyền riêng tư, điều khoản tại đây.</p>
 
             <div class="badge-group">
                 <a href="support.html" class="app-store-btn" style="color: #f8fafc; padding: 14px 24px; border: 1px solid #38bdf8; border-radius: 12px; text-decoration: none;">Hỗ trợ ứng dụng</a>
             </div>
+        </section>
+
+        <section id="apps" aria-labelledby="apps-title">
+            <h2 id="apps-title">Một góc nhỏ của KV Apps</h2>
+            <p class="section-intro">Mỗi sản phẩm có một cách dùng và một câu chuyện riêng.</p>
+            <article class="app-feature" id="paper-drift">
+                <img src="assets/paper-drift/icon.png" width="112" height="112" alt="Icon Paper Drift: hai thuyền giấy trên dòng nước xanh" loading="lazy">
+                <div>
+                    <span class="app-status">GAME PUZZLE 2D · ĐANG PHÁT TRIỂN</span>
+                    <h2>Paper Drift</h2>
+                    <p>Một dòng nước. Một lối về bến. Đưa những chiếc thuyền giấy qua đầm, đọc nhịp dòng chảy và thắp sáng bến thư của bạn. 1.000 màn offline, không cần tài khoản trong bản hiện tại.</p>
+                    <div class="app-actions"><a class="primary-link" href="paper-drift.html">Khám phá game →</a><a href="support.html#paper-drift">Hỗ trợ game</a><a href="privacy.html#paper-drift">Privacy</a><a href="terms.html#paper-drift">Terms</a></div>
+                </div>
+            </article>
         </section>
 
         <section class="grid-features">

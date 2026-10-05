@@ -1,6 +1,6 @@
 # KV Apps — website và URL dùng chung cho App Store
 
-Website tĩnh của Khanh Vu, dùng chung cho các ứng dụng liên kết tới những trang này. Cập nhật nội dung ngày **30/09/2026**. Không cần build, framework hoặc JavaScript phía client.
+Website tĩnh của Khanh Vu, dùng chung cho các ứng dụng liên kết tới những trang này. Cập nhật nội dung ngày **05/10/2026**. Không cần build, framework hoặc JavaScript phía client.
 
 ## Các URL ổn định
 
@@ -13,6 +13,19 @@ Website tĩnh của Khanh Vu, dùng chung cho các ứng dụng liên kết tớ
 | AdMob seller file | https://khanhvu-ops.github.io/app-ads.txt |
 
 Các đường dẫn giữ nguyên để app đã phát hành không cần đổi link. Privacy/Terms viết bằng tiếng Anh; Support có phần hướng dẫn tiếng Anh và FAQ tiếng Việt.
+
+### URL dùng cho Paper Drift
+
+| Mục đích | URL |
+|---|---|
+| Marketing URL | https://khanhvu-ops.github.io/paper-drift.html |
+| Privacy Policy URL | https://khanhvu-ops.github.io/privacy.html#paper-drift |
+| Support URL | https://khanhvu-ops.github.io/support.html#paper-drift |
+| Terms | https://khanhvu-ops.github.io/terms.html#paper-drift |
+
+Paper Drift hiện là bản offline đang phát triển: save local, không account/cloud sync, SDK ads/analytics hoặc IAP chưa bật. Mục riêng ghi chính xác phạm vi này, FAQ mô tả luật và kinh tế hiện có; không quảng bá một listing App Store chưa được xác nhận. Trước khi bật SDK/monetization, cập nhật notice và App Store privacy disclosures theo implementation mới. Không thay seller ID trong `app-ads.txt`.
+
+`index.html` giới thiệu thêm Paper Drift; `paper-drift.html` là trang marketing riêng với icon và ảnh native từ project game. Asset được giữ local trong `assets/paper-drift/`; site không thêm script analytics, font/CDN hay embed bên thứ ba. Thay đổi Color Meter có sẵn ở working tree được giữ nguyên.
 
 ## Phạm vi nội dung
 
@@ -61,3 +74,5 @@ Sau deploy, kiểm tra HTTPS và nội dung mới tại ba URL pháp lý/hỗ tr
 - [GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement): hosting website.
 
 Các nội dung này không phải xác nhận Apple/Google đã duyệt ứng dụng. Khi tính năng hoặc SDK thay đổi, kiểm tra lại chính sách và khai báo tương ứng.
+
+Color Meter privacy notice also covers Firebase Analytics, Crashlytics and Remote Config, including in-app usage/crash opt-out controls. Publish the updated policy together with the app version that enables Firebase.
