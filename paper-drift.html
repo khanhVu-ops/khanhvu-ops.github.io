@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paper Drift — Một dòng nước. Một lối về bến.</title>
-    <meta name="description" content="Paper Drift là game puzzle thuyền giấy 2D cho iOS: 1.000 màn offline, dòng chảy đổi hướng và một bến thư để thắp sáng. Đang phát triển bởi Khanh Vu, KV Apps.">
+    <title>Paper Drift — One current. One way home.</title>
+    <meta name="description" content="Paper Drift is a 2D paper-boat puzzle for iOS: 1,000 offline levels, changing currents and a mail dock to light up. In development by Khanh Vu, KV Apps.">
     <link rel="canonical" href="https://khanhvu-ops.github.io/paper-drift.html">
     <meta property="og:title" content="Paper Drift — Một dòng nước. Một lối về bến.">
     <meta property="og:description" content="Game puzzle thuyền giấy cho iOS, đang phát triển bởi KV Apps.">
@@ -56,40 +56,47 @@
         footer nav { margin: 20px 0; }
         @media (max-width: 720px) { .hero, .dock { grid-template-columns: minmax(0, 1fr); gap: 32px; } .hero { padding: 40px 0; } .hero-preview { max-width: 380px; justify-self: center; width: 100%; } .features { grid-template-columns: minmax(0, 1fr); } .chapter { padding: 40px 0; } .dock .phone { width: 210px; } main, .nav, footer { padding-left: 22px; padding-right: 22px; } }
     </style>
+    <link rel="stylesheet" href="assets/language.css">
+    <link rel="icon" href="assets/paper-drift/icon.png" type="image/png">
+    <script src="assets/language.js" defer></script>
 </head>
 <body>
-    <a class="skip" href="#main">Đi tới nội dung</a>
-    <header><div class="nav"><a class="brand" href="index.html">KV Apps / Paper Drift</a><nav aria-label="Điều hướng Paper Drift"><a href="support.html#paper-drift">Hỗ trợ</a><a href="privacy.html#paper-drift">Privacy</a><a href="terms.html#paper-drift">Terms</a></nav></div></header>
+    <a class="skip" href="#main">Skip to content</a>
+    <header><div class="nav"><a class="brand" href="index.html">KV Apps / Paper Drift</a><nav aria-label="Paper Drift navigation"><a href="support.html#paper-drift">Support</a><a href="privacy.html#paper-drift">Privacy</a><a href="terms.html#paper-drift">Terms</a></nav></div><nav class="language-switch" aria-label="Language" data-language-switch>
+        <a href="?lang=en" lang="en" data-language="en" aria-current="true">English</a>
+        <a href="?lang=vi" lang="vi" data-language="vi">Tiếng Việt</a>
+    </nav>
+</header>
     <main id="main">
         <section class="hero" aria-labelledby="game-title">
             <div>
-                <img class="icon" src="assets/paper-drift/icon.png" width="96" height="96" alt="Icon Paper Drift: thuyền giấy vàng và san hô trên mặt nước">
-                <p class="eyebrow">Một game nhỏ của Khanh Vu</p>
+                <img class="icon" src="assets/paper-drift/icon.png" width="96" height="96" alt="Paper Drift icon: golden and coral paper boats on the water">
+                <p class="eyebrow">A little game by Khanh Vu</p>
                 <h1 id="game-title">Paper<br>Drift</h1>
-                <p class="tagline">Một dòng nước.<br>Một lối về bến.</p>
-                <p class="intro">Có một lá thư chưa tới nhà. Gấp một chiếc thuyền, đọc dòng nước và tìm lối đưa những lời thương qua đầm.</p>
-                <div class="actions"><a class="button" href="#how-to-play">Khám phá cách chơi</a><a href="support.html#paper-drift">Hỏi về game →</a></div>
-                <p class="status">iOS 17+ · Bản hiện tại đang phát triển<br>Chưa có đường dẫn tải trên App Store.</p>
+                <p class="tagline">One current.<br>One way home.</p>
+                <p class="intro">A letter is waiting to get home. Fold a boat, read the current and carry a little love across the lagoon.</p>
+                <div class="actions"><a class="button" href="#how-to-play">Discover how to play</a><a href="support.html#paper-drift">Ask about the game →</a></div>
+                <p class="status">iOS 17+ · Currently in development<br>An App Store download link isn't available yet.</p>
             </div>
-            <div class="hero-preview"><div class="phone-stage"><img class="phone" src="assets/paper-drift/gameplay.png" width="1206" height="2622" alt="Màn chơi Paper Drift với thuyền giấy nhiều màu và hàng 4 hướng dòng nước"></div><p class="preview-note">Ảnh từ bản game đang phát triển.</p></div>
+            <div class="hero-preview"><div class="phone-stage"><img class="phone" src="assets/paper-drift/gameplay.png" width="1206" height="2622" alt="Paper Drift puzzle with colorful paper boats and four upcoming current directions"></div><p class="preview-note">Screenshots from the development build.</p></div>
         </section>
         <section class="chapter" id="how-to-play" aria-labelledby="play-title">
-            <p class="eyebrow">Đọc hướng. Chọn lối. Thả trôi.</p>
-            <h2 id="play-title">Nhìn thì nhẹ nhàng.<br>Nghĩ thêm một nước.</h2>
-            <p>Mỗi chiếc thuyền chỉ đi thẳng theo mũi giấy. Khi một chiếc rời đầm, dòng nước đẩy những chiếc còn lại và đổi hướng. Lối thoát vừa mở có thể trở thành một bài toán mới.</p>
+            <p class="eyebrow">Read the water. Find a path. Let it drift.</p>
+            <h2 id="play-title">Looks peaceful.<br>Think one move ahead.</h2>
+            <p>Each boat sails straight along its pointed end. When one leaves the lagoon, the current shifts the remaining boats and changes direction. A path you've just opened may become a new puzzle.</p>
             <div class="features">
-                <article class="feature"><span class="number">01 / LỐI VỀ</span><h3>1.000 chuyến qua đầm</h3><p>Bàn thuyền dày hơn, màn mở đầu có chỉ dẫn và một hành trình qua 10 vùng nước để khám phá theo từng lượt.</p></article>
-                <article class="feature"><span class="number">02 / NHỊP NƯỚC</span><h3>Một dòng chảy có nhịp</h3><p>Nhìn trước 4 hướng nước. Thuyền giấy, vệt nước và đèn soi đường giúp bạn theo dõi từng chuyển động.</p></article>
-                <article class="feature"><span class="number">03 / KHOẢNG NGHỈ</span><h3>Chơi ở bất cứ đâu</h3><p>Puzzle và tiến độ lưu offline. Bản hiện tại không cần tài khoản, không bật ads và có tuỳ chọn giảm chuyển động.</p></article>
+                <article class="feature"><span class="number">01 / THE WAY HOME</span><h3>1,000 voyages across the lagoon</h3><p>Crowded boards, guided opening levels and a journey through 10 waters to discover one move at a time.</p></article>
+                <article class="feature"><span class="number">02 / THE WATER'S RHYTHM</span><h3>A current with a rhythm</h3><p>See the next four currents. Paper boats, wakes and guiding lights help you follow every move.</p></article>
+                <article class="feature"><span class="number">03 / A LITTLE BREAK</span><h3>Play wherever you are</h3><p>Puzzles and progress work offline. The current build needs no account, has no live ads and supports reduced motion.</p></article>
             </div>
         </section>
         <section class="chapter dock" aria-labelledby="dock-title">
-            <div><p class="eyebrow">Bến vẫn chờ bạn</p><h2 id="dock-title">Mang một chút sáng<br>về phía nhà.</h2><p>Nhận giọt sáng khi đưa thư tới bến, ghé lấy thư daily và thêm đèn giấy, sen nổi, chuông gió cho bến của mình. Mỗi món có một chút chuyển động, một tiếng chạm riêng.</p><p class="note">Bản hiện tại lưu tiến độ trên thiết bị. Chưa có cloud sync hoặc khôi phục save từ phía nhà phát triển; xem thông tin hỗ trợ trước khi xoá app hoặc đổi máy.</p></div>
-            <div><img class="phone" src="assets/paper-drift/home.png" width="1206" height="2622" loading="lazy" alt="Bến thư Paper Drift, đèn giấy và quà điểm danh trên mặt nước xanh"></div>
+            <div><p class="eyebrow">Your dock is waiting</p><h2 id="dock-title">Bring a little light<br>back home.</h2><p>Earn light drops as you deliver letters, collect your daily mail and add paper lanterns, lotuses and wind chimes to your dock. Every decoration has its own movement and touch sound.</p><p class="note">This build saves progress on your device. There is no cloud sync or developer-operated save recovery. Check the support information before deleting the app or changing devices.</p></div>
+            <div><img class="phone" src="assets/paper-drift/home.png" width="1206" height="2622" loading="lazy" alt="Paper Drift mail dock, lanterns and daily rewards on teal water"></div>
         </section>
-        <section class="chapter" aria-labelledby="help-title"><div class="help"><h2 id="help-title">Một chiếc thuyền bị kẹt?</h2><p>FAQ giải thích gợi ý 8 giọt, phiếu hành trình, lượt hồi, daily và cách báo lỗi. Bạn có thể viết cho chúng tôi bằng tiếng Việt hoặc tiếng Anh.</p><div class="actions"><a class="button" href="support.html#paper-drift">Mở hỗ trợ game</a><a href="mailto:khanhvu.dev@gmail.com?subject=Paper%20Drift%20Support">Gửi email</a></div></div></section>
-        <section class="chapter" lang="en" aria-labelledby="english-title"><h2 id="english-title">Paper Drift, in a few words.</h2><p>An offline paper-boat puzzle for iOS. Send each boat out along its pointed direction, then plan around currents that shift the remaining boats. The current development build includes 1,000 levels, a dock to decorate and daily rewards, with no account, live ads or paid purchases. There is no App Store download link yet.</p><p><a href="privacy.html#paper-drift">Privacy notice</a> · <a href="terms.html#paper-drift">Game terms</a> · <a href="support.html#paper-drift">Support</a></p></section>
+        <section class="chapter" aria-labelledby="help-title"><div class="help"><h2 id="help-title">A boat got stuck?</h2><p>Our FAQ explains 8-drop hints, journey tickets, attempt refills, daily mail and bug reports. You can contact us in English or Vietnamese.</p><div class="actions"><a class="button" href="support.html#paper-drift">Open game support</a><a href="mailto:khanhvu.dev@gmail.com?subject=Paper%20Drift%20Support">Send an email</a></div></div></section>
+        <section class="chapter" aria-labelledby="english-title"><h2 id="english-title">Paper Drift, in a few words.</h2><p>An offline paper-boat puzzle for iOS. Send each boat out along its pointed direction, then plan around currents that shift the remaining boats. The current development build includes 1,000 levels, a dock to decorate and daily rewards, with no account, live ads or paid purchases. There is no App Store download link yet.</p><p><a href="privacy.html#paper-drift">Privacy notice</a> · <a href="terms.html#paper-drift">Game terms</a> · <a href="support.html#paper-drift">Support</a></p></section>
     </main>
-    <footer><nav aria-label="Liên kết cuối trang"><a href="index.html">KV Apps</a><a href="privacy.html#paper-drift">Privacy Policy</a><a href="terms.html#paper-drift">Terms of Use</a><a href="support.html#paper-drift">Support</a></nav><p>© 2026 Khanh Vu (KV Apps). Paper Drift đang phát triển.</p></footer>
+    <footer><nav aria-label="Footer links"><a href="index.html">KV Apps</a><a href="privacy.html#paper-drift">Privacy Policy</a><a href="terms.html#paper-drift">Terms of Use</a><a href="support.html#paper-drift">Support</a></nav><p>© 2026 Khanh Vu (KV Apps). Paper Drift is in development.</p></footer>
 </body>
 </html>

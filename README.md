@@ -76,3 +76,12 @@ Sau deploy, kiểm tra HTTPS và nội dung mới tại ba URL pháp lý/hỗ tr
 Các nội dung này không phải xác nhận Apple/Google đã duyệt ứng dụng. Khi tính năng hoặc SDK thay đổi, kiểm tra lại chính sách và khai báo tương ứng.
 
 Color Meter privacy notice also covers Firebase Analytics, Crashlytics and Remote Config, including in-app usage/crash opt-out controls. Publish the updated policy together with the app version that enables Firebase.
+
+
+## English default and language choices
+
+All five public pages ship as English HTML for US/global visitors, including without JavaScript. `assets/language.js` adds English/Tiếng Việt switching using reviewed dictionaries in `assets/i18n/`. Only an explicit choice is stored in browser localStorage (`kvapps.language`); browser/device language is never used as the default. An explicit `?lang=en` or `?lang=vi` takes precedence and preserves the section anchor. Internal links carry the language even when storage is unavailable. App Store URLs stay unchanged. The game's links include its selected language.
+
+When editing English copy, update its matching Vietnamese dictionary entry. Do not translate IDs, anchors, URLs, app-ads.txt or product names. Privacy describes the language preference; there are no analytics/advertising scripts. Screenshots show the native English game.
+
+Language QA: serve this folder locally (`python3 -m http.server 8768`), install Playwright in your development environment, then run `node scripts/check-language.cjs http://127.0.0.1:8768/` (Chrome channel). It checks both languages at 320/390/1440px, English default on a Vietnamese browser, persistence and query precedence, internal links/anchors, images, overflow and English fallback without JS. Outputs go to `/tmp/kvapps-language-qa`, or `QA_OUTPUT`.
