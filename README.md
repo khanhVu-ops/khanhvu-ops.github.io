@@ -1,6 +1,6 @@
 # KV Apps — website và URL dùng chung cho App Store
 
-Website tĩnh của Khanh Vu, dùng chung cho các ứng dụng liên kết tới những trang này. Cập nhật nội dung ngày **05/10/2026**. Không cần build, framework hoặc JavaScript phía client.
+Website tĩnh của Khanh Vu, dùng chung cho các ứng dụng liên kết tới những trang này. Mục privacy Paper Drift cập nhật ngày **09/10/2026**; các trang khác giữ nội dung trước đó. Không cần build, framework hoặc JavaScript phía client.
 
 ## Các URL ổn định
 
@@ -23,7 +23,7 @@ Các đường dẫn giữ nguyên để app đã phát hành không cần đổ
 | Support URL | https://khanhvu-ops.github.io/support.html#paper-drift |
 | Terms | https://khanhvu-ops.github.io/terms.html#paper-drift |
 
-Paper Drift hiện là bản offline đang phát triển: save local, không account/cloud sync, SDK ads/analytics hoặc IAP chưa bật. Mục riêng ghi chính xác phạm vi này, FAQ mô tả luật và kinh tế hiện có; không quảng bá một listing App Store chưa được xác nhận. Trước khi bật SDK/monetization, cập nhật notice và App Store privacy disclosures theo implementation mới. Không thay seller ID trong `app-ads.txt`.
+Paper Drift 1.0.0 đang phát triển: save local, không account/cloud sync; AdMob/UMP và StoreKit đã tích hợp, cả hai config ads bật Google test IDs. Firebase Analytics chỉ khởi tạo khi build có cấu hình Firebase; build kiểm tra ngày 09/10 chưa có. Privacy đã nêu các provider, dữ liệu/choices thật, nhắc thư local, purchase ledger và giới hạn khôi phục. Không có analytics opt-out trong app hiện tại. App Store privacy answers và privacy report phải đối chiếu archive sẽ phát hành; cập nhật privacy không tự bật cấu hình production. Terms/Support/marketing vẫn cần rà soát riêng theo bản phát hành. Không thay seller ID trong `app-ads.txt`.
 
 `index.html` giới thiệu thêm Paper Drift; `paper-drift.html` là trang marketing riêng với icon và ảnh native từ project game. Asset được giữ local trong `assets/paper-drift/`; site không thêm script analytics, font/CDN hay embed bên thứ ba. Thay đổi Color Meter có sẵn ở working tree được giữ nguyên.
 
@@ -80,3 +80,9 @@ Color Meter privacy notice also covers Firebase Analytics, Crashlytics and Remot
 ## Website language
 
 All five public pages are English-only static HTML. There is no language switch, translation resource, JavaScript or language preference storage. Existing `?lang=en` or `?lang=vi` links still serve the same English page; section anchors are unchanged. The native Paper Drift app has its own 19-language first-launch picker and saved setting.
+
+## Privacy Paper Drift — nguồn đối chiếu ngày 09/10/2026
+
+- Native source: `AnalyticsBootstrap.swift`, `FBEvent.swift`, `DriftAds.swift`, `DriftStore.swift`, `ProgressStore.swift`, `DriftNotifications.swift`, `GameInfoView.swift`, hai `KVAdsConfig` và `PrivacyInfo.xcprivacy`.
+- [Google Mobile Ads data disclosure](https://developers.google.com/admob/ios/privacy/data-disclosure), [UMP choices](https://developers.google.com/admob/ios/privacy), [Firebase Analytics data disclosure](https://support.google.com/analytics/answer/10285841), [Apple App Privacy](https://developer.apple.com/app-store/app-privacy-details/).
+- Không đổi Color Meter, seller ID, config ads/analytics hoặc App Store Connect trong lượt này.
