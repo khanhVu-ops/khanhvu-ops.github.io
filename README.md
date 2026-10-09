@@ -23,7 +23,7 @@ Các đường dẫn giữ nguyên để app đã phát hành không cần đổ
 | Support URL | https://khanhvu-ops.github.io/support.html#paper-drift |
 | Terms | https://khanhvu-ops.github.io/terms.html#paper-drift |
 
-Paper Drift 1.0.0 đang phát triển: save local, không account/cloud sync; AdMob/UMP và StoreKit đã tích hợp, cả hai config ads bật Google test IDs. Firebase Analytics chỉ khởi tạo khi build có cấu hình Firebase; build kiểm tra ngày 09/10 chưa có. Privacy đã nêu các provider, dữ liệu/choices thật, nhắc thư local, purchase ledger và giới hạn khôi phục. Không có analytics opt-out trong app hiện tại. App Store privacy answers và privacy report phải đối chiếu archive sẽ phát hành; cập nhật privacy không tự bật cấu hình production. Terms/Support/marketing vẫn cần rà soát riêng theo bản phát hành. Không thay seller ID trong `app-ads.txt`.
+Paper Drift 1.0.0 đang phát triển: save local, không account/cloud sync; AdMob/UMP và StoreKit đã tích hợp, cả hai config ads bật Google test IDs. Đã thêm cấu hình Firebase và bật Analytics ngày 09/10; ATT dùng hộp thoại iOS sau opening, trước khi khởi tạo quảng cáo. Firebase ad storage/user data/personalization bị từ chối trong integration hiện tại; Analytics đo usage độc lập ATT. SDK đã ghi nhận upload thành công trong QA Debug. Privacy đã nêu các provider, dữ liệu/choices thật, nhắc thư local, purchase ledger và giới hạn khôi phục. Không có analytics opt-out trong app hiện tại. App Store privacy answers và privacy report phải đối chiếu archive sẽ phát hành; cập nhật privacy không tự bật cấu hình production. Terms/Support/marketing vẫn cần rà soát riêng theo bản phát hành. Không thay seller ID trong `app-ads.txt`.
 
 `index.html` giới thiệu thêm Paper Drift; `paper-drift.html` là trang marketing riêng với icon và ảnh native từ project game. Asset được giữ local trong `assets/paper-drift/`; site không thêm script analytics, font/CDN hay embed bên thứ ba. Thay đổi Color Meter có sẵn ở working tree được giữ nguyên.
 
@@ -85,4 +85,4 @@ All five public pages are English-only static HTML. There is no language switch,
 
 - Native source: `AnalyticsBootstrap.swift`, `FBEvent.swift`, `DriftAds.swift`, `DriftStore.swift`, `ProgressStore.swift`, `DriftNotifications.swift`, `GameInfoView.swift`, hai `KVAdsConfig` và `PrivacyInfo.xcprivacy`.
 - [Google Mobile Ads data disclosure](https://developers.google.com/admob/ios/privacy/data-disclosure), [UMP choices](https://developers.google.com/admob/ios/privacy), [Firebase Analytics data disclosure](https://support.google.com/analytics/answer/10285841), [Apple App Privacy](https://developer.apple.com/app-store/app-privacy-details/).
-- Không đổi Color Meter, seller ID, config ads/analytics hoặc App Store Connect trong lượt này.
+- Giữ Color Meter và seller ID. Privacy đã đồng bộ tiếp sau khi native project thêm cấu hình Firebase/ATT; chưa đổi ad unit IDs hoặc App Store Connect.
