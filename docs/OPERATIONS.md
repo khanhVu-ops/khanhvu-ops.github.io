@@ -39,6 +39,8 @@ Snapshot **19/10/2026**. Đánh dấu xong sau khi kiểm tra kết quả; trạ
 - [x] Viết nháp bài [Reddit](social/channels/reddit/README.md) và [nhóm Facebook VN](social/channels/facebook-groups/README.md).
 - [x] Tool [upload YouTube qua API](../tools/youtube/README.md), mặc định private.
 - [x] Tool [render biến thể hook](../tools/render/README.md); mỗi brief 18/10 đã có `render.toml` (thời gian theo kịch bản, chỉnh lại sau khi quay).
+- [x] [Dashboard local](../tools/dashboard/README.md): pipeline, lịch, bộ đăng bài, nhật ký bài đăng, số liệu (SQLite gitignored), campaign link.
+- [ ] Lấy provider token (`pt`) trong App Store Connect, nhập ở trang Campaign link và tạo link cho từng kênh × ngôn ngữ.
 - [x] Tool [kiểm tra content](content/WORKFLOW.md#kiểm-tra-trước-khi-đăng) (`tools/check-content.py`): chặn thiếu Pro, sai link App Store, lệch hook/creative_id, link hỏng; in tổng quan pipeline.
 - [ ] Chủ kênh tạo OAuth client trong Google Cloud, điền `.env`, chạy `upload.py auth`.
 - [ ] Quay 4 master trên build thật bằng vault thử; xuất bản EN và VI.

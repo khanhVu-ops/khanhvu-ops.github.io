@@ -29,6 +29,8 @@ LEDGER = REPO / "docs/social/channels/youtube/UPLOADS.md"
 SCOPES = (
     "https://www.googleapis.com/auth/youtube.upload",
     "https://www.googleapis.com/auth/youtube.readonly",
+    # Read-only analytics for the dashboard (tools/dashboard/youtube_sync.py): watch time, retention.
+    "https://www.googleapis.com/auth/yt-analytics.readonly",
 )
 PRIVACY = ("private", "unlisted", "public")
 SHORTS_MAX_SECONDS = 180

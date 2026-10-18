@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KV Studio</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='250 252 808 499'%3E%3Cpath fill='%2314e8f8' d='M260 280Q260 262 276 270L392 333Q404 341 404 358V606L270 734Q260 742 260 728Z'/%3E%3Cpath fill='%2325e6d3' d='M418 440Q418 428 428 420L540 315Q555 303 575 303H720Q732 305 724 316L430 596Q418 606 418 590Z'/%3E%3Cpath fill='%230a84ee' d='M406 622L526 734Q532 741 522 741H273Q263 741 270 734Z'/%3E%3Cpath fill='%230a8ac6' d='M562 500Q572 492 582 502L822 731Q830 741 816 741H650Q620 741 600 720L478 592Q470 583 478 576Z'/%3E%3Cpath fill='%2314e8f8' d='M746 628L852 445Q875 405 915 405H1034Q1048 407 1040 419L848 727Q840 738 831 729L749 641Q741 634 746 628Z'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+    <div class="backdrop" aria-hidden="true"></div>
+    <div class="shell">
+        <aside class="sidebar">
+            <a class="brand" href="#/">
+                <svg class="brand-mark" viewBox="250 252 808 499" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="g-bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b5fae"/><stop offset="1" stop-color="#0c3570"/></linearGradient>
+                        <linearGradient id="g-arm" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#079fa8"/><stop offset="1" stop-color="#25e6d3"/></linearGradient>
+                        <linearGradient id="g-tri" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1fcaf0"/><stop offset="1" stop-color="#1263d4"/></linearGradient>
+                        <linearGradient id="g-leg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a3b78"/><stop offset="1" stop-color="#0a8ac6"/></linearGradient>
+                        <linearGradient id="g-vee" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14e8f8"/><stop offset="1" stop-color="#0a84ee"/></linearGradient>
+                    </defs>
+                    <path fill="url(#g-bar)" d="M260 280Q260 262 276 270L392 333Q404 341 404 358V606L270 734Q260 742 260 728Z"/>
+                    <path fill="url(#g-arm)" d="M418 440Q418 428 428 420L540 315Q555 303 575 303H720Q732 305 724 316L430 596Q418 606 418 590Z"/>
+                    <path fill="url(#g-tri)" d="M406 622L526 734Q532 741 522 741H273Q263 741 270 734Z"/>
+                    <path fill="url(#g-leg)" d="M562 500Q572 492 582 502L822 731Q830 741 816 741H650Q620 741 600 720L478 592Q470 583 478 576Z"/>
+                    <path fill="url(#g-vee)" d="M746 628L852 445Q875 405 915 405H1034Q1048 407 1040 419L848 727Q840 738 831 729L749 641Q741 634 746 628Z"/>
+                </svg>
+                <span class="brand-text"><strong>KV Studio</strong><small>Marketing dashboard</small></span>
+            </a>
+            <nav class="nav" id="nav"></nav>
+            <div class="sidebar-foot">
+                <button class="icon-btn" id="theme" type="button" title="Đổi giao diện sáng/tối"></button>
+                <button class="icon-btn" id="refresh" type="button" title="Đọc lại repo (R)"></button>
+                <span class="sync" id="sync">—</span>
+            </div>
+        </aside>
+        <main class="main" id="main" tabindex="-1">
+            <div class="loading"><span class="spinner"></span>Đang đọc repo…</div>
+        </main>
+    </div>
+    <div class="drawer-layer" id="drawer" hidden></div>
+    <div class="modal-layer" id="modal" hidden></div>
+    <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+    <div class="tooltip" id="tooltip" hidden></div>
+    <script src="app.js" type="module"></script>
+</body>
+</html>

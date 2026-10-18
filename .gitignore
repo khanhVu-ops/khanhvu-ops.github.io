@@ -16,3 +16,4 @@ __pycache__/
 /tools/youtube/.venv/
 /content/*/videos/*/exports/
 /tools/render/.venv/
+/.dashboard/

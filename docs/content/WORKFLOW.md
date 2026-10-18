@@ -17,6 +17,10 @@ Trạng thái mô tả bằng chứng hiện có. `Ready` cần có export cuố
 6. Cập nhật 24h/7d trong nhật ký hoặc báo cáo theo [mẫu](../templates/POST_REPORT.md), gồm khoảng đo và nguồn. Chỉ ghi chỉ số thật sự lấy được.
 7. Tạo biến thể có ID/version riêng nếu đổi hook hoặc bản dịch. Ghi lại điều học được, không ghi view/lượt cài dự đoán thành kết quả.
 
+## Dashboard
+
+`python3 tools/dashboard/server.py` mở [dashboard local](../../tools/dashboard/README.md) gom cả quy trình trên vào một chỗ: pipeline, lịch, bộ đăng bài từng kênh, ghi bài đã đăng vào `POSTS.md`, nhập số 24h/7d (lưu riêng trong `.dashboard/`, không vào repo), so sánh hook A/B/C và quản lý campaign link App Store. Dashboard chạy `check-content.py` mỗi lần tải trang.
+
 ## Kiểm tra trước khi đăng
 
 Chạy từ gốc repo (chỉ cần Python 3.11+, không cài gì thêm):

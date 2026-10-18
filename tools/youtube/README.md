@@ -12,7 +12,7 @@
 Chủ kênh tự làm các bước trong Google Cloud Console bằng tài khoản studio `khanhvu.dev@gmail.com`.
 
 1. Tạo project mới (ví dụ `kvapps-studio`) tại [console.cloud.google.com](https://console.cloud.google.com/).
-2. **APIs & Services → Library**: bật **YouTube Data API v3**.
+2. **APIs & Services → Library**: bật **YouTube Data API v3** và **YouTube Analytics API** (dashboard dùng để đọc thời gian xem và tỷ lệ xem hết; quyền chỉ đọc `yt-analytics.readonly`). Token tạo trước khi thêm quyền này cần chạy lại `auth`.
 3. **Google Auth Platform → Branding/Audience**: loại **External**, giữ trạng thái **Testing**, thêm `khanhvu.dev@gmail.com` vào **Test users**.
 4. **Clients → Create client → Desktop app**. Tải JSON về và lưu thành `.secrets/youtube-client.json` ở gốc repo (thư mục này đã gitignore).
 5. Tạo môi trường Python và cấu hình:
