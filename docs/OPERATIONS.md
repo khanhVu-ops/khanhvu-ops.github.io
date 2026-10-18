@@ -23,4 +23,15 @@ Snapshot **18/10/2026**. Đánh dấu xong sau khi kiểm tra kết quả; trạ
 - [ ] Đăng video đầu tiên khi bản cuối đã duyệt; ghi URL thật vào nhật ký kênh.
 - [ ] Bổ sung số liệu sau 24 giờ/7 ngày và chọn creative tiếp theo theo dữ liệu.
 
-Các mục trên là backlog, không tạo lịch tự động hay tự đăng bài.
+## Veilnest — 14 ngày (thêm 18/10/2026)
+
+- [x] Viết trang SEO [how-to-hide-photos-iphone.html](../website/how-to-hide-photos-iphone.html), thêm `sitemap.xml`/`robots.txt`. Chưa commit/deploy.
+- [x] Lập [lịch 14 ngày](content/VEILNEST_14_DAYS.md), 7 brief và metadata YouTube cho từng hook.
+- [x] Viết nháp bài [Reddit](social/channels/reddit/README.md) và [nhóm Facebook VN](social/channels/facebook-groups/README.md).
+- [x] Tool [upload YouTube qua API](../tools/youtube/README.md), mặc định private.
+- [ ] Chủ kênh tạo OAuth client trong Google Cloud, điền `.env`, chạy `upload.py auth`.
+- [ ] Quay 4 master trên build thật bằng vault thử; xuất bản EN và VI.
+- [ ] Sau khi deploy trang SEO: gửi `sitemap.xml` trong Google Search Console.
+- [ ] Chốt ngày bắt đầu; ghi ngày thật vào lịch 14 ngày.
+
+Các mục trên là backlog. Tool YouTube chỉ upload khi chủ kênh chạy lệnh; không có tác vụ tự đăng.

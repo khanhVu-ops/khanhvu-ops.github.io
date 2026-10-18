@@ -10,7 +10,8 @@ Repo chung để vận hành studio **KV Apps — Apps & Games by Khanh Vu**: we
 | Xem việc cần làm tiếp | [Bảng công việc studio](docs/OPERATIONS.md) |
 | Cách kéo user organic, thị trường và nội dung | [Chiến lược social](docs/social/STRATEGY.md) |
 | Quản lý YouTube, TikTok, Instagram, Facebook | [Các kênh social](docs/social/channels/README.md) |
-| Lên lịch và ghi kết quả đăng bài | [Lịch nội dung](docs/content/CALENDAR.md) |
+| Lên lịch và ghi kết quả đăng bài | [Lịch nội dung](docs/content/CALENDAR.md) · [Veilnest 14 ngày](docs/content/VEILNEST_14_DAYS.md) |
+| Upload Shorts lên YouTube (private/hẹn giờ) | [Tool YouTube](tools/youtube/README.md) |
 | Tìm kịch bản, storyboard, video theo app | [Kho nội dung](content/README.md) |
 | Sửa trang chủ, privacy, support, terms | [Website](docs/website/README.md) · mã nguồn trong [website/](website/) |
 | Đọc hướng dẫn và biểu mẫu | [Chỉ mục tài liệu](docs/README.md) |
@@ -31,7 +32,7 @@ content/
   color-meter/videos/    Nội dung Color Meter
   paper-drift/videos/    Nội dung Paper Drift
   shared/                 Tài nguyên dùng chung giữa các app
-tools/                    Kiểm tra website và chạy preview
+tools/                    Kiểm tra website, chạy preview, upload YouTube (tools/youtube/)
 .github/workflows/        Phát hành riêng website/ lên GitHub Pages
 ```
 

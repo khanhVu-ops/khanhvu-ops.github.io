@@ -1,0 +1,13 @@
+# YouTube metadata for 2026-10-18-calculator-pov-en-v1, hook B. Uploads private unless you override.
+creative_id = "2026-10-18-calculator-pov-en-v1-hookb"
+
+[youtube]
+title = "When they ask to borrow your phone #Shorts"
+description = "Flip the phone face-down and Veilnest locks your vault behind a working calculator. The calculator only does math; you unlock with your own PIN.\n\nVeilnest on the App Store: https://apps.apple.com/app/id6813747332\nHow to hide photos on iPhone (Hidden album vs. a vault): https://khanhvu-ops.github.io/how-to-hide-photos-iphone.html\n\nFilmed with a test vault and demo photos.\n#Shorts #iphonetips #privacy"
+tags = ["iphone tips", "hide photos iphone", "photo vault", "privacy", "veilnest"]
+category_id = "28"
+language = "en"
+made_for_kids = false
+# true if any realistic scene was AI-generated or altered; real screen recordings are false
+synthetic_media = false
+privacy = "private"

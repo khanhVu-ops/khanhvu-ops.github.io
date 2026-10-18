@@ -9,6 +9,8 @@ Cập nhật **18/10/2026**. Google chủ sở hữu studio: **`khanhvu.dev@gmai
 | Instagram | Tên dự kiến KV Apps; handle dự kiến `khanhvuapps` | Chưa hoàn tất đăng ký; chưa giữ được handle | Form dùng email studio | Chủ tài khoản tự điền password/ngày sinh và xác minh, sau đó kiểm tra profile và loại tài khoản |
 | Facebook cá nhân | Tài khoản thật của chủ studio | Chưa hoàn tất đăng ký mới | Form dùng email studio | Chủ tài khoản hoàn tất thông tin cá nhân và xác minh |
 | Facebook Page | Tên dự kiến KV Apps; handle chưa xác nhận | Chưa tạo | Sẽ do Facebook cá nhân quản trị | Tạo sau khi có tài khoản cá nhân hoạt động |
+| Reddit | Tài khoản cá nhân của chủ studio (chưa ghi username) | Chưa kiểm tra | Chủ studio | Kiểm tra tuổi tài khoản/karma trước bài đầu; xem [hướng dẫn](channels/reddit/README.md) |
+| Google Cloud (YouTube API) | Project OAuth cho [tool upload](../../tools/youtube/README.md) | Chưa tạo | `khanhvu.dev@gmail.com` | Chủ kênh tạo project, bật YouTube Data API v3, tạo Desktop client; secret chỉ ở `.secrets/` local |
 | Apple Developer | Email studio | Người dùng xác nhận đang dùng email này; chưa audit quyền | `khanhvu.dev@gmail.com` | Kiểm tra lại trong Apple khi thay đổi quyền |
 | AdMob | Email studio | Người dùng xác nhận đang dùng email này; chưa audit quyền | `khanhvu.dev@gmail.com` | Giữ seller file hiện có; kiểm tra quyền trực tiếp khi cần |
 

@@ -20,6 +20,6 @@ Trạng thái mô tả bằng chứng hiện có. `Ready` cần có export cuố
 
 Git hiện giữ script, asset demo, storyboard và preview của ba pack Veilnest được nhập. Các ZIP và handoff trùng lặp chỉ giữ local, xem [IMPORT.md](IMPORT.md). File GitHub Pages chỉ lấy từ `website/`; creative không xuất hiện trên site nhưng file đã commit vẫn công khai trong GitHub.
 
-Với dự án mới, giữ file render có ích cho review ở Git; media thô lớn để ngoài Git hoặc `media/local/` (đã ignore). Ghi nơi lưu trữ trong hệ thống riêng nếu có dữ liệu nhạy cảm. Trước khi thêm file lớn, chọn Git LFS hoặc kho media phù hợp và cập nhật tài liệu; không giả định thư mục ignored được backup khi push.
+Thư mục `exports/` của mọi creative đã gitignore: bản export cuối không vào repo public, nên tự sao lưu ở nơi khác. Với dự án mới, giữ file render có ích cho review ở Git; media thô lớn để ngoài Git hoặc `media/local/` (đã ignore). Ghi nơi lưu trữ trong hệ thống riêng nếu có dữ liệu nhạy cảm. Trước khi thêm file lớn, chọn Git LFS hoặc kho media phù hợp và cập nhật tài liệu; không giả định thư mục ignored được backup khi push.
 
 Các script render nhập từ repo iOS là công cụ sản xuất cũ, không nằm trong workflow phát hành website và chưa được kiểm tra lại khả năng render trong lần chuyển này.

@@ -1,0 +1,13 @@
+# YouTube metadata for 2026-10-18-hidden-album-vi-v1, hook A. Uploads private unless you override.
+creative_id = "2026-10-18-hidden-album-vi-v1-hooka"
+
+[youtube]
+title = "Album Ẩn trên iPhone mở bằng mật mã máy #Shorts"
+description = "Album Ẩn của iPhone miễn phí và có sẵn, nhưng mở bằng mật mã máy. Veilnest giữ ảnh sau một mã PIN 6 số riêng.\n\nVeilnest trên App Store: https://apps.apple.com/app/id6813747332\nHướng dẫn (tiếng Anh): https://khanhvu-ops.github.io/how-to-hide-photos-iphone.html\n\nQuay bằng vault thử và ảnh mẫu.\n#Shorts #thuthuatiphone #iphone"
+tags = ["thủ thuật iphone", "ẩn ảnh iphone", "photo vault", "veilnest"]
+category_id = "28"
+language = "vi"
+made_for_kids = false
+# true if any realistic scene was AI-generated or altered; real screen recordings are false
+synthetic_media = false
+privacy = "private"

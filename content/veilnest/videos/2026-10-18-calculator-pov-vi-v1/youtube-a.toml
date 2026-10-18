@@ -1,0 +1,13 @@
+# YouTube metadata for 2026-10-18-calculator-pov-vi-v1, hook A. Uploads private unless you override.
+creative_id = "2026-10-18-calculator-pov-vi-v1-hooka"
+
+[youtube]
+title = "POV: bạn thân giật điện thoại của bạn #Shorts"
+description = "Úp điện thoại xuống là Veilnest khoá vault và hiện một máy tính dùng được thật. Máy tính chỉ để tính toán; mở vault bằng PIN riêng của bạn.\n\nVeilnest trên App Store: https://apps.apple.com/app/id6813747332\nHướng dẫn (tiếng Anh): https://khanhvu-ops.github.io/how-to-hide-photos-iphone.html\n\nQuay bằng vault thử và ảnh mẫu.\n#Shorts #thuthuatiphone #iphone"
+tags = ["thủ thuật iphone", "ẩn ảnh iphone", "photo vault", "veilnest"]
+category_id = "28"
+language = "vi"
+made_for_kids = false
+# true if any realistic scene was AI-generated or altered; real screen recordings are false
+synthetic_media = false
+privacy = "private"

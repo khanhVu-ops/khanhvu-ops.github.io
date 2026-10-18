@@ -10,6 +10,8 @@
 | [veilnest-us-pov-v2-2026-10-04](videos/veilnest-us-pov-v2-2026-10-04/README.md) | POV v2, animatic 15s, sửa tính liên tục owner → friend → owner | Hướng chính nếu chọn comedy POV; còn cần actor motion/voice và UI thật |
 | [veilnest-gemini-continuation-2026-10-04](videos/veilnest-gemini-continuation-2026-10-04/README.md) | Kit nối opening Gemini có sẵn thành khoảng 18s; chưa có clip B mới | Hướng thay thế nếu giữ opening đã có; tạo/dựng đoạn B rồi ghép |
 
+Brief mới cho 14 ngày (18/10/2026), quay trên build thật thay cho các pack trên: xem [VEILNEST_14_DAYS.md](../../docs/content/VEILNEST_14_DAYS.md). Mỗi thư mục `2026-10-18-*` có `BRIEF.md` và `youtube-<hook>.toml`.
+
 **V2 và Gemini continuation là hai hướng sản xuất**, không phải hai bản cuối đã sẵn sàng đăng. Các ảnh/UI là tài liệu dựng, không phải capture app thực. Các JSON verification cũ chứng minh kiểm tra kỹ thuật tại thời điểm dựng, không chứng minh chất lượng final hoặc kết quả marketing.
 
 Đã chép đủ 109 file từ IOS-Vault ngày 18/10/2026 và để nguyên nguồn. Git lưu file làm việc/preview (~41 MiB). ZIP handoff và thư mục `continuation-kit/` trùng lặp vẫn ở local nhưng bị gitignore (~48 MiB); clone mới có toàn bộ nội dung làm việc duy nhất, không có các bundle trùng này. Xem [manifest](../../docs/content/IMPORT_2026-10-18.json).

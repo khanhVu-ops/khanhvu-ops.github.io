@@ -1,6 +1,6 @@
 # Lịch nội dung
 
-Cập nhật 18/10/2026. Đây là **slot thử nghiệm chưa chốt ngày**, chưa có lịch tự đăng hoặc bài đã đăng. Thời gian sau khi chốt ghi theo `Asia/Ho_Chi_Minh` và ghi riêng giờ nếu đổi thị trường.
+Cập nhật 18/10/2026. **Kế hoạch đăng hằng ngày cho Veilnest nằm ở [VEILNEST_14_DAYS.md](VEILNEST_14_DAYS.md)** (14 ngày, 4 master, brief và metadata YouTube có sẵn). Bảng dưới là các slot thử nghiệm tổng của studio. Đây là **slot thử nghiệm chưa chốt ngày**, chưa có lịch tự đăng hoặc bài đã đăng. Thời gian sau khi chốt ghi theo `Asia/Ho_Chi_Minh` và ghi riêng giờ nếu đổi thị trường.
 
 | Slot | App | Ý tưởng / creative | Ngôn ngữ | Kênh dự kiến | Trạng thái / phụ thuộc |
 |---|---|---|---|---|---|

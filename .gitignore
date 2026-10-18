@@ -12,3 +12,6 @@ __pycache__/
 .env
 .env.*
 !.env.example
+/.secrets/
+/tools/youtube/.venv/
+/content/*/videos/*/exports/

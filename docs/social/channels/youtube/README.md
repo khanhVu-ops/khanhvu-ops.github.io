@@ -6,6 +6,9 @@ Vai trò: Shorts cho demo và gameplay; thêm tutorial dài khi có nhu cầu h�
 
 ## Khi chuẩn bị đăng
 
+Có thể upload bằng [tool API](../../../../tools/youtube/README.md): mặc định private, hẹn giờ bằng `--publish-at`.
+
+
 1. Chọn creative đã duyệt từ [kho nội dung](../../../../content/README.md), dùng bản export sạch, ghi đúng app và version.
 2. Tiêu đề nêu tình huống/lợi ích; mô tả có tên app, URL đích đã kiểm tra và liên hệ khi cần. Không dùng CTA tải cho app chưa có listing.
 3. Kiểm tra caption, crop dọc, quyền âm thanh và các lựa chọn đối tượng/nội dung theo video thực tế trong Studio.
