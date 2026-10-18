@@ -67,7 +67,7 @@ Threads hợp với bài chữ ngắn hơn video: chuyện làm app, ảnh chụ
 
 ### Facebook Page — KV Apps (chưa tạo)
 
-**Facebook cá nhân thật** của chủ studio đã đăng ký xong. Chủ studio đã xác nhận chính sách và đã bấm Create Page, nhưng Facebook vẫn quay lại form, chưa có Page được xác nhận; đang chờ kết quả thử trực tiếp trên tab điền sẵn. Page được quản trị từ tài khoản cá nhân đó.
+**Facebook cá nhân thật** của chủ studio đã đăng ký xong. Chủ studio đã xác nhận chính sách và đã bấm Create Page, nhưng Facebook vẫn quay lại form, chưa có Page được xác nhận; chủ studio đã kiểm tra trực tiếp và nghi do tài khoản mới. Chưa có thông báo Facebook xác nhận nguyên nhân hoặc thời gian chờ; trạng thái chi tiết nằm trong sổ tài khoản. Page được quản trị từ tài khoản cá nhân đó.
 
 1. Facebook → **Pages → Create new Page**.
 2. Page name: `KV Apps`. Category: `Software` (lựa chọn đã thấy và điền trong UI).

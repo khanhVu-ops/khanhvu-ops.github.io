@@ -6,7 +6,7 @@ Facebook cá nhân thật đã đăng ký xong và đang đăng nhập; tài kho
 
 ## Hoàn tất và vận hành
 
-1. Đã kiểm tra phiên đăng nhập Facebook cá nhân thật và chủ studio đã xác nhận chính sách tạo Page. Các lần bấm Create Page vẫn quay về form hợp lệ, không có thông báo lý do; chờ chủ studio thử trực tiếp. Không coi Page đã tạo hoặc tự suy đoán tài khoản bị hạn chế.
+1. Đã kiểm tra phiên đăng nhập Facebook cá nhân thật và chủ studio đã xác nhận chính sách tạo Page. Các lần bấm Create Page vẫn quay về form hợp lệ, không có thông báo lý do; chủ studio đã kiểm tra trực tiếp và nhận định có thể do tài khoản mới. Đang chờ kiểm tra lại; chưa có nguyên nhân/thời gian chờ do Facebook xác nhận. Chỉ coi Page đã tạo khi có hồ sơ thực đã kiểm tra.
 2. Tạo Page KV Apps, chọn category phù hợp với studio app/game theo lựa chọn có trong UI; đặt email công khai và website studio.
 3. Đặt avatar, cover, mô tả và username nếu được phép; kiểm tra URL public rồi cập nhật sổ tài khoản.
 4. Dùng Page đăng cập nhật app, hướng dẫn và Reels từ [kho nội dung](../../../../content/README.md). Một bài nên dẫn về một app hoặc một hành động cụ thể.
