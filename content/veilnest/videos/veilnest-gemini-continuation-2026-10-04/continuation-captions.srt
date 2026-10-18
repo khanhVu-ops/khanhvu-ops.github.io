@@ -1,0 +1,12 @@
+1
+00:00:06,958 --> 00:00:09,458
+Looks like a calculator.
+
+2
+00:00:09,458 --> 00:00:11,458
+Unlock with your private PIN.
+
+3
+00:00:11,458 --> 00:00:14,958
+Your private photos. Only for you.
+

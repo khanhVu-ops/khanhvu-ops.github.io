@@ -1,0 +1,23 @@
+{
+  "clip-a-keep-0-6.96s.mp4": {
+    "width": 720,
+    "height": 1280,
+    "fps": "24/1",
+    "frames": "167",
+    "duration": "6.958333"
+  },
+  "screen-demo-8s.mp4": {
+    "width": 720,
+    "height": 1440,
+    "fps": "24/1",
+    "frames": "192",
+    "duration": "8.000000"
+  },
+  "clip-c-end-card-3s.mp4": {
+    "width": 720,
+    "height": 1280,
+    "fps": "24/1",
+    "frames": "72",
+    "duration": "3.000000"
+  }
+}

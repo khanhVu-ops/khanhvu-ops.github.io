@@ -1,0 +1,17 @@
+{
+  "width": 720,
+  "height": 1280,
+  "fps": "24/1",
+  "frames": 431,
+  "duration": "17.979655",
+  "continuation": "gemini_generated_video_38e8ea4b.mp4 (external original used for the historical smoke check)",
+  "continuation_trim": [
+    0.5,
+    8.5
+  ],
+  "phone_screen_compositing": false,
+  "captions_burned_in": false,
+  "audio": true,
+  "kind": "assembly smoke check using the existing video as temporary B, not a newly generated continuation",
+  "new_continuation_generated": false
+}

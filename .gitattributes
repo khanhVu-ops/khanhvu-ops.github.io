@@ -1,0 +1,2 @@
+# SubRip cue blocks conventionally end with a blank line.
+*.srt whitespace=-blank-at-eof

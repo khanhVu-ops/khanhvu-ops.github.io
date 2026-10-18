@@ -1,0 +1,9 @@
+Alternative when the video model cannot reproduce readable UI: generate a screen-replacement plate, then composite screen-demo-8s.mp4 with tracking and finger occlusion in the editor.
+
+Create ONLY a vertical 9:16 10-second continuation of the supplied opening video, matching its last pose. Preserve the same fictional woman, hair, charcoal tee, jeans, beige sofa, warm daylight and single black phone. Use over-shoulder-reference.png as the next angle.
+0–0.5s: Match the preceding last pose, woman looking down at her own phone, man looking away.
+0.5–1.5s: Motivated cut to the supplied over-shoulder angle. Phone large, nearly front-facing, hands supporting it naturally. Keep the camera and phone steady.
+1.5–3s: Right index finger presses near the top center of the screen continuously for 1.5 seconds.
+3–5s: Six distinct light keypad taps across the lower half of the screen.
+5–10s: Stop tapping, hands relaxed, hold the phone steady. No scrolling.
+Throughout, keep the screen a uniform flat dark neutral gray replacement surface. No UI, digits, text, photos, reflections that hide the screen, brand card or captions. Quiet matching room tone only, no speech or new lip movement. No new characters, extra phone, floating device, extra fingers, wardrobe change or location change. Keep the fingertip anatomy and existing phone bezel clear for compositing.

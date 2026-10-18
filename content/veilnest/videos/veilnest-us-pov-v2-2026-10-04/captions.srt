@@ -1,0 +1,15 @@
+1
+00:00:00,150 --> 00:00:01,550
+Lemme see your photos.
+
+2
+00:00:02,100 --> 00:00:03,550
+This is a calculator.
+
+3
+00:00:04,150 --> 00:00:05,600
+I'm financially responsible.
+
+4
+00:00:06,050 --> 00:00:06,950
+Then pay me back.

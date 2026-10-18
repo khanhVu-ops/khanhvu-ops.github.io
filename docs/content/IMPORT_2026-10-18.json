@@ -1,0 +1,770 @@
+{
+  "imported_on": "2026-10-18",
+  "source_repository": "IOS-Vault",
+  "source_unchanged": true,
+  "files": [
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/CONTROLLED_SCREEN_PROMPT.txt",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/CONTROLLED_SCREEN_PROMPT.txt",
+      "source_sha256": "6b7aa10c0eb9334e80595ca0a39ee02e83fbba774bf56cbbee00a574c82ffdf0",
+      "bytes": 1370,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/GEMINI_IMAGE_ONLY_PROMPT.txt",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/GEMINI_IMAGE_ONLY_PROMPT.txt",
+      "source_sha256": "339d15fcadb485995f483ac3c212c93a5ac630f0bdda38526ecc20c09775d58a",
+      "bytes": 1733,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/GEMINI_PROMPT.txt",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/GEMINI_PROMPT.txt",
+      "source_sha256": "be5615b00e1ea03befd013f16a6632326381030f06a20ffcb0084e791af7d1bc",
+      "bytes": 3503,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/IMAGE_PROMPTS.md",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/IMAGE_PROMPTS.md",
+      "source_sha256": "99780f8bae5f8d0efd7a0fba8d4d468865d9be8ac9f2675653b0b27356e0b4e9",
+      "bytes": 3245,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/README.md",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/README.md",
+      "source_sha256": "b137a78a432a9d79234d8b6ed0d1e874a6c31372b723c71c677c30a808b66ba1",
+      "bytes": 5996,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/analysis/cut-analysis.jpg",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/analysis/cut-analysis.jpg",
+      "source_sha256": "88aab2f67f5e0d5ca615d90641859d3f2310f53b4e5fe31f38261766c37433e9",
+      "bytes": 99198,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/analysis/exact-cut.jpg",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/analysis/exact-cut.jpg",
+      "source_sha256": "37721dcfa808cfd69c744cc87d0885c70416a8d9f90be8434a6a50a7e8105b55",
+      "bytes": 73406,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/analysis/source-contact-sheet.jpg",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/analysis/source-contact-sheet.jpg",
+      "source_sha256": "a4c4cc7903c81c7eb93705c05b8906477c508ca2681dc09aeed01d7958d651c7",
+      "bytes": 70132,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/analysis/source-last-frame.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/analysis/source-last-frame.png",
+      "source_sha256": "10425adfbb5c678c6b7a5e9d4b90a77155e31fbbe25696e1097adb9f780eabdc",
+      "bytes": 137341,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/assemble.py",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/assemble.py",
+      "source_sha256": "83867ae549bf9e66b163ae8f0d8c9a8646535a73a2f8509a2314025d039a5947",
+      "bytes": 3657,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/assembly-check.json",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/assembly-check.json",
+      "source_sha256": "1c9738c424ee04fe2557510cad280a9000b31828f98807ab72cd72a6622fcfb3",
+      "bytes": 461,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/asset-verification.json",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/asset-verification.json",
+      "source_sha256": "2fc8134a2b760acf95563cfd35d3d565cc47cbc299ee2af1a0a261b98c3b7832",
+      "bytes": 419,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/assets/clip-a-last-frame.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/assets/clip-a-last-frame.png",
+      "source_sha256": "2675b767c43fa8aa313fd68ae4838c02fb2c52cb4a07cccfe35bfaa7aacf35a6",
+      "bytes": 877693,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/assets/demo-photo-sheet.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/assets/demo-photo-sheet.png",
+      "source_sha256": "bac363766fc9f7f61a2c16d801ec4880942659e65a58a789e8e05fa22ca27451",
+      "bytes": 2642060,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/assets/end-card-base.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/assets/end-card-base.png",
+      "source_sha256": "c961bdcfcb7db3a35262c3bd5f89acab4c68f7f657e8bccba6d359060a23ecbc",
+      "bytes": 24344,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/assets/end-card.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/assets/end-card.png",
+      "source_sha256": "b2087b65c5e44db20899ae65db78c5e1967935fbc9d44a8eef0b71b2301f15dc",
+      "bytes": 53490,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/assets/identity-room-reference.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/assets/identity-room-reference.png",
+      "source_sha256": "4c401675ebd427e15252c8fa3bc32443b74642ebd1151dfb14eb9d2491bc53ad",
+      "bytes": 874677,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/assets/over-shoulder-reference.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/assets/over-shoulder-reference.png",
+      "source_sha256": "d915056f3757a0e7d9153aa005acddb32636639bacbf4f560af271fca7156fa5",
+      "bytes": 1666631,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/assets/screen-calculator.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/assets/screen-calculator.png",
+      "source_sha256": "d174eb4ed56e5d7bb86f893d1fb02d07f85617c14ff51d639d6f3bbbf6bb55e8",
+      "bytes": 33476,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/assets/screen-pin.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/assets/screen-pin.png",
+      "source_sha256": "59c267a8c0b81ab0f75c9aa8506b4e684118b8855c1812c8964646ea8788e8e8",
+      "bytes": 32595,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/assets/screen-vault-base.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/assets/screen-vault-base.png",
+      "source_sha256": "c0beb5f339d0bde2121067010a277aa812f7f9da9edbc6ba7c00d447abd6df2b",
+      "bytes": 22887,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/assets/screen-vault.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/assets/screen-vault.png",
+      "source_sha256": "9b754bf1b2ea6bf82147ee1e969f94bc753e1518ca5c87b4eeccb700720ed65b",
+      "bytes": 531692,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/assets/veilnest-icon.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/assets/veilnest-icon.png",
+      "source_sha256": "3ba335627255f17b26a5b0e99d6af6ecdabfadb813414d162fc817d56fedc987",
+      "bytes": 782903,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/build_assets.py",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/build_assets.py",
+      "source_sha256": "5c0472c117d768444d0af72d588ed1aa04fa299f9870a8e21b2f4b2963c4fa1f",
+      "bytes": 5161,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/clip-a-keep-0-6.96s.mp4",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/clip-a-keep-0-6.96s.mp4",
+      "source_sha256": "f24c56bb2c13a7c04be9d839a29038a2ea3cdbc30f1660177ff3195e5569a07f",
+      "bytes": 2378598,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/clip-c-end-card-3s.mp4",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/clip-c-end-card-3s.mp4",
+      "source_sha256": "ea48e053e46b536479dc19103f14395d11a7e32332f8ba2a71545c3657b697aa",
+      "bytes": 26083,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-captions.srt",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-captions.srt",
+      "source_sha256": "6a18621fe47b8f21d538b1834a79d793ae1ef892bd94555ca7525107e0408adb",
+      "bytes": 189,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/CONTROLLED_SCREEN_PROMPT.txt",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/CONTROLLED_SCREEN_PROMPT.txt",
+      "source_sha256": "6b7aa10c0eb9334e80595ca0a39ee02e83fbba774bf56cbbee00a574c82ffdf0",
+      "bytes": 1370,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/GEMINI_IMAGE_ONLY_PROMPT.txt",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/GEMINI_IMAGE_ONLY_PROMPT.txt",
+      "source_sha256": "339d15fcadb485995f483ac3c212c93a5ac630f0bdda38526ecc20c09775d58a",
+      "bytes": 1733,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/GEMINI_PROMPT.txt",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/GEMINI_PROMPT.txt",
+      "source_sha256": "be5615b00e1ea03befd013f16a6632326381030f06a20ffcb0084e791af7d1bc",
+      "bytes": 3503,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/IMAGE_PROMPTS.md",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/IMAGE_PROMPTS.md",
+      "source_sha256": "99780f8bae5f8d0efd7a0fba8d4d468865d9be8ac9f2675653b0b27356e0b4e9",
+      "bytes": 3245,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/README.md",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/README.md",
+      "source_sha256": "b137a78a432a9d79234d8b6ed0d1e874a6c31372b723c71c677c30a808b66ba1",
+      "bytes": 5996,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/analysis/cut-analysis.jpg",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/analysis/cut-analysis.jpg",
+      "source_sha256": "88aab2f67f5e0d5ca615d90641859d3f2310f53b4e5fe31f38261766c37433e9",
+      "bytes": 99198,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/analysis/exact-cut.jpg",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/analysis/exact-cut.jpg",
+      "source_sha256": "37721dcfa808cfd69c744cc87d0885c70416a8d9f90be8434a6a50a7e8105b55",
+      "bytes": 73406,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/analysis/source-contact-sheet.jpg",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/analysis/source-contact-sheet.jpg",
+      "source_sha256": "a4c4cc7903c81c7eb93705c05b8906477c508ca2681dc09aeed01d7958d651c7",
+      "bytes": 70132,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/analysis/source-last-frame.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/analysis/source-last-frame.png",
+      "source_sha256": "10425adfbb5c678c6b7a5e9d4b90a77155e31fbbe25696e1097adb9f780eabdc",
+      "bytes": 137341,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/assemble.py",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/assemble.py",
+      "source_sha256": "83867ae549bf9e66b163ae8f0d8c9a8646535a73a2f8509a2314025d039a5947",
+      "bytes": 3657,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/assembly-check.json",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/assembly-check.json",
+      "source_sha256": "1c9738c424ee04fe2557510cad280a9000b31828f98807ab72cd72a6622fcfb3",
+      "bytes": 461,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/asset-verification.json",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/asset-verification.json",
+      "source_sha256": "2fc8134a2b760acf95563cfd35d3d565cc47cbc299ee2af1a0a261b98c3b7832",
+      "bytes": 419,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/clip-a-last-frame.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/clip-a-last-frame.png",
+      "source_sha256": "2675b767c43fa8aa313fd68ae4838c02fb2c52cb4a07cccfe35bfaa7aacf35a6",
+      "bytes": 877693,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/demo-photo-sheet.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/demo-photo-sheet.png",
+      "source_sha256": "bac363766fc9f7f61a2c16d801ec4880942659e65a58a789e8e05fa22ca27451",
+      "bytes": 2642060,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/end-card-base.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/end-card-base.png",
+      "source_sha256": "c961bdcfcb7db3a35262c3bd5f89acab4c68f7f657e8bccba6d359060a23ecbc",
+      "bytes": 24344,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/end-card.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/end-card.png",
+      "source_sha256": "b2087b65c5e44db20899ae65db78c5e1967935fbc9d44a8eef0b71b2301f15dc",
+      "bytes": 53490,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/identity-room-reference.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/identity-room-reference.png",
+      "source_sha256": "4c401675ebd427e15252c8fa3bc32443b74642ebd1151dfb14eb9d2491bc53ad",
+      "bytes": 874677,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/over-shoulder-reference.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/over-shoulder-reference.png",
+      "source_sha256": "d915056f3757a0e7d9153aa005acddb32636639bacbf4f560af271fca7156fa5",
+      "bytes": 1666631,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/screen-calculator.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/screen-calculator.png",
+      "source_sha256": "d174eb4ed56e5d7bb86f893d1fb02d07f85617c14ff51d639d6f3bbbf6bb55e8",
+      "bytes": 33476,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/screen-pin.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/screen-pin.png",
+      "source_sha256": "59c267a8c0b81ab0f75c9aa8506b4e684118b8855c1812c8964646ea8788e8e8",
+      "bytes": 32595,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/screen-vault-base.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/screen-vault-base.png",
+      "source_sha256": "c0beb5f339d0bde2121067010a277aa812f7f9da9edbc6ba7c00d447abd6df2b",
+      "bytes": 22887,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/screen-vault.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/screen-vault.png",
+      "source_sha256": "9b754bf1b2ea6bf82147ee1e969f94bc753e1518ca5c87b4eeccb700720ed65b",
+      "bytes": 531692,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/veilnest-icon.png",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/assets/veilnest-icon.png",
+      "source_sha256": "3ba335627255f17b26a5b0e99d6af6ecdabfadb813414d162fc817d56fedc987",
+      "bytes": 782903,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/build_assets.py",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/build_assets.py",
+      "source_sha256": "5c0472c117d768444d0af72d588ed1aa04fa299f9870a8e21b2f4b2963c4fa1f",
+      "bytes": 5161,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/clip-a-keep-0-6.96s.mp4",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/clip-a-keep-0-6.96s.mp4",
+      "source_sha256": "f24c56bb2c13a7c04be9d839a29038a2ea3cdbc30f1660177ff3195e5569a07f",
+      "bytes": 2378598,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/clip-c-end-card-3s.mp4",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/clip-c-end-card-3s.mp4",
+      "source_sha256": "ea48e053e46b536479dc19103f14395d11a7e32332f8ba2a71545c3657b697aa",
+      "bytes": 26083,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/continuation-captions.srt",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/continuation-captions.srt",
+      "source_sha256": "6a18621fe47b8f21d538b1834a79d793ae1ef892bd94555ca7525107e0408adb",
+      "bytes": 189,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit/screen-demo-8s.mp4",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/screen-demo-8s.mp4",
+      "source_sha256": "d352349a3113235ade59c0e21980bb443100a04d8b98273f3b142c70c1ce9874",
+      "bytes": 200564,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/continuation-kit.zip",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit.zip",
+      "source_sha256": "933224a0202258b02762d9f454697be94f50654e48712bb7115bbb62187374d8",
+      "bytes": 10417595,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-gemini-continuation-2026-10-04/screen-demo-8s.mp4",
+      "destination": "content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/screen-demo-8s.mp4",
+      "source_sha256": "d352349a3113235ade59c0e21980bb443100a04d8b98273f3b142c70c1ce9874",
+      "bytes": 200564,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/README.md",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/README.md",
+      "source_sha256": "2e210b501dceca053744e66b42427b486212de605d5ab56f7dee7c00abfcb069",
+      "bytes": 3513,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/SCRIPT.md",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/SCRIPT.md",
+      "source_sha256": "f3409e6643a02bfe143a4489277da408c5ee56bd0a69da43864ff153f24e1853",
+      "bytes": 3512,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/VIDEO_PROMPTS.md",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/VIDEO_PROMPTS.md",
+      "source_sha256": "7a2fb491bf332a2bffb971eed6261cb6d2088caad407dbf1c2853b8de47ebd8e",
+      "bytes": 4694,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/assets/actors-reference.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/assets/actors-reference.png",
+      "source_sha256": "af7c753022531bd7fe9d1d116c6e66fedf21063d27d3ab93848675bbd22985db",
+      "bytes": 2067648,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/assets/calculator.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/assets/calculator.png",
+      "source_sha256": "9877ad521b4da65789889f4856160596bda5fa8161bb4db0c42ae586ac4c1382",
+      "bytes": 49423,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/assets/end-card.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/assets/end-card.png",
+      "source_sha256": "e6d3850e7ab98849b78e8943d4f394ce6bc4f66f202d333e1d2f5aed3cb526cb",
+      "bytes": 37131,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/assets/pin.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/assets/pin.png",
+      "source_sha256": "f7cff086f47863c1005beb47687d1fd6d2716da6a2f8367c7d77dbcdeffc41a6",
+      "bytes": 47339,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/assets/review-answer.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/assets/review-answer.png",
+      "source_sha256": "eed36220803b4ff520f9264cde27f232d1f93507392db77e4a02d3057620de0b",
+      "bytes": 1899342,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/assets/review-end-card.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/assets/review-end-card.png",
+      "source_sha256": "d2eea3e21ab74bef8ab42c974d2aec07f3f15506c6a9a47611ecf5e37c1aa91f",
+      "bytes": 148723,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/assets/review-hold.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/assets/review-hold.png",
+      "source_sha256": "942fe970a7884ac0cf39f97910f5fc6923619727054440f89ddc41a44d41535f",
+      "bytes": 152600,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/assets/review-hook.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/assets/review-hook.png",
+      "source_sha256": "a1b1908c2f9a1112d1ff2b86ba3df3b8e98f66e865454fc5bb0ddd725c78494f",
+      "bytes": 2080324,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/assets/review-pin.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/assets/review-pin.png",
+      "source_sha256": "f66e46855e4dbc85d3d08b351ca6194f0450688a31479fcae8af335ade638ed8",
+      "bytes": 154946,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/assets/review-vault.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/assets/review-vault.png",
+      "source_sha256": "30130baf0aa5dadf7a33a72141326aed38ba1504defeef64395767c78567fa9c",
+      "bytes": 166128,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/assets/timing-sounds.wav",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/assets/timing-sounds.wav",
+      "source_sha256": "2b187cdd527db46a6705fb84523899880d40e8fb57938714d601b41dd2ea655a",
+      "bytes": 1440044,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/assets/vault.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/assets/vault.png",
+      "source_sha256": "686fa7dd135faf8587cbb75923c743bbba29fdc4da9dd8f6b50365efe98ad20f",
+      "bytes": 47723,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/assets/veilnest-icon.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/assets/veilnest-icon.png",
+      "source_sha256": "3ba335627255f17b26a5b0e99d6af6ecdabfadb813414d162fc817d56fedc987",
+      "bytes": 782903,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/captions.srt",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/captions.srt",
+      "source_sha256": "14c179d64076880f1e79d285876413e2af58e573cd692f987ada57363efcac28",
+      "bytes": 253,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/preview.mp4",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/preview.mp4",
+      "source_sha256": "ca7cb69f66bc8d85ba9a55a6179ebba700edcffa30dd08c4b2cd8304c0599bce",
+      "bytes": 2163516,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/production-pack.zip",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/production-pack.zip",
+      "source_sha256": "defcc83588fccf5f8c416fcc6c6d7d4516103ca59f674c11f47c99426d616791",
+      "bytes": 10103839,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/render-verification.json",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/render-verification.json",
+      "source_sha256": "52a59183f95c9ae22a222d40779c736e284cfaddf5f5d5f6ed7eef35d9f77418",
+      "bytes": 197,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/render_preview.py",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/render_preview.py",
+      "source_sha256": "24b4a24b7672c0f8d88072dcbe3dcf70bb211fcc613480e7a0320bb6d21bb86c",
+      "bytes": 11973,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/serve_preview.py",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/serve_preview.py",
+      "source_sha256": "65a603594511d390edf3142fcc097cf1b0785f9d555383c1fdf939be7c5afc1a",
+      "bytes": 2892,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/storyboard-review.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/storyboard-review.png",
+      "source_sha256": "b23fd280690595c0313669f3d17ee5beb1d5da08d5a3af1a79a81460d38122bd",
+      "bytes": 308647,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-2026-10-04/storyboard.html",
+      "destination": "content/veilnest/videos/veilnest-us-pov-2026-10-04/storyboard.html",
+      "source_sha256": "1311a06b250f76a34f27b073bd6039fc2f76fbb12af827765b487999b985abdd",
+      "bytes": 7511,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/README.md",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/README.md",
+      "source_sha256": "3f15a261509a2424ec4dca4f9782c55d215f13db4b8cecb1185a8210c4320c78",
+      "bytes": 2518,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/SCRIPT.md",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/SCRIPT.md",
+      "source_sha256": "fc51233726987c54d197c6810c18cbb3fe95a10e1cc25e8ca17b6f2f388870df",
+      "bytes": 4170,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/VIDEO_PROMPTS.md",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/VIDEO_PROMPTS.md",
+      "source_sha256": "bc8cbef91d8fe5139e946c41500a40a6b02ab5f2647b75320e59b0915cf3ab47",
+      "bytes": 4853,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/actors-reference.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/actors-reference.png",
+      "source_sha256": "af7c753022531bd7fe9d1d116c6e66fedf21063d27d3ab93848675bbd22985db",
+      "bytes": 2067648,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/calculator.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/calculator.png",
+      "source_sha256": "385ffd856f379df140ec442141d216859a855eb0e1ae4186ef557f23894eaeec",
+      "bytes": 41027,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/end-card.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/end-card.png",
+      "source_sha256": "e6d3850e7ab98849b78e8943d4f394ce6bc4f66f202d333e1d2f5aed3cb526cb",
+      "bytes": 37131,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/friend-holding-phone.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/friend-holding-phone.png",
+      "source_sha256": "f5718044faacb608045c4cfdf7659d7825ca4180cb35d564a6cae9aca2684dbc",
+      "bytes": 1962327,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/phone-return.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/phone-return.png",
+      "source_sha256": "0535e33b60a34b4407bd9d9d590a400a74aa617236dfc1959be418bb038c205e",
+      "bytes": 2033034,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/pin.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/pin.png",
+      "source_sha256": "8e7216dcc1094dc3c4729a7421cb949acb436b0fee631e1ee5b69adfd567287c",
+      "bytes": 36512,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/review-answer.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/review-answer.png",
+      "source_sha256": "b9dac7443117736d6d4444416be26f869918a66e78e79ec57edc8460baa68e16",
+      "bytes": 2043700,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/review-end-card.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/review-end-card.png",
+      "source_sha256": "a32902ff9b35dbf7009dd4b5a95f412799b3614f24cb4461f7821d483e3d87b0",
+      "bytes": 115574,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/review-friend.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/review-friend.png",
+      "source_sha256": "712da111d5bd70d7bb0b8d1cf5bfaeb8c4075fcd7e64d5cd8d25f3a85d5f187b",
+      "bytes": 1955012,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/review-hold.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/review-hold.png",
+      "source_sha256": "68ecec53f34fbd05335f760467461f32d0ac229f905d940ab3d73d21aeb0ac4f",
+      "bytes": 459962,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/review-hook.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/review-hook.png",
+      "source_sha256": "8415b924be9b73dedead97826581f34c2d285a29a7af4a2214b03f8f335ce47b",
+      "bytes": 2080159,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/review-pin.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/review-pin.png",
+      "source_sha256": "da6c397560ffb238aae930da0420c6e3222ace71f777e1990e711fbbd049dc7c",
+      "bytes": 441781,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/review-return.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/review-return.png",
+      "source_sha256": "abb8d92d98c2d298d11165f887a99e252639b540dc4b1645010912e3a353ea89",
+      "bytes": 2030673,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/review-vault.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/review-vault.png",
+      "source_sha256": "a37e67f702c8eb6591fb44210b0f42ed73b54d373831e225c4ad60c5970decb4",
+      "bytes": 496915,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/timing-sounds.wav",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/timing-sounds.wav",
+      "source_sha256": "49b37f0d5400c8ba0a58476504807660c1797df57790a97079c23e628cae0f83",
+      "bytes": 1440044,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/vault.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/vault.png",
+      "source_sha256": "064e3652e8eda0cfc34a0aab0ce212a849b438721bda4c3aa7d52311670447a2",
+      "bytes": 44839,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/assets/veilnest-icon.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/assets/veilnest-icon.png",
+      "source_sha256": "3ba335627255f17b26a5b0e99d6af6ecdabfadb813414d162fc817d56fedc987",
+      "bytes": 782903,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/captions.srt",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/captions.srt",
+      "source_sha256": "83ed9b64361f066933a2a48e5fb2b171991549ce694c3cdef962b9d9d99d0104",
+      "bytes": 223,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/preview.mp4",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/preview.mp4",
+      "source_sha256": "54f619a9e7e59f45e171628a8e6eace8731036411d6f643e5dde86376fb085fb",
+      "bytes": 2572010,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/production-pack.zip",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/production-pack.zip",
+      "source_sha256": "005b86ae9920c0bc1a3cf9111e48d0215baa60f94b0f800afb90917155d3cdfa",
+      "bytes": 19501484,
+      "git_storage": "local_duplicate_archive"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/render-verification.json",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/render-verification.json",
+      "source_sha256": "52a59183f95c9ae22a222d40779c736e284cfaddf5f5d5f6ed7eef35d9f77418",
+      "bytes": 197,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/render_preview.py",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/render_preview.py",
+      "source_sha256": "30b43d5b411ebac1a382b9e6a34449d6905b7510c57b7be26242cc6a2e81d194",
+      "bytes": 12428,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/serve_preview.py",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/serve_preview.py",
+      "source_sha256": "1033ec1589eaaa079823625eb195a8be1db37255cc2db5d6e2d803a4cfef4298",
+      "bytes": 2892,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/storyboard-review.png",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/storyboard-review.png",
+      "source_sha256": "0b49c8fb176171873cb0bf3a9ac7f391e006a1be68098fac3eb3acf88024a789",
+      "bytes": 316148,
+      "git_storage": "tracked_working_file"
+    },
+    {
+      "source": "Docs/Marketing/veilnest-us-pov-v2-2026-10-04/storyboard.html",
+      "destination": "content/veilnest/videos/veilnest-us-pov-v2-2026-10-04/storyboard.html",
+      "source_sha256": "99e27e58479ebf113fb902a5dbcdee5d4c0fd15fc83159187969d175e7d4258b",
+      "bytes": 7347,
+      "git_storage": "tracked_working_file"
+    }
+  ]
+}

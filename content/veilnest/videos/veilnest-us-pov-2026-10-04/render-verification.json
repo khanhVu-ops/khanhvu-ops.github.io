@@ -1,0 +1,11 @@
+{
+  "width": 1080,
+  "height": 1920,
+  "fps": "30/1",
+  "frames": "450",
+  "duration": "15.000000",
+  "video_codec": "h264",
+  "has_audio": true,
+  "spoken_dialogue": false,
+  "type": "animatic"
+}

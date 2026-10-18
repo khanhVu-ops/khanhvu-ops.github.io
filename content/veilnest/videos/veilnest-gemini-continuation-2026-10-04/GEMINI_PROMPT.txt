@@ -1,0 +1,25 @@
+Create ONLY the next 10-second continuation of the supplied video. The supplied video is the opening scene and must not be replayed or regenerated.
+
+REFERENCE ROLES
+- Video clip-a-keep-0-6.96s.mp4: exact preceding action, people, clothing, room, lighting, phone, and sound context. At its end the woman has received her own phone back and is looking down at it. The man is looking away to her right.
+- over-shoulder-reference.png: the next camera angle, the same woman's hair, shirt, hands, jeans, sofa and the same single black phone. Its blank screen is only a replacement surface; the finished continuation must display the reference UI described below.
+- screen-calculator.png: calculator UI layout and correct digits. Calculator title at the top; result 42.
+- screen-pin.png: a SEPARATE six-digit PIN unlock screen, after leaving the calculator cover.
+- screen-vault.png: the private vault containing six visible personal photographs. This is the essential reveal.
+
+FORMAT AND CONTINUITY
+Vertical 9:16, realistic casual US creator-ad footage, matching the existing video. Same woman, same charcoal tee, blue jeans, shoulder-length brown wavy hair, same beige couch and warm daylight. The owner keeps the same single black phone throughout. The man does not take the phone again and does not watch her screen. Match the previous ending pose and continue the existing action. Keep the phone physically supported by her hands. No floating phone, changing phone model, extra hands, extra fingers, costume change, new location or new characters.
+
+TIMED ACTION — 10 SECONDS TOTAL
+0.0–0.5: Brief matching continuation of the previous ending pose: woman looking down at her phone, man looking away. Both remain silent. This is an editing handle, not a new conversation.
+0.5–1.5: A motivated hard cut to the supplied close over-shoulder angle. The phone shows the calculator reference and 42. Establish it clearly. Keep the phone screen large, readable, in focus and nearly front-facing. Do not orbit the camera.
+1.5–3.0: She presses and HOLDS the Calculator TITLE near the TOP of the screen for a full 1.5 seconds. This is one continuous long press with one finger. Do not type a secret code into the calculator keypad.
+3.0–5.0: The screen switches to the separate PIN reference. Six natural keypad taps fill six masked dots one at a time. The actual PIN must not be displayed as text. Keep the exact same physical phone, framing and apartment background through this transition.
+5.0–8.5: Unlock to the vault reference, clearly showing personal PHOTOGRAPHS. Hold on the grid for a full 3.5 seconds so viewers understand that the calculator conceals a private photo vault. She subtly relaxes her hands; keep the photograph grid stable and visible. No scrolling during this reveal.
+8.5–10.0: Continue holding the unlocked vault view calmly as an editing handle. No new action and no fade out.
+
+AUDIO
+Quiet matching apartment room tone only. No new dialogue, narration or lip movement. Very subtle taps and unlock sound if possible. No music reset. Captions and brand ending will be added during editing.
+
+RESTRICTIONS
+Do not generate captions, marketing slogans, an end card, App Store badges, credits, or an ANIMATIC label. Avoid illegible or invented interface text. Preserve the provided calculator, separate PIN, then photo-vault sequence. Do not end on the PIN: viewers must actually see the photographs. Do not turn the calculator buttons into PIN entry. No scene after the vault reveal.

@@ -1,0 +1,12 @@
+Create a realistic vertical 9:16 10-second continuation of an existing US creator-ad scene. Image clip-a-last-frame.png is the exact previous ending pose and identity reference. The woman has already received her own black phone back from the man, and is looking down at it. He is turning away to her right. Start from that pose; do not repeat the phone handover or add dialogue.
+
+Image over-shoulder-reference.png gives the next close phone angle. Images screen-calculator.png, screen-pin.png, and screen-vault.png give the three screen states, in that order.
+
+0–0.5s: Match the previous ending pose in the same room, same woman, charcoal tee, jeans, hair, sofa and phone. Remain silent.
+0.5–1.5s: Motivated cut to the over-shoulder angle. Same phone supported by the woman's hands. Screen shows Calculator and 42. Make the screen large, readable, stable and nearly front-facing.
+1.5–3s: Her finger holds the Calculator TITLE near the top for a complete 1.5 seconds. One continuous press. No PIN digits typed into the calculator keypad.
+3–5s: Switch to the SEPARATE light PIN screen. Six taps fill six masked dots one by one.
+5–8.5s: Reveal the supplied private PHOTO grid. Keep the personal photos visible for 3.5 seconds. Same phone, hands, camera and apartment throughout the insert.
+8.5–10s: Hold the unlocked photo grid, no new action, no fade.
+
+Quiet room tone and subtle taps only. No dialogue, narrator, subtitles, logo or end card. No floating phone, extra fingers or phones, changed face, clothing, room or light. Do not finish on the PIN; actually show the photos. Do not invent interface text. The first 0.5s and last 1.5s are editing handles; the middle eight seconds will follow the existing opening clip.

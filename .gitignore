@@ -1,2 +1,14 @@
 .DS_Store
 Thumbs.db
+__pycache__/
+*.pyc
+
+# Imported duplicate handoff bundles remain local; working files are tracked.
+/content/veilnest/videos/*/*.zip
+/content/veilnest/videos/veilnest-gemini-continuation-2026-10-04/continuation-kit/
+
+# Local scratch media and credentials never belong in this public repository.
+/media/local/
+.env
+.env.*
+!.env.example
