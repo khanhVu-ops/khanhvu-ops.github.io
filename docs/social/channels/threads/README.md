@@ -1,6 +1,6 @@
 # Threads — KV Apps
 
-Trạng thái: [sổ tài khoản](../../ACCOUNTS.md). Nhật ký: [POSTS.md](POSTS.md). Cách tạo profile và bio: [bộ hồ sơ social](../../../../content/shared/social-kit/README.md).
+Đã tạo profile public [@khanhvuapps](https://www.threads.com/@khanhvuapps) từ Instagram ngày 18/10/2026; bio và link website riêng đã lưu. Trạng thái: [sổ tài khoản](../../ACCOUNTS.md). Nhật ký: [POSTS.md](POSTS.md). Cách tạo profile và bio: [bộ hồ sơ social](../../../../content/shared/social-kit/README.md).
 
 Threads dùng chung tài khoản Instagram `khanhvuapps`. Vai trò: bài chữ ngắn của developer — một điều học được khi làm app, một ảnh chụp màn hình tính năng mới, một câu hỏi cho người dùng. Không đăng lại nguyên caption video.
 

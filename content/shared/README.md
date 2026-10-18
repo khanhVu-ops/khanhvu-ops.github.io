@@ -1,6 +1,6 @@
 # Tài nguyên dùng chung
 
-Dùng cho intro/outro, subtitle style, template cover và tài nguyên đa app khi phát sinh. Hiện chưa có bộ brand social final.
+Dùng cho intro/outro, subtitle style, template cover và tài nguyên đa app khi phát sinh. Đã có [logo studio](logo/README.md) và [social kit](social-kit/README.md) gồm avatar, banner YouTube, cover Facebook và nội dung profile. Trạng thái upload từng kênh nằm ở sổ tài khoản.
 
 Nhận diện gốc: [BRAND.md](../../docs/studio/BRAND.md). Website hiện dùng [kv-apps.svg](../../website/assets/kv-apps.svg). Không sao chép hàng loạt icon/video app vào thư mục này; nội dung thuộc app giữ trong app đó.
 

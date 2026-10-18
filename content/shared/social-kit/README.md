@@ -26,13 +26,13 @@ Kích thước tham chiếu: [YouTube channel branding](https://support.google.c
 
 ### YouTube — [@khanhvuapps](https://www.youtube.com/@khanhvuapps)
 
-Đã có tên, handle, mô tả, link. **Còn thiếu banner; avatar cần thay bằng logo mới.**
+Avatar mới và banner đã xuất bản. Trạng thái gần nhất xem [sổ tài khoản](../../../docs/social/ACCOUNTS.md); hướng dẫn dưới đây dùng cho lần thay tiếp theo.
 
 YouTube Studio → **Customization → Branding → Banner image → Upload** → chọn `youtube-banner-2560x1440.jpg` → kiểm tra khung TV/desktop/mobile → **Publish**.
 
 ### TikTok — [@khanhvuapps](https://www.tiktok.com/@khanhvuapps)
 
-Đã có tên `KV Apps`, avatar và bio (kiểm tra 18/10/2026). Bio đang dùng (≤ 80 ký tự):
+Tên và bio đã lưu; logo mới chưa được xác nhận trên profile sau Apply/Save. Trạng thái gần nhất xem sổ tài khoản. Bio đang dùng (≤ 80 ký tự):
 
 ```text
 iOS apps & offline games by Khanh Vu. Small apps. Everyday joy.
@@ -42,24 +42,21 @@ iOS apps & offline games by Khanh Vu. Small apps. Everyday joy.
 
 ### Instagram — [@khanhvuapps](https://www.instagram.com/khanhvuapps/)
 
-Đã có tên, avatar, bio và link (kiểm tra 18/10/2026). Bio đang dùng (≤ 150 ký tự):
+Đã có tên, logo mới và bio; đã chuyển Business/category Software, lưu email business và bật hiển thị contact. Website hiện là text trong bio; cần thêm vào trường Links bằng app. Bio hiện tại (≤ 150 ký tự):
 
 ```text
 Practical iOS apps, creative tools and offline games by Khanh Vu.
 Small apps. Everyday joy.
+khanhvu-ops.github.io
 ```
 
-Còn lại: chọn loại tài khoản chuyên nghiệp (**Settings → Account type and tools → Switch to professional account → Creator** hoặc **Business**, category *App Page* hoặc *Software*), rồi bật hiển thị email liên hệ `khanhvu.dev@gmail.com`.
+Nút email liên hệ chỉ hiển thị trên Instagram mobile. Không cần chuyển loại tài khoản lại; chỉ bổ sung link website trong app và kiểm tra nút Email.
 
-### Threads — @khanhvuapps (chưa tạo)
+### Threads — [@khanhvuapps](https://www.threads.com/@khanhvuapps)
 
-Threads dùng chung tài khoản Instagram, nên handle sẽ là `@khanhvuapps`.
+Đã tạo bằng Instagram `khanhvuapps` qua web ngày 18/10/2026, profile Public; bio và link riêng đã lưu. Logo mới kế thừa từ Instagram đã được kiểm tra; trạng thái gần nhất được ghi tại sổ tài khoản.
 
-1. Cài app **Threads** trên iPhone, chọn **Log in with Instagram** và chọn `khanhvuapps`.
-2. Chọn **Import from Instagram** để lấy tên, avatar và bio.
-3. Profile để **Public**.
-4. Vào **Edit profile → Link**, dán `https://khanhvu-ops.github.io/`. Link phải ở ô Link, không phải trong bio.
-5. Kiểm tra lại trên [threads.com/@khanhvuapps](https://www.threads.com/@khanhvuapps), rồi cập nhật sổ tài khoản.
+Quản lý tiếp trên web hoặc app Threads: **Edit profile → Bio**; **Links → Add link**, URL `https://khanhvu-ops.github.io/`, tiêu đề “Explore KV Apps”; lưu bio bằng **Done** trong Edit profile, sau đó thêm link riêng bằng **Done** trong Add link và quay lại profile. Luôn reload để xác nhận link còn hiển thị; lần nhập đồng thời bio/link đã có trường hợp link mất sau reload. Không cần tạo thêm tài khoản hoặc nhập lại mật khẩu.
 
 Bio Threads (≤ 150 ký tự), nếu muốn khác Instagram:
 

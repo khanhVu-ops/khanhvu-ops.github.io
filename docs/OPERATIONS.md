@@ -6,12 +6,17 @@ Snapshot **18/10/2026**. Đánh dấu xong sau khi kiểm tra kết quả; trạ
 
 - [x] Tạo và kiểm tra YouTube KV Apps bằng Google studio.
 - [x] Tạo và kiểm tra handle TikTok `@khanhvuapps` bằng Google studio.
-- [x] Avatar YouTube; tên, avatar, bio TikTok; profile Instagram (kiểm tra public 18/10 tối).
-- [ ] Upload [banner YouTube](../content/shared/social-kit/youtube-banner-2560x1440.jpg); kiểm tra crop trên mobile.
-- [ ] Instagram: chuyển tài khoản chuyên nghiệp, hiện email liên hệ.
-- [ ] Tạo Threads `@khanhvuapps` từ Instagram, thêm link website.
+- [x] Profile YouTube, TikTok, Instagram đã tạo; tên và bio đã kiểm tra.
+- [x] Avatar YouTube và Instagram đã đổi sang logo mảnh ghép mới.
+- [ ] Xác nhận logo mới trên TikTok; lần kiểm tra cuối vẫn hiện KV cũ sau khi Apply/Save.
+- [x] Upload [banner YouTube](../content/shared/social-kit/youtube-banner-2560x1440.jpg), Publish và kiểm tra trên trang kênh.
+- [x] Instagram Business, category Software; lưu email business và bật Display contact info.
+- [ ] Thêm website vào trường Links Instagram bằng app; hiện địa chỉ mới ở text bio.
+- [x] Tạo Threads public `@khanhvuapps` từ Instagram; thêm bio và link website riêng.
+- [x] Kiểm tra trực quan logo Threads và xác nhận bio/link còn hiển thị sau reload.
 - [ ] Chủ tài khoản hoàn tất Facebook cá nhân thật; sau đó tạo Facebook Page KV Apps.
-- [ ] Chỉ thêm Instagram/Facebook lên website khi đã có URL xác nhận.
+- [x] Thêm link Instagram và Threads đã xác nhận lên website.
+- [ ] Thêm Facebook lên website sau khi Page có URL xác nhận.
 
 ## Nội dung và tăng trưởng
 

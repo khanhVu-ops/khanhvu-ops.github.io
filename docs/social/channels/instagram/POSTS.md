@@ -1,6 +1,6 @@
 # Nhật ký Instagram
 
-Chưa có bài đăng được xác nhận tính đến 18/10/2026; đăng ký tài khoản còn dang dở. Thêm dòng sau khi đăng thật; kế hoạch nằm trong [lịch nội dung](../../../content/CALENDAR.md).
+Tài khoản đã tạo và chuyển Business ngày 18/10/2026; chưa có bài đăng được xác nhận. Thêm dòng sau khi đăng thật; kế hoạch nằm trong [lịch nội dung](../../../content/CALENDAR.md).
 
 | Ngày giờ + múi giờ | App | Creative ID / phiên bản | Ngôn ngữ | URL bài đăng | Link đích | Kết quả 24h / 7d · nguồn |
 |---|---|---|---|---|---|---|
