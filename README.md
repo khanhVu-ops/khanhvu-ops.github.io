@@ -1,6 +1,15 @@
 # KV Apps — website và URL dùng chung cho App Store
 
-Website tĩnh của Khanh Vu, dùng chung cho các ứng dụng liên kết tới những trang này. Mục privacy Paper Drift cập nhật ngày **09/10/2026**; các trang khác giữ nội dung trước đó. Không cần build, framework hoặc JavaScript phía client.
+Website tĩnh của Khanh Vu, dùng chung cho các ứng dụng liên kết tới những trang này. Ngày **18/10/2026**, trang chủ được cập nhật theo nhận diện **KV Apps — Apps & Games by Khanh Vu**, thêm Veilnest và Color Meter, hỗ trợ/privacy riêng cho Veilnest và đồng bộ thông tin Paper Drift. Không cần build, framework hoặc JavaScript phía client.
+
+## Nhận diện và danh mục
+
+- Thương hiệu: **KV Apps**; slogan **Small apps. Everyday joy.**; liên hệ công khai `khanhvu.dev@gmail.com`.
+- **Veilnest:** App Store US lookup xác nhận version 1.3, seller Van Khanh Vu và ID `6813747332` ngày 18/10/2026. Trang chủ dùng link tải chính xác; support và privacy có anchor `#veilnest`. Copy về vault/PIN/calculator dựa trên listing này; thông tin Firebase dựa trên bootstrap, analytics service và package configuration của repo IOS-Vault.
+- **Color Meter:** thêm icon gốc, mô tả chức năng và anchor hỗ trợ `#color-meter`. Chưa xác nhận listing App Store riêng, nên không tạo link tải hoặc nhãn đã phát hành.
+- **Paper Drift:** giữ trạng thái đang phát triển và trang riêng. Support, terms và marketing phân biệt gameplay offline với các dịch vụ ads, purchases và analytics đã mô tả trong privacy.
+- Icon sản phẩm được sao chép từ asset catalog của app. `assets/kv-apps.svg` là favicon studio; trang Paper Drift giữ favicon game riêng.
+- YouTube **KV Apps / @khanhvuapps** đã tạo và xác nhận ngày 18/10/2026, chủ sở hữu Google `khanhvu.dev@gmail.com`: https://www.youtube.com/@khanhvuapps . Trang chủ đã có link kênh. Chỉ thêm các social link khác sau khi tài khoản đã được tạo và xác nhận.
 
 ## Các URL ổn định
 
@@ -12,7 +21,7 @@ Website tĩnh của Khanh Vu, dùng chung cho các ứng dụng liên kết tớ
 | Support URL | https://khanhvu-ops.github.io/support.html |
 | AdMob seller file | https://khanhvu-ops.github.io/app-ads.txt |
 
-Các đường dẫn giữ nguyên để app đã phát hành không cần đổi link. Privacy/Terms viết bằng tiếng Anh; Support có phần hướng dẫn tiếng Anh và FAQ tiếng Việt.
+Các đường dẫn giữ nguyên để app đã phát hành không cần đổi link. Các trang public viết bằng tiếng Anh; hỗ trợ qua email nhận tiếng Anh hoặc tiếng Việt.
 
 ### URL dùng cho Paper Drift
 
@@ -23,9 +32,9 @@ Các đường dẫn giữ nguyên để app đã phát hành không cần đổ
 | Support URL | https://khanhvu-ops.github.io/support.html#paper-drift |
 | Terms | https://khanhvu-ops.github.io/terms.html#paper-drift |
 
-Paper Drift 1.0.0 đang phát triển: save local, không account/cloud sync; AdMob/UMP và StoreKit đã tích hợp, cả hai config ads bật Google test IDs. Đã thêm cấu hình Firebase và bật Analytics ngày 09/10; ATT dùng hộp thoại iOS sau opening, trước khi khởi tạo quảng cáo. Firebase ad storage/user data/personalization bị từ chối trong integration hiện tại; Analytics đo usage độc lập ATT. SDK đã ghi nhận upload thành công trong QA Debug. Privacy đã nêu các provider, dữ liệu/choices thật, nhắc thư local, purchase ledger và giới hạn khôi phục. Không có analytics opt-out trong app hiện tại. App Store privacy answers và privacy report phải đối chiếu archive sẽ phát hành; cập nhật privacy không tự bật cấu hình production. Terms/Support/marketing vẫn cần rà soát riêng theo bản phát hành. Không thay seller ID trong `app-ads.txt`.
+Paper Drift 1.0.0 đang phát triển: save local, không account/cloud sync; AdMob/UMP và StoreKit đã tích hợp, cả hai config ads bật Google test IDs. Đã thêm cấu hình Firebase và bật Analytics ngày 09/10; ATT dùng hộp thoại iOS sau opening, trước khi khởi tạo quảng cáo. Firebase ad storage/user data/personalization bị từ chối trong integration hiện tại; Analytics đo usage độc lập ATT. SDK đã ghi nhận upload thành công trong QA Debug. Privacy đã nêu các provider, dữ liệu/choices thật, nhắc thư local, purchase ledger và giới hạn khôi phục. Không có analytics opt-out trong app hiện tại. App Store privacy answers và privacy report phải đối chiếu archive sẽ phát hành; cập nhật privacy không tự bật cấu hình production. Support/Terms/marketing đã bỏ các khẳng định cũ rằng app chưa tích hợp ads/purchases và website có language switch. Vẫn cần đối chiếu lựa chọn sản phẩm và giá theo archive phát hành. Không thay seller ID trong `app-ads.txt`.
 
-`index.html` giới thiệu thêm Paper Drift; `paper-drift.html` là trang marketing riêng với icon và ảnh native từ project game. Asset được giữ local trong `assets/paper-drift/`; site không thêm script analytics, font/CDN hay embed bên thứ ba. Thay đổi Color Meter có sẵn ở working tree được giữ nguyên.
+`index.html` giới thiệu Veilnest, Color Meter và Paper Drift; `paper-drift.html` là trang marketing riêng với icon và ảnh native từ project game. Asset được giữ local trong `assets/`; site không thêm script analytics, font/CDN hay embed bên thứ ba.
 
 ## Phạm vi nội dung
 

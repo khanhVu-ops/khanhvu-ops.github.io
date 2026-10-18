@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KV Apps — iOS Apps and Games by Khanh Vu</title>
-    <meta name="description" content="Explore iOS apps and games by Khanh Vu: Paper Drift, Color Meter, privacy information, terms and support.">
+    <meta name="description" content="Discover KV Apps: Veilnest private photo vault, Color Meter creative tools and Paper Drift offline puzzles. iOS apps and games by Khanh Vu.">
     <link rel="canonical" href="https://khanhvu-ops.github.io/">
+    <meta property="og:title" content="KV Apps — Apps &amp; Games by Khanh Vu">
+    <meta property="og:description" content="Small apps. Everyday joy. Discover a private photo vault, creative tools and an offline puzzle game.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://khanhvu-ops.github.io/">
     <style>
         :root {
             --bg: #090d16;
@@ -112,8 +116,14 @@
 
         .hero {
             text-align: center;
-            padding: 40px 0 60px;
+            padding: 12px 0 60px;
         }
+
+        .studio-mark { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.08em; color: #7dd3fc; }
+        .studio-byline { color: var(--accent); font-size: 0.9rem; font-weight: 600; margin-bottom: 16px; }
+        .hero-action { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 22px; border-radius: 12px; text-decoration: none; font-weight: 600; }
+        .hero-action.primary { background: var(--accent); color: var(--bg); }
+        .hero-action.secondary { color: var(--text-primary); border: 1px solid var(--surface-border); }
 
         .app-icon-wrapper {
             margin: 0 auto 28px;
@@ -262,10 +272,16 @@
         .nav-links { display: flex; flex-wrap: wrap; gap: 12px 24px; }
         .nav-links a { margin-left: 0; white-space: nowrap; }
         .app-feature { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 28px; align-items: center; padding: 36px; border: 1px solid #2b6661; border-radius: 28px; background: linear-gradient(130deg, #153c3d, #121826); }
+        .app-feature + .app-feature { margin-top: 24px; }
+        .app-feature.vault { border-color: #51436f; background: linear-gradient(130deg, #2b2043, #121826); }
+        .app-feature.color { border-color: #304d78; background: linear-gradient(130deg, #172b49, #121826); }
         .app-feature img { width: 112px; height: 112px; border-radius: 26px; }
-        .app-feature h2 { font-size: 2rem; letter-spacing: -0.04em; margin: 8px 0; }
+        .app-feature h3 { font-size: 2rem; letter-spacing: -0.04em; margin: 8px 0; }
         .app-feature p { color: #c3d8d3; max-width: 650px; }
+        .app-feature.vault p, .app-feature.color p { color: #cbd5e1; }
         .app-status { color: #ffe4a0; font-size: 0.8rem; font-weight: 600; }
+        .app-status.available { color: #a7f3d0; }
+        .app-status.category { color: #93c5fd; }
         .app-actions { display: flex; gap: 12px 22px; flex-wrap: wrap; margin-top: 20px; }
         .app-actions a { color: #b7eee3; text-underline-offset: 4px; }
         .app-actions .primary-link { color: #183e38; padding: 9px 16px; background: #ffe4a0; border-radius: 10px; text-decoration: none; font-weight: 700; }
@@ -279,7 +295,7 @@
             .app-feature img { width: 88px; height: 88px; border-radius: 22px; }
         }
     </style>
-    <link rel="icon" href="assets/paper-drift/icon.png" type="image/png">
+    <link rel="icon" href="assets/kv-apps.svg" type="image/svg+xml">
 </head>
 <body>
     <div class="ambient-glow"></div>
@@ -290,8 +306,8 @@
                 <span>KV Apps</span>
                 <span class="brand-badge">iOS Studio</span>
             </a>
-            <nav class="nav-links">
-                <a href="#apps">Apps</a>
+            <nav class="nav-links" aria-label="Main navigation">
+                <a href="#apps">Apps &amp; games</a>
                 <a href="support.html">Support</a>
                 <a href="privacy.html">Privacy</a>
                 <a href="terms.html">Terms</a>
@@ -301,34 +317,44 @@
 
     <main>
         <section class="hero">
-            <div class="app-icon-wrapper">
-                <svg viewBox="0 0 24 24">
-                    <defs>
-                        <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#38bdf8" />
-                            <stop offset="100%" stop-color="#818cf8" />
-                        </linearGradient>
-                    </defs>
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/>
-                </svg>
-            </div>
+            <div class="app-icon-wrapper" aria-hidden="true"><span class="studio-mark">KV</span></div>
 
+            <p class="studio-byline">Apps &amp; Games by Khanh Vu</p>
             <h1>Small apps.<br>Everyday joy.</h1>
-            <p class="tagline">iOS apps and games by Khanh Vu, made for work, creativity and a little downtime. Explore our products and find support, privacy information and terms here.</p>
+            <p class="tagline">A private space for your photos, tools for your creativity and little games for your downtime. Independently made for iOS.</p>
 
             <div class="badge-group">
-                <a href="support.html" class="app-store-btn" style="color: #f8fafc; padding: 14px 24px; border: 1px solid #38bdf8; border-radius: 12px; text-decoration: none;">App support</a>
+                <a href="#apps" class="hero-action primary">Explore our apps</a>
+                <a href="support.html" class="hero-action secondary">Get support</a>
             </div>
         </section>
 
         <section id="apps" aria-labelledby="apps-title">
-            <h2 id="apps-title">A little corner of KV Apps</h2>
-            <p class="section-intro">Every product has its own purpose and story.</p>
+            <h2 id="apps-title">Find your next everyday app.</h2>
+            <p class="section-intro">Explore our apps and a puzzle game in the making. Each product has its own features, purchase options and privacy information.</p>
+            <article class="app-feature vault" id="veilnest" aria-labelledby="veilnest-title">
+                <img src="assets/veilnest/icon.png" width="112" height="112" alt="Veilnest app icon" loading="lazy">
+                <div>
+                    <span class="app-status available">PRIVATE PHOTO VAULT · ON THE APP STORE</span>
+                    <h3 id="veilnest-title">Veilnest</h3>
+                    <p>Keep private photos and videos in an encrypted space with a PIN you choose. Capture directly into your vault, organize your collection and edit in the app. No account required.</p>
+                    <div class="app-actions"><a class="primary-link" href="https://apps.apple.com/app/id6813747332">View on the App Store →</a><a href="support.html#veilnest">Veilnest support</a><a href="privacy.html#veilnest">Privacy</a><a href="terms.html">Terms</a></div>
+                </div>
+            </article>
+            <article class="app-feature color" id="color-meter" aria-labelledby="color-meter-title">
+                <img src="assets/color-meter/icon.png" width="112" height="112" alt="Color Meter app icon" loading="lazy">
+                <div>
+                    <span class="app-status category">COLOR TOOLS · CREATIVITY</span>
+                    <h3 id="color-meter-title">Color Meter</h3>
+                    <p>Find colors in camera views and photos, explore the color wheel and keep your favorite colors in local collections. A pocket companion for your next creative project.</p>
+                    <div class="app-actions"><a class="primary-link" href="support.html#color-meter">Explore Color Meter →</a><a href="privacy.html#color-meter">Privacy</a><a href="terms.html">Terms</a></div>
+                </div>
+            </article>
             <article class="app-feature" id="paper-drift">
                 <img src="assets/paper-drift/icon.png" width="112" height="112" alt="Paper Drift icon: two paper boats on teal water" loading="lazy">
                 <div>
                     <span class="app-status">2D PUZZLE GAME · IN DEVELOPMENT</span>
-                    <h2>Paper Drift</h2>
+                    <h3>Paper Drift</h3>
                     <p>One current. One way home. Guide paper boats across the lagoon, read the rhythm of the water and light up your mail dock. The current build has 1,000 offline levels and needs no account.</p>
                     <div class="app-actions"><a class="primary-link" href="paper-drift.html">Explore the game →</a><a href="support.html#paper-drift">Game support</a><a href="privacy.html#paper-drift">Privacy</a><a href="terms.html#paper-drift">Terms</a></div>
                 </div>
@@ -338,20 +364,20 @@
         <section class="grid-features">
             <div class="card">
                 <span class="card-icon">🎨</span>
-                <h3>Tools for creativity</h3>
-                <p>From sampling colors to everyday utilities. Check each app for its features and purchase options; different needs don't have to share one plan.</p>
+                <h3>Make something yours</h3>
+                <p>Pick a color, collect an idea or keep a personal moment in its own space. Small tools for the things you care about.</p>
             </div>
 
             <div class="card">
                 <span class="card-icon">⚡</span>
-                <h3>Made for your work</h3>
-                <p>Use our tools for personal or commercial projects under the applicable license and content rights. You keep the rights to your own work.</p>
+                <h3>A little time to play</h3>
+                <p>Discover thoughtful puzzles for a quiet break. Explore Paper Drift and follow the journey as we bring the game to life.</p>
             </div>
 
             <div class="card">
                 <span class="card-icon">🛡️</span>
-                <h3>Respect for privacy</h3>
-                <p>Learn what data each feature processes and which permissions it uses. Apps with ads or online services provide the relevant information and choices.</p>
+                <h3>Know your apps</h3>
+                <p>Find product-specific support and privacy information, or reach Khanh Vu directly at <a href="mailto:khanhvu.dev@gmail.com" style="color: var(--accent);">khanhvu.dev@gmail.com</a>.</p>
             </div>
         </section>
     </main>
@@ -363,6 +389,7 @@
                 <a href="privacy.html">Privacy Policy</a>
                 <a href="terms.html">Terms of Use</a>
                 <a href="support.html">Support</a>
+                <a href="https://www.youtube.com/@khanhvuapps">YouTube</a>
                 <a href="app-ads.txt">app-ads.txt</a>
             </div>
             <p class="copyright">© 2026 Khanh Vu (KV Apps). All rights reserved.</p>
