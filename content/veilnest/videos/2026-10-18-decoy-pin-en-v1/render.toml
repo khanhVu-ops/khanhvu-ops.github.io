@@ -1,0 +1,57 @@
+# Cấu hình render cho 2026-10-18-decoy-pin-en-v1. Xem tools/render/README.md.
+# Thời gian theo kịch bản trong BRIEF.md — chỉnh lại theo footage thật sau khi quay.
+creative_id = "2026-10-18-decoy-pin-en-v1"
+# master = "exports/master.mov"   # mặc định: exports/master.* (thư mục đã gitignore)
+# trim = [0.0, 15.0]               # cắt master trước khi dựng, giây
+fit = "auto"                       # auto | scale | crop | pad | blur (nền mờ khi khác 9:16)
+loudness = -14.0                   # LUFS; false để giữ nguyên âm lượng
+platforms = ["tiktok", "reels", "shorts"]
+
+[hook]
+duration = 2.0
+position = "upper"                 # top | upper | center | lower | bottom | số 0–1
+style = "hook"
+
+# [captions]
+# file = "captions.srt"
+# style = "caption"
+# position = "lower"
+
+[[variant]]
+id = "a"
+hook = "Two PINs. Two different vaults."
+meta = "youtube-a.toml"
+
+[[variant]]
+id = "b"
+hook = "A fake PIN for nosy people"
+meta = "youtube-b.toml"
+
+[[variant]]
+id = "c"
+hook = "Which PIN did I just type?"
+meta = "youtube-c.toml"
+
+[[text]]
+text = "PIN one."
+start = 2.2
+end = 5.8
+
+[[text]]
+text = "PIN two."
+start = 6.2
+end = 9.8
+
+[[text]]
+text = "Decoy vault · Veilnest Pro"
+start = 10.0
+end = 13.0
+style = "label"
+position = "upper"
+
+[end_card]
+start = 13.0
+title = "Veilnest"
+subtitle = "Private photo vault"
+cta = "Search “Veilnest” on the App Store"
+icon = "../veilnest-us-pov-v2-2026-10-04/assets/veilnest-icon.png"

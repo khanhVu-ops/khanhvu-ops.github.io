@@ -1,0 +1,28 @@
+# Vùng bị UI nền tảng che trên khung dọc 1080×1920, tính bằng pixel từ mép tương ứng.
+# Số đo là ước lượng thận trọng (đối chiếu 19/10/2026): thanh tab trên cùng, nút like/comment/share
+# bên phải, tên tài khoản + caption + âm thanh ở dưới. Nền tảng đổi giao diện thường xuyên —
+# xem lại bản export trên điện thoại thật rồi sửa số ở đây nếu khác.
+
+[tiktok]
+label = "TikTok"
+color = "#ff2d55"
+top = 160
+bottom = 480
+left = 60
+right = 150
+
+[reels]
+label = "Reels"
+color = "#bf5af2"
+top = 220
+bottom = 420
+left = 60
+right = 130
+
+[shorts]
+label = "Shorts"
+color = "#ff9f0a"
+top = 150
+bottom = 400
+left = 60
+right = 140

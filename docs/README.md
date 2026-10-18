@@ -4,7 +4,7 @@
 |---|---|
 | Vận hành | [Công việc ưu tiên](OPERATIONS.md) |
 | Thương hiệu | [KV Apps](studio/BRAND.md) |
-| Social | [Tài khoản](social/ACCOUNTS.md) · [Chiến lược](social/STRATEGY.md) · [Từng kênh](social/channels/README.md) · [Upload YouTube](../tools/youtube/README.md) |
+| Social | [Tài khoản](social/ACCOUNTS.md) · [Chiến lược](social/STRATEGY.md) · [Từng kênh](social/channels/README.md) · [Render video](../tools/render/README.md) · [Upload YouTube](../tools/youtube/README.md) |
 | App/game | [Veilnest](apps/veilnest.md) · [Color Meter](apps/color-meter.md) · [Paper Drift](apps/paper-drift.md) |
 | Nội dung | [Quy trình](content/WORKFLOW.md) · [Lịch đăng](content/CALENDAR.md) · [Veilnest 14 ngày](content/VEILNEST_14_DAYS.md) · [Tài liệu nhập từ IOS-Vault](content/IMPORT.md) |
 | Biểu mẫu | [Brief video](templates/VIDEO_BRIEF.md) · [Báo cáo bài đăng](templates/POST_REPORT.md) |

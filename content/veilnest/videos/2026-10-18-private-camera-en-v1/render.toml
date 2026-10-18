@@ -1,0 +1,50 @@
+# Cấu hình render cho 2026-10-18-private-camera-en-v1. Xem tools/render/README.md.
+# Thời gian theo kịch bản trong BRIEF.md — chỉnh lại theo footage thật sau khi quay.
+creative_id = "2026-10-18-private-camera-en-v1"
+# master = "exports/master.mov"   # mặc định: exports/master.* (thư mục đã gitignore)
+# trim = [0.0, 15.0]               # cắt master trước khi dựng, giây
+fit = "auto"                       # auto | scale | crop | pad | blur (nền mờ khi khác 9:16)
+loudness = -14.0                   # LUFS; false để giữ nguyên âm lượng
+platforms = ["tiktok", "reels", "shorts"]
+
+[hook]
+duration = 2.0
+position = "upper"                 # top | upper | center | lower | bottom | số 0–1
+style = "hook"
+
+# [captions]
+# file = "captions.srt"
+# style = "caption"
+# position = "lower"
+
+[[variant]]
+id = "a"
+hook = "This photo isn't in my Photos app"
+meta = "youtube-a.toml"
+
+[[variant]]
+id = "b"
+hook = "Take photos that skip your camera roll"
+meta = "youtube-b.toml"
+
+[[variant]]
+id = "c"
+hook = "Where did that photo go?"
+meta = "youtube-c.toml"
+
+[[text]]
+text = "Not in Photos."
+start = 6.2
+end = 9.8
+
+[[text]]
+text = "Only in my vault."
+start = 10.2
+end = 12.8
+
+[end_card]
+start = 13.0
+title = "Veilnest"
+subtitle = "Private photo vault"
+cta = "Search “Veilnest” on the App Store"
+icon = "../veilnest-us-pov-v2-2026-10-04/assets/veilnest-icon.png"

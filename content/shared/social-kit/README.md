@@ -12,6 +12,8 @@ Lập ngày 18/10/2026. Mọi kênh dùng **một nhận diện**: tên `KV Apps
 | [`youtube-banner-2560x1440.jpg`](youtube-banner-2560x1440.jpg) | Banner YouTube | 2560 × 1440, 248 KB | Logo và icon nằm trong vùng giữa ~1500 × 400, phần còn lại có thể bị cắt trên mobile |
 | [`facebook-cover-1640x683.jpg`](facebook-cover-1640x683.jpg) | Ảnh bìa Facebook Page | 1640 × 683 (2.4:1), 96 KB | Nội dung ở giữa, chừa góc dưới trái cho avatar |
 
+Overlay vùng an toàn cho video dọc 1080 × 1920 nằm ở [`safezones/`](safezones/): `safezones-all` gộp TikTok, Reels và Shorts, các file còn lại là từng nền tảng. Đặt overlay làm lớp trên cùng trong app dựng khi canh chữ, rồi tắt lớp này trước khi xuất. Số đo và lệnh tạo lại xem [tool render](../../../tools/render/README.md#vùng-an-toàn).
+
 Nguồn của banner và cover là [`banner.html`](banner.html). Muốn sửa thì chỉnh file đó rồi chụp lại bằng Chrome headless:
 
 ```sh

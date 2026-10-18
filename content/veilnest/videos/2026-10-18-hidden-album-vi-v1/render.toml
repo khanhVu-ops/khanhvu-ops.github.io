@@ -1,0 +1,48 @@
+# Cấu hình render cho 2026-10-18-hidden-album-vi-v1. Xem tools/render/README.md.
+# Thời gian theo kịch bản trong BRIEF.md — chỉnh lại theo footage thật sau khi quay.
+creative_id = "2026-10-18-hidden-album-vi-v1"
+# master = "exports/master.mov"   # mặc định: exports/master.* (thư mục đã gitignore)
+# trim = [0.0, 15.0]               # cắt master trước khi dựng, giây
+fit = "auto"                       # auto | scale | crop | pad | blur (nền mờ khi khác 9:16)
+loudness = -14.0                   # LUFS; false để giữ nguyên âm lượng
+platforms = ["tiktok", "reels", "shorts"]
+
+[hook]
+duration = 2.0
+position = "upper"                 # top | upper | center | lower | bottom | số 0–1
+style = "hook"
+
+# [captions]
+# file = "captions.srt"
+# style = "caption"
+# position = "lower"
+
+[[variant]]
+id = "a"
+hook = "Album Ẩn trên iPhone mở bằng mật mã máy"
+meta = "youtube-a.toml"
+
+# Bản dịch nháp từ kịch bản EN — duyệt lại câu chữ trước khi render bản cuối.
+[[text]]
+text = "Ai biết mật mã máy là mở được."
+start = 2.2
+end = 5.0
+
+[[text]]
+text = "Vault có mã PIN riêng."
+start = 5.2
+end = 9.8
+
+[[text]]
+text = "Album Ẩn: miễn phí, có sẵn\nVault: mã PIN riêng"
+start = 10.0
+end = 13.0
+style = "label"
+position = "upper"
+
+[end_card]
+start = 13.0
+title = "Veilnest"
+subtitle = "Kho ảnh riêng tư"
+cta = "Tìm “Veilnest” trên App Store"
+icon = "../veilnest-us-pov-v2-2026-10-04/assets/veilnest-icon.png"

@@ -53,6 +53,16 @@ Mỗi caption: hook, một câu lợi ích, CTA, 3–5 hashtag. TikTok chưa có
 
 Kiểm tra hashtag và quy tắc âm thanh trong ứng dụng của từng nền tảng trước khi đăng. Không dùng hashtag không liên quan để kéo view.
 
+## Dựng
+
+Mỗi brief đã có `render.toml`: hook A/B/C, text theo kịch bản và end card. Thời gian lấy từ kịch bản, nên chỉnh lại theo footage thật. Bản VI là bản dịch nháp, cần duyệt câu chữ. Quay xong, dựng **một master sạch không chữ** cho mỗi concept, đặt vào `exports/master.mov` của thư mục creative, rồi chạy:
+
+```sh
+tools/render/.venv/bin/python tools/render/render.py render content/veilnest/videos/2026-10-18-decoy-pin-en-v1 --preview
+```
+
+Lệnh trên xuất mọi biến thể hook kèm ảnh bìa và ảnh review vùng an toàn. Bản VI dùng cùng master: chép master sang thư mục VI. Xem [tool render](../../tools/render/README.md).
+
 ## YouTube
 
 Upload bản export bằng [tool YouTube](../../tools/youtube/README.md). Mặc định **private**; muốn hẹn giờ thì thêm `--publish-at 2026-10-21T08:00:00+07:00`, tool sẽ hỏi lại trước khi gửi. Video vào [UPLOADS.md](../social/channels/youtube/UPLOADS.md); khi đã public thật thì ghi tiếp vào [POSTS.md](../social/channels/youtube/POSTS.md).
