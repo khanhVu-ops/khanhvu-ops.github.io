@@ -10,6 +10,7 @@ Website tĩnh của Khanh Vu, dùng chung cho các ứng dụng liên kết tớ
 - **Paper Drift:** giữ trạng thái đang phát triển và trang riêng. Support, terms và marketing phân biệt gameplay offline với các dịch vụ ads, purchases và analytics đã mô tả trong privacy.
 - Icon sản phẩm được sao chép từ asset catalog của app. `assets/kv-apps.svg` là favicon studio; trang Paper Drift giữ favicon game riêng.
 - YouTube **KV Apps / @khanhvuapps** đã tạo và xác nhận ngày 18/10/2026, chủ sở hữu Google `khanhvu.dev@gmail.com`: https://www.youtube.com/@khanhvuapps . Trang chủ đã có link kênh. Chỉ thêm các social link khác sau khi tài khoản đã được tạo và xác nhận.
+- TikTok **@khanhvuapps** đã tạo ngày 18/10/2026: https://www.tiktok.com/@khanhvuapps . Đã đối chiếu TikTok trong Linked apps của Google `khanhvu.dev@gmail.com`; trang chủ có link hồ sơ. Tên hiển thị hiện là `khanhvuapps`; TikTok cho phép chỉnh lại từ 25/10/2026. Instagram và Facebook chưa hoàn tất đăng ký, nên chưa có liên kết công khai trên site.
 
 ## Các URL ổn định
 
