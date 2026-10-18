@@ -1,6 +1,6 @@
 # Sổ tài khoản studio
 
-Cập nhật **18/10/2026**. Google chủ sở hữu studio: **`khanhvu.dev@gmail.com`**. Mọi trạng thái dưới đây là trạng thái đã quan sát hoặc được chủ tài khoản xác nhận, không phải kế hoạch đã hoàn thành.
+Cập nhật **19/10/2026**. Google chủ sở hữu studio: **`khanhvu.dev@gmail.com`**. Mọi trạng thái dưới đây là trạng thái đã quan sát hoặc được chủ tài khoản xác nhận, không phải kế hoạch đã hoàn thành.
 
 | Nền tảng | Hồ sơ / định danh | Trạng thái | Chủ sở hữu / quản trị | Việc còn lại |
 |---|---|---|---|---|
@@ -12,7 +12,7 @@ Cập nhật **18/10/2026**. Google chủ sở hữu studio: **`khanhvu.dev@gmai
 | Facebook cá nhân | Tài khoản thật của chủ studio | Chủ studio đã hoàn tất đăng ký; phiên Facebook đang đăng nhập đã kiểm tra (18/10) | Chủ studio | Dùng tài khoản này quản trị Page; không công khai thông tin xác minh cá nhân |
 | Facebook Page | Tên dự kiến KV Apps; `facebook.com/khanhvuapps` chưa có trang public (18/10) | Chưa tạo | Sẽ do Facebook cá nhân quản trị | Đã được chủ studio chấp nhận chính sách và thử tạo; vẫn chưa thành công. Chủ studio nhận định có thể do tài khoản mới; chưa có thông báo Facebook xác nhận nguyên nhân hoặc thời điểm thử lại |
 | Reddit | Tài khoản cá nhân của chủ studio (chưa ghi username) | Chưa kiểm tra | Chủ studio | Kiểm tra tuổi tài khoản/karma trước bài đầu; xem [hướng dẫn](channels/reddit/README.md) |
-| Google Cloud (YouTube API) | Project OAuth cho [tool upload](../../tools/youtube/README.md) | Chưa tạo | `khanhvu.dev@gmail.com` | Chủ kênh tạo project, bật YouTube Data API v3, tạo Desktop client; secret chỉ ở `.secrets/` local |
+| Google Cloud (YouTube API) | Project `kvapps-studio`; app `KV Apps Studio Tools`; client `KV Apps Studio Desktop` | Đã tạo project, bật YouTube Data API v3 và YouTube Analytics API; app External/Testing, test user là email studio; client JSON đã lưu local (19/10) | `khanhvu.dev@gmail.com` | Đang chờ chủ kênh xác nhận cấp ba quyền tại màn hình OAuth; chưa có token hoặc kết quả đối chiếu kênh qua API. [Thiết lập tool](../../tools/youtube/README.md) |
 | Apple Developer | Email studio | Người dùng xác nhận đang dùng email này; chưa audit quyền | `khanhvu.dev@gmail.com` | Kiểm tra lại trong Apple khi thay đổi quyền |
 | AdMob | Email studio | Người dùng xác nhận đang dùng email này; chưa audit quyền | `khanhvu.dev@gmail.com` | Giữ seller file hiện có; kiểm tra quyền trực tiếp khi cần |
 
