@@ -41,11 +41,12 @@ Snapshot **19/10/2026**. Đánh dấu xong sau khi kiểm tra kết quả; trạ
 - [x] Tool [render biến thể hook](../tools/render/README.md); mỗi brief 18/10 đã có `render.toml` (thời gian theo kịch bản, chỉnh lại sau khi quay).
 - [x] [Dashboard local](../tools/dashboard/README.md): pipeline, lịch, bộ đăng bài, nhật ký bài đăng, số liệu (SQLite gitignored), campaign link.
 - [ ] Lấy provider token (`pt`) trong App Store Connect, nhập ở trang Campaign link và tạo link cho từng kênh × ngôn ngữ.
-- [ ] Sau khi có token YouTube: bấm “Đồng bộ YouTube” với một video public và đối chiếu số với YouTube Studio (`youtube_sync.py` chưa từng gọi API thật).
+- [ ] Khi có một video public: bấm “Đồng bộ YouTube” và đối chiếu số với YouTube Studio (`youtube_sync.py` chưa từng gọi API thật; token đã có đủ quyền).
 - [ ] Dashboard giai đoạn sau: Meta app cho Instagram/Threads, app TikTok được duyệt, tự đồng bộ theo lịch. Chi tiết và điều kiện ở [trạng thái dashboard](../tools/dashboard/README.md#trạng-thái-và-việc-còn-lại).
 - [x] Tool [kiểm tra content](content/WORKFLOW.md#kiểm-tra-trước-khi-đăng) (`tools/check-content.py`): chặn thiếu Pro, sai link App Store, lệch hook/creative_id, link hỏng; in tổng quan pipeline.
 - [x] Tạo project `kvapps-studio`, bật YouTube Data API v3 và YouTube Analytics API; app External/Testing với test user studio; tạo Desktop client, lưu JSON và `.env` local (19/10/2026).
-- [ ] Hoàn tất `upload.py auth`: màn hình Google đang chờ chủ kênh xác nhận ba quyền upload/xem tài khoản/đọc Analytics. Sau khi cấp token, đối chiếu đúng kênh KV Apps qua API và kiểm tra kết nối trên dashboard. Chưa upload video.
+- [x] Hoàn tất `upload.py auth` bằng Google studio với ba quyền upload/xem tài khoản/đọc Analytics. `upload.py channel` gọi API thật trả đúng KV Apps `UC7kW-0SrYs4FGm1LFT9zJRw`; dashboard hiện Đã kết nối (19/10). Token chỉ lưu local; chưa upload video.
+- [ ] Khi có bản render + metadata được duyệt và chủ kênh yêu cầu video cụ thể: thử upload private qua dashboard, kiểm tra YouTube Studio và dòng mới trong UPLOADS.md.
 - [ ] Quay 4 master trên build thật bằng vault thử; xuất bản EN và VI.
 - [ ] Sau khi deploy trang SEO: gửi `sitemap.xml` trong Google Search Console.
 - [ ] Chốt ngày bắt đầu; ghi ngày thật vào lịch 14 ngày.

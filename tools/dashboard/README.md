@@ -40,6 +40,7 @@ Muốn sao lưu số liệu riêng thì chép `.dashboard/dashboard.db` ra nơi 
 - **Upload private**: dashboard gọi `tools/youtube/upload.py`, nên dùng chung metadata, kiểm tra kênh và sổ UPLOADS.md. Luôn có nút **Kiểm tra (dry-run)** để chạy thử trước. Dashboard **không bao giờ** đặt public hoặc hẹn giờ; việc đó làm trong YouTube Studio hoặc bằng `upload.py --publish-at` (có bước xác nhận riêng).
 - **Đồng bộ số liệu**: `youtube_sync.py` chạy bằng `tools/youtube/.venv`, chỉ đọc. Nó lấy view, like và comment, và nếu token có quyền thì lấy thêm thời gian xem, thời lượng xem trung bình và tỷ lệ xem hết từ YouTube Analytics. Mỗi lần đồng bộ được gắn nhãn khoảng đo trung thực: `24h` khi đo trong khoảng 24–36 giờ sau khi đăng, `7d` khi đo trong khoảng 7–7,5 ngày, còn lại là `lifetime`. Video private được bỏ qua.
 - Cần làm theo [tools/youtube/README.md](../youtube/README.md): bật thêm **YouTube Analytics API** trong Google Cloud, rồi chạy `upload.py auth` (token cũ phải đăng nhập lại để có quyền `yt-analytics.readonly`).
+- Máy studio đã kết nối ngày **19/10/2026**: project `kvapps-studio`, client Desktop, token đủ ba quyền; `upload.py channel` trả đúng KV Apps `UC7kW-0SrYs4FGm1LFT9zJRw`, trang Kênh hiện **Đã kết nối**. Nút upload chỉ bật khi biến thể đang chọn có bản render và metadata; hiện repo chưa có bản render thật. Chưa thử upload hoặc đồng bộ số liệu thật.
 
 ## Bảo mật
 
@@ -70,6 +71,7 @@ Cập nhật 19/10/2026. Bảng dưới phân biệt rõ phần **đã chạy th
 | Tạo/xoá campaign link, gợi ý `ct`, URL có `pt`/`ppid` | Test `CampaignTests`; tạo thử một link trên giao diện rồi xoá file |
 | Xem video, ảnh bìa, ảnh review vùng an toàn trong Content | Render thử bằng master giả trong `exports/` rồi xoá |
 | YouTube **dry-run** (kiểm tra metadata + file, không gửi gì) | Gọi thật qua dashboard, `upload.py` trả “Dry run: … nothing was sent” |
+| Kết nối OAuth YouTube | `upload.py auth` lưu token local đủ ba scope và refresh token; `upload.py channel` gọi API thật trả đúng ID KV Apps; trang Kênh hiện Đã kết nối, cả ba điều kiện môi trường/client/token đạt |
 | Chặn Host/Origin lạ, chặn đọc file ngoài `content/`, Range cho video | Test `ServerTests` + `curl` |
 | Báo lỗi thân thiện khi cổng đã bị dùng | Thử cả hai trường hợp: dashboard đang chạy sẵn và chương trình khác chiếm cổng |
 
@@ -77,8 +79,8 @@ Cập nhật 19/10/2026. Bảng dưới phân biệt rõ phần **đã chạy th
 
 | Tính năng | Thiếu | Việc cần làm (ai) | Sau khi xong, kiểm tra |
 |---|---|---|---|
-| **Upload YouTube private** | Token OAuth và bản render thật | Đã tạo project `kvapps-studio`, bật cả hai API, cấu hình External/Testing và Desktop client; client JSON + `.env` đã lưu local (19/10). `upload.py auth` đang chờ chủ kênh xác nhận ba quyền trên Google. [Hướng dẫn](../youtube/README.md) | Sau khi cấp quyền: `upload.py channel` phải trả đúng kênh KV Apps; trang Kênh có cả 3 dấu tick xanh. Nút upload còn cần bản render + metadata; chỉ thử upload khi chủ kênh yêu cầu một video cụ thể |
-| **Đồng bộ số liệu YouTube** | Như trên. Code `youtube_sync.py` **chưa từng gọi API thật** | Sau khi có token và một video public, bấm “Đồng bộ YouTube” | Số view khớp YouTube Studio; nhãn `24h`/`7d`/`lifetime` đúng thời điểm đo; thời gian xem và tỷ lệ xem hết có mặt (Analytics có thể trễ 1–2 ngày). Sửa code nếu tên trường API khác |
+| **Upload YouTube private** | Bản render thật được duyệt; OAuth đã xong | [Render video](../render/README.md), kiểm tra [metadata YouTube](../youtube/README.md). Chỉ thử upload khi chủ kênh yêu cầu một video cụ thể | Video private hiện trên YouTube Studio, đúng kênh KV Apps; có dòng mới trong UPLOADS.md. Chưa kiểm tra upload thật |
+| **Đồng bộ số liệu YouTube** | Video public thật. Token đã có đủ quyền; code `youtube_sync.py` **chưa từng gọi API thật** | Khi có video public, bấm “Đồng bộ YouTube” | Số view khớp YouTube Studio; nhãn `24h`/`7d`/`lifetime` đúng thời điểm đo; thời gian xem và tỷ lệ xem hết có mặt (Analytics có thể trễ 1–2 ngày). Sửa code nếu tên trường API khác |
 | **Campaign link được Apple ghi nhận** | Provider token `pt` | Chủ app lấy `pt` trong App Store Connect → Apps → Veilnest → Analytics → Acquisition → Campaigns, nhập ở trang Campaign link, tạo link cho từng kênh × ngôn ngữ | Sau 1–2 ngày có lượt truy cập, campaign xuất hiện trong Analytics → Sources (Apple ẩn số dưới ngưỡng) |
 | **Custom Product Page** | CPP chưa được duyệt | Tạo CPP (ví dụ `decoy`, `calculator`) trong App Store Connect; khi duyệt, thêm `ppid` vào link | Link mở đúng trang CPP |
 | **Facebook Page** | Page chưa tạo được (xem [ACCOUNTS.md](../../docs/social/ACCOUNTS.md)) | Chủ studio thử tạo lại; cập nhật ACCOUNTS.md | Kênh tự mở khoá trong trang Đăng bài khi trạng thái không còn “Chưa tạo” |

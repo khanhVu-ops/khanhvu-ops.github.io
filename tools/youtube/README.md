@@ -9,7 +9,9 @@
 
 ## Thiết lập một lần
 
-Chủ kênh tự làm các bước trong Google Cloud Console bằng tài khoản studio `khanhvu.dev@gmail.com`.
+Đã hoàn tất trên máy studio ngày **19/10/2026** bằng `khanhvu.dev@gmail.com`: project `kvapps-studio`, app `KV Apps Studio Tools` (External/Testing, test user là email studio), client `KV Apps Studio Desktop`, cả hai API đã bật. Client JSON và token đủ ba quyền nằm trong `.secrets/`, `.env` đã khóa ID kênh KV Apps. `auth` và `channel` đã gọi API thật, trả đúng `UC7kW-0SrYs4FGm1LFT9zJRw`; chưa upload video.
+
+Các bước dưới dùng khi thiết lập lại trên máy khác. Chủ kênh thực hiện trong Google Cloud Console bằng tài khoản studio.
 
 1. Tạo project mới (ví dụ `kvapps-studio`) tại [console.cloud.google.com](https://console.cloud.google.com/).
 2. **APIs & Services → Library**: bật **YouTube Data API v3** và **YouTube Analytics API** (dashboard dùng để đọc thời gian xem và tỷ lệ xem hết; quyền chỉ đọc `yt-analytics.readonly`). Token tạo trước khi thêm quyền này cần chạy lại `auth`.
