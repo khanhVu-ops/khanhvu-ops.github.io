@@ -8,7 +8,7 @@ Website tĩnh của Khanh Vu, dùng chung cho các ứng dụng liên kết tớ
 - **Veilnest:** App Store US lookup xác nhận version 1.3, seller Van Khanh Vu và ID `6813747332` ngày 18/10/2026. Trang chủ dùng link tải chính xác; support và privacy có anchor `#veilnest`. Copy về vault/PIN/calculator dựa trên listing này; thông tin Firebase dựa trên bootstrap, analytics service và package configuration của repo IOS-Vault.
 - **Color Meter:** thêm icon gốc, mô tả chức năng và anchor hỗ trợ `#color-meter`. Chưa xác nhận listing App Store riêng, nên không tạo link tải hoặc nhãn đã phát hành.
 - **Paper Drift:** giữ trạng thái đang phát triển và trang riêng. Support, terms và marketing phân biệt gameplay offline với các dịch vụ ads, purchases và analytics đã mô tả trong privacy.
-- Icon sản phẩm được sao chép từ asset catalog của app. `assets/kv-apps.svg` là favicon studio; trang Paper Drift giữ favicon game riêng.
+- Icon sản phẩm được sao chép từ asset catalog của app. `assets/kv-apps.svg` là favicon studio trên cả 6 trang, cùng apple-touch icon `assets/kv-apps-avatar.png`. Logo mảnh ghép mới xuất hiện ở header/back-link và hero trang chủ; Paper Drift giữ icon sản phẩm riêng trong nội dung. Ảnh chia sẻ studio dùng `assets/kv-apps-social-cover.jpg` từ bộ social-kit; trang game giữ ảnh chia sẻ sản phẩm.
 
 Thông tin tài khoản/chủ sở hữu và các bước social còn lại được quản lý tại [sổ tài khoản](../social/ACCOUNTS.md), không cập nhật song song trong hướng dẫn website.
 
@@ -73,7 +73,7 @@ python3 tools/check-site.py
 ./tools/preview.sh
 ```
 
-Mở `http://127.0.0.1:8765/`, đọc cả năm trang ở mobile/desktop và thử liên kết nội bộ, anchor và email.
+Mở `http://127.0.0.1:8765/`, đọc cả sáu trang ở mobile/desktop và thử liên kết nội bộ, anchor và email.
 
 Remote đã cấu hình cho repo: `khanhVu-ops/khanhvu-ops.github.io`. GitHub Pages dùng **GitHub Actions**, workflow [pages.yml](../../.github/workflows/pages.yml) chỉ upload `website/`, không upload `docs/` hay `content/`. Các file trong GitHub vẫn public theo visibility của repository.
 

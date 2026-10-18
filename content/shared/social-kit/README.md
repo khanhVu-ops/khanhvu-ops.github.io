@@ -42,15 +42,14 @@ iOS apps & offline games by Khanh Vu. Small apps. Everyday joy.
 
 ### Instagram — [@khanhvuapps](https://www.instagram.com/khanhvuapps/)
 
-Đã có tên, logo mới và bio; đã chuyển Business/category Software, lưu email business và bật hiển thị contact. Website hiện là text trong bio; cần thêm vào trường Links bằng app. Bio hiện tại (≤ 150 ký tự):
+Đã có tên, logo mới và bio; đã chuyển Business/category Software, lưu email business và bật hiển thị contact. Website đã có link bấm riêng, thêm qua Meta Business Suite và kiểm tra trên profile sau reload. Bio hiện tại (≤ 150 ký tự):
 
 ```text
 Practical iOS apps, creative tools and offline games by Khanh Vu.
 Small apps. Everyday joy.
-khanhvu-ops.github.io
 ```
 
-Nút email liên hệ chỉ hiển thị trên Instagram mobile. Không cần chuyển loại tài khoản lại; chỉ bổ sung link website trong app và kiểm tra nút Email.
+Nút email liên hệ chỉ hiển thị trên Instagram mobile. Không cần chuyển loại tài khoản lại; website đã hoàn tất; kiểm tra nút Email trong app.
 
 ### Threads — [@khanhvuapps](https://www.threads.com/@khanhvuapps)
 
@@ -68,10 +67,10 @@ Threads hợp với bài chữ ngắn hơn video: chuyện làm app, ảnh chụ
 
 ### Facebook Page — KV Apps (chưa tạo)
 
-Cần **Facebook cá nhân thật** của chủ studio trước; Page được tạo và quản trị từ tài khoản đó.
+**Facebook cá nhân thật** của chủ studio đã đăng ký xong. Form Page KV Apps đã điền; còn bước xác nhận chính sách tại Create Page trước khi tạo. Page được quản trị từ tài khoản cá nhân đó.
 
 1. Facebook → **Pages → Create new Page**.
-2. Page name: `KV Apps`. Category: `App Page` (thêm `Software` nếu được chọn nhiều).
+2. Page name: `KV Apps`. Category: `Software` (lựa chọn đã thấy và điền trong UI).
 3. Bio:
 
 ```text

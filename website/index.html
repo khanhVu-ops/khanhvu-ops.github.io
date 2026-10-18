@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KV Apps — iOS Apps and Games by Khanh Vu</title>
     <meta name="description" content="Discover KV Apps: Veilnest private photo vault, Color Meter creative tools and Paper Drift offline puzzles. iOS apps and games by Khanh Vu.">
+    <meta property="og:image" content="https://khanhvu-ops.github.io/assets/kv-apps-social-cover.jpg">
+    <meta property="og:image:width" content="1640">
+    <meta property="og:image:height" content="683">
+    <meta property="og:image:alt" content="KV Apps — Small apps. Everyday joy. iOS apps and games by Khanh Vu.">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://khanhvu-ops.github.io/">
     <meta property="og:title" content="KV Apps — Apps &amp; Games by Khanh Vu">
     <meta property="og:description" content="Small apps. Everyday joy. Discover a private photo vault, creative tools and an offline puzzle game.">
@@ -119,7 +124,6 @@
             padding: 12px 0 60px;
         }
 
-        .studio-mark { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.08em; color: #7dd3fc; }
         .studio-byline { color: var(--accent); font-size: 0.9rem; font-weight: 600; margin-bottom: 16px; }
         .hero-action { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 22px; border-radius: 12px; text-decoration: none; font-weight: 600; }
         .hero-action.primary { background: var(--accent); color: var(--bg); }
@@ -139,11 +143,7 @@
             overflow: hidden;
         }
 
-        .app-icon-wrapper svg {
-            width: 58px;
-            height: 58px;
-            fill: url(#iconGradient);
-        }
+        .app-icon-wrapper img { display: block; width: 100%; height: 100%; }
 
         .hero h1 {
             font-size: clamp(2.4rem, 5vw, 3.4rem);
@@ -296,6 +296,7 @@
         }
     </style>
     <link rel="icon" href="assets/kv-apps.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/kv-apps-avatar.png">
 </head>
 <body>
     <div class="ambient-glow"></div>
@@ -318,7 +319,7 @@
 
     <main>
         <section class="hero">
-            <div class="app-icon-wrapper" aria-hidden="true"><span class="studio-mark">KV</span></div>
+            <div class="app-icon-wrapper" aria-hidden="true"><img src="assets/kv-apps-avatar.png" width="110" height="110" alt=""></div>
 
             <p class="studio-byline">Apps &amp; Games by Khanh Vu</p>
             <h1>Small apps.<br>Everyday joy.</h1>

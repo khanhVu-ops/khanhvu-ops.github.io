@@ -8,7 +8,7 @@ Vai trò sau khi tạo: Reels demo/gameplay từ creative master; feed/các mụ
 
 1. Chủ tài khoản hoàn tất đăng ký, password, ngày sinh và xác minh trực tiếp; kiểm tra username thực sau khi tạo.
 2. Đặt display name KV Apps, avatar, bio và website. Kiểm tra lại profile public rồi cập nhật sổ tài khoản.
-3. Đã chuyển Business và lưu email business. Kiểm tra nút Email trên app mobile; thêm website trong trường Links vì Instagram web không cho sửa trường này.
+3. Đã chuyển Business và lưu email business. Đã thêm website trong trường Links qua Meta Business Suite → Edit Instagram profile → Edit Links → Add external link → Save; profile sau reload đã hiện link bấm. Kiểm tra nút Email trên app mobile.
 4. Đăng Reels bằng master sạch từ [content/](../../../../content/README.md); kiểm tra cover, subtitle, crop và âm thanh.
 5. Sau khi post có thật, ghi creative ID, URL và số liệu trong nhật ký; dẫn về đúng listing/website của app được giới thiệu.
 

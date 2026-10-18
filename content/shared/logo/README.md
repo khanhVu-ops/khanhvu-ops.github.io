@@ -8,7 +8,7 @@ Chọn ngày 18/10/2026: mẫu "mảnh ghép" (phương án 3 trong bốn ảnh 
 | `kv-mark-on-dark.svg` | Hình KV trên nền tối: mảng navy được làm sáng để không chìm vào nền |
 | `avatar-light.svg` · `avatar-light-1024.png` | **Avatar mặc định** cho mọi kênh: nền trắng, đọc rõ cả trên app nền tối |
 | `avatar-dark.svg` · `avatar-dark-1024.png` | Khi muốn avatar nền tối |
-| `favicon.svg` | Favicon website (`website/assets/kv-apps.svg`), tự đổi màu theo chế độ sáng/tối của trình duyệt. Header website dùng `website/assets/kv-mark.svg` (bản on-dark) |
+| `favicon.svg` | Favicon website (`website/assets/kv-apps.svg`), tự đổi màu theo chế độ sáng/tối của trình duyệt. Header website dùng `website/assets/kv-mark.svg` (bản on-dark) và `kv-mark-on-light.svg` cho trang Paper Drift; avatar `kv-apps-avatar.png` dùng ở hero và apple-touch icon; ảnh chia sẻ `kv-apps-social-cover.jpg` lấy từ social-kit |
 
 Avatar chỉ dùng hình KV, không kèm chữ "KV Apps" vì ở cỡ avatar chữ không đọc được và tên kênh đã nằm cạnh avatar. Hình nằm giữa, rộng 640/1024 px nên không bị mất khi cắt tròn. Banner và cover ở [social-kit](../social-kit/README.md) dùng `kv-mark-on-dark.svg`.
 

@@ -6,11 +6,11 @@ Cập nhật **18/10/2026**. Google chủ sở hữu studio: **`khanhvu.dev@gmai
 |---|---|---|---|---|
 | YouTube | [KV Apps · @khanhvuapps](https://www.youtube.com/@khanhvuapps), ID `UC7kW-0SrYs4FGm1LFT9zJRw` | Đã tạo; avatar logo mảnh ghép mới và banner đã hiện trên trang kênh (18/10) | Google studio đã đối chiếu | Video đầu tiên |
 | TikTok | [KV Apps · @khanhvuapps](https://www.tiktok.com/@khanhvuapps) | Tên KV Apps và bio đã lưu; trang profile vẫn hiện avatar KV cũ sau reload | Google studio; đã thấy TikTok trong Google Linked apps | Đã thử upload logo mới nhưng chưa xác nhận lưu thành công; kiểm tra/đổi lại trong app TikTok. Loại tài khoản chưa xác minh |
-| Instagram | [KV Apps · @khanhvuapps](https://www.instagram.com/khanhvuapps/) | Đã chuyển Business, category Software; logo mới và bio đã lưu | Email studio đã đối chiếu trong Accounts Center | Email business đã lưu và bật Display contact info; nút contact chỉ hiện trên mobile. Cần thêm website vào ô Links bằng app |
+| Instagram | [KV Apps · @khanhvuapps](https://www.instagram.com/khanhvuapps/) | Đã chuyển Business, category Software; logo mới và bio đã lưu | Email studio đã đối chiếu trong Accounts Center | Website trong trường Links đã lưu qua Meta Business Suite và xác nhận trên profile sau reload; nút contact cần kiểm tra trong app mobile |
 | Threads | [KV Apps · @khanhvuapps](https://www.threads.com/@khanhvuapps) | Đã tạo profile public; bio, logo mới kế thừa từ Instagram và link website riêng đã kiểm tra sau reload (18/10) | Instagram `khanhvuapps` | Bài đầu tiên |
 | Meta Business Suite | [Business Suite](https://business.facebook.com/) | Đã đăng nhập bằng Instagram studio và thấy dashboard @khanhvuapps | Instagram `khanhvuapps` | Chưa có Facebook Page được kết nối; luồng Connect Facebook Page chưa hoàn tất |
-| Facebook cá nhân | Tài khoản thật của chủ studio | Chưa hoàn tất đăng ký mới | Form dùng email studio | Chủ tài khoản hoàn tất thông tin cá nhân và xác minh |
-| Facebook Page | Tên dự kiến KV Apps; `facebook.com/khanhvuapps` chưa có trang public (18/10) | Chưa tạo | Sẽ do Facebook cá nhân quản trị | Tạo sau khi có tài khoản cá nhân hoạt động |
+| Facebook cá nhân | Tài khoản thật của chủ studio | Chủ studio đã hoàn tất đăng ký; phiên Facebook đang đăng nhập đã kiểm tra (18/10) | Chủ studio | Dùng tài khoản này quản trị Page; không công khai thông tin xác minh cá nhân |
+| Facebook Page | Tên dự kiến KV Apps; `facebook.com/khanhvuapps` chưa có trang public (18/10) | Chưa tạo | Sẽ do Facebook cá nhân quản trị | Form KV Apps/category Software/bio đã điền; đang chờ chủ studio xác nhận chính sách ở nút Create Page |
 | Reddit | Tài khoản cá nhân của chủ studio (chưa ghi username) | Chưa kiểm tra | Chủ studio | Kiểm tra tuổi tài khoản/karma trước bài đầu; xem [hướng dẫn](channels/reddit/README.md) |
 | Google Cloud (YouTube API) | Project OAuth cho [tool upload](../../tools/youtube/README.md) | Chưa tạo | `khanhvu.dev@gmail.com` | Chủ kênh tạo project, bật YouTube Data API v3, tạo Desktop client; secret chỉ ở `.secrets/` local |
 | Apple Developer | Email studio | Người dùng xác nhận đang dùng email này; chưa audit quyền | `khanhvu.dev@gmail.com` | Kiểm tra lại trong Apple khi thay đổi quyền |
@@ -37,21 +37,20 @@ Support: khanhvu.dev@gmail.com
 
 ## TikTok — profile
 
-Tên `KV Apps` và bio “iOS apps & offline games by Khanh Vu. Small apps. Everyday joy.” đã hiển thị sau reload. Đã chọn logo mảnh ghép mới, Apply và Save, nhưng lần kiểm tra cuối vẫn hiện avatar KV cũ; chưa coi việc đổi logo là xong và chưa có bằng chứng để kết luận nguyên nhân. Không thử đổi nickname đang có giới hạn tới 25/10. Chưa xác nhận Business account. [Hướng dẫn vận hành](channels/tiktok/README.md).
+Tên `KV Apps` và bio “iOS apps & offline games by Khanh Vu. Small apps. Everyday joy.” đã hiển thị sau reload. Đã chọn logo mảnh ghép mới, Apply và Save với cả PNG và JPEG, nhưng lần kiểm tra cuối sau reload vẫn hiện avatar KV cũ; chưa coi việc đổi logo là xong và chưa có bằng chứng để kết luận nguyên nhân. Không thử đổi nickname đang có giới hạn tới 25/10. Chưa xác nhận Business account. [Hướng dẫn vận hành](channels/tiktok/README.md).
 
 ## Instagram — Business
 
 Đã hoàn tất chuyển loại tài khoản; UI xác nhận “Your Instagram business account is ready”. Trang Professional account lưu category **Software**, email business `khanhvu.dev@gmail.com` và **Display contact info = bật**. Instagram ghi rõ nút liên hệ chỉ hiện trong app mobile. Category label đang ẩn; không thêm số điện thoại hay địa chỉ cá nhân.
 
-Bio hiện có ba dòng:
+Bio đã làm gọn sau khi thêm website vào Links:
 
 ```text
 Practical iOS apps, creative tools and offline games by Khanh Vu.
 Small apps. Everyday joy.
-khanhvu-ops.github.io
 ```
 
-Địa chỉ ở bio là text. Chưa xác nhận website trong trường Links riêng; Instagram web báo chỉ sửa link trên ứng dụng điện thoại.
+Đã thêm `https://khanhvu-ops.github.io/` với title “Explore KV Apps” qua Meta Business Suite → Edit Instagram profile → Edit Links → Add external link → Save. Profile Instagram sau reload có link bấm riêng; không cần thao tác mobile cho mục này. Meta Business Suite có thể còn hiển thị “No links” ngay sau lưu, nên lấy kết quả profile Instagram đã reload làm bằng chứng.
 
 ## Threads — đã tạo
 

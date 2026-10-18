@@ -22,7 +22,7 @@
         .skip:focus { top: 8px; }
         header { border-bottom: 1px solid var(--line); }
         .nav { max-width: 1120px; margin: auto; padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-        .brand { text-decoration: none; font-weight: 800; letter-spacing: -0.03em; }
+        .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 800; letter-spacing: -0.03em; }
         nav { display: flex; flex-wrap: wrap; gap: 12px 24px; font-size: 0.9rem; }
         main { max-width: 1120px; margin: auto; padding: 0 28px; }
         .hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: center; gap: 48px; padding: 66px 0 76px; }
@@ -56,11 +56,12 @@
         footer nav { margin: 20px 0; }
         @media (max-width: 720px) { .hero, .dock { grid-template-columns: minmax(0, 1fr); gap: 32px; } .hero { padding: 40px 0; } .hero-preview { max-width: 380px; justify-self: center; width: 100%; } .features { grid-template-columns: minmax(0, 1fr); } .chapter { padding: 40px 0; } .dock .phone { width: 210px; } main, .nav, footer { padding-left: 22px; padding-right: 22px; } }
     </style>
-    <link rel="icon" href="assets/paper-drift/icon.png" type="image/png">
+    <link rel="icon" href="assets/kv-apps.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/kv-apps-avatar.png">
 </head>
 <body>
     <a class="skip" href="#main">Skip to content</a>
-    <header><div class="nav"><a class="brand" href="index.html">KV Apps / Paper Drift</a><nav aria-label="Paper Drift navigation"><a href="support.html#paper-drift">Support</a><a href="privacy.html#paper-drift">Privacy</a><a href="terms.html#paper-drift">Terms</a></nav></div>
+    <header><div class="nav"><a class="brand" href="index.html"><img src="assets/kv-mark-on-light.svg" width="52" height="32" alt=""><span>KV Apps / Paper Drift</span></a><nav aria-label="Paper Drift navigation"><a href="support.html#paper-drift">Support</a><a href="privacy.html#paper-drift">Privacy</a><a href="terms.html#paper-drift">Terms</a></nav></div>
 </header>
     <main id="main">
         <section class="hero" aria-labelledby="game-title">

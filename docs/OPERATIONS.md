@@ -11,11 +11,12 @@ Snapshot **18/10/2026**. Đánh dấu xong sau khi kiểm tra kết quả; trạ
 - [ ] Xác nhận logo mới trên TikTok; lần kiểm tra cuối vẫn hiện KV cũ sau khi Apply/Save.
 - [x] Upload [banner YouTube](../content/shared/social-kit/youtube-banner-2560x1440.jpg), Publish và kiểm tra trên trang kênh.
 - [x] Instagram Business, category Software; lưu email business và bật Display contact info.
-- [ ] Thêm website vào trường Links Instagram bằng app; hiện địa chỉ mới ở text bio.
+- [x] Thêm website vào Links Instagram qua Meta Business Suite; kiểm tra link bấm và bio sau reload.
 - [x] Tạo Threads public `@khanhvuapps` từ Instagram; thêm bio và link website riêng.
 - [x] Kiểm tra trực quan logo Threads và xác nhận bio/link còn hiển thị sau reload.
 - [x] Đăng nhập Meta Business Suite bằng Instagram studio; kiểm tra dashboard @khanhvuapps.
-- [ ] Chủ tài khoản hoàn tất Facebook cá nhân thật; sau đó tạo Facebook Page KV Apps.
+- [x] Chủ tài khoản hoàn tất Facebook cá nhân thật; đã kiểm tra phiên đăng nhập.
+- [ ] Tạo Facebook Page KV Apps; đã điền form, đang chờ xác nhận chính sách ở nút Create Page.
 - [x] Thêm link Instagram và Threads đã xác nhận lên website.
 - [ ] Thêm Facebook lên website sau khi Page có URL xác nhận.
 
@@ -32,7 +33,7 @@ Snapshot **18/10/2026**. Đánh dấu xong sau khi kiểm tra kết quả; trạ
 
 ## Veilnest — 14 ngày (thêm 18/10/2026)
 
-- [x] Viết trang SEO [how-to-hide-photos-iphone.html](../website/how-to-hide-photos-iphone.html), thêm `sitemap.xml`/`robots.txt`. Chưa commit/deploy.
+- [x] Viết trang SEO [how-to-hide-photos-iphone.html](../website/how-to-hide-photos-iphone.html), thêm `sitemap.xml`/`robots.txt`; đã deploy cùng website.
 - [x] Lập [lịch 14 ngày](content/VEILNEST_14_DAYS.md), 7 brief và metadata YouTube cho từng hook.
 - [x] Viết nháp bài [Reddit](social/channels/reddit/README.md) và [nhóm Facebook VN](social/channels/facebook-groups/README.md).
 - [x] Tool [upload YouTube qua API](../tools/youtube/README.md), mặc định private.
