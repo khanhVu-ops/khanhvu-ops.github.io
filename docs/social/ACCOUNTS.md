@@ -10,7 +10,7 @@ Cập nhật **18/10/2026**. Google chủ sở hữu studio: **`khanhvu.dev@gmai
 | Threads | [KV Apps · @khanhvuapps](https://www.threads.com/@khanhvuapps) | Đã tạo profile public; bio, logo mới kế thừa từ Instagram và link website riêng đã kiểm tra sau reload (18/10) | Instagram `khanhvuapps` | Bài đầu tiên |
 | Meta Business Suite | [Business Suite](https://business.facebook.com/) | Đã đăng nhập bằng Instagram studio và thấy dashboard @khanhvuapps | Instagram `khanhvuapps` | Chưa có Facebook Page được kết nối; luồng Connect Facebook Page chưa hoàn tất |
 | Facebook cá nhân | Tài khoản thật của chủ studio | Chủ studio đã hoàn tất đăng ký; phiên Facebook đang đăng nhập đã kiểm tra (18/10) | Chủ studio | Dùng tài khoản này quản trị Page; không công khai thông tin xác minh cá nhân |
-| Facebook Page | Tên dự kiến KV Apps; `facebook.com/khanhvuapps` chưa có trang public (18/10) | Chưa tạo | Sẽ do Facebook cá nhân quản trị | Form KV Apps/category Software/bio đã điền; đang chờ chủ studio xác nhận chính sách ở nút Create Page |
+| Facebook Page | Tên dự kiến KV Apps; `facebook.com/khanhvuapps` chưa có trang public (18/10) | Chưa tạo | Sẽ do Facebook cá nhân quản trị | Chủ studio đã xác nhận chính sách. Đã bấm Create Page qua luồng cũ, luồng Public Page và giao diện trực tiếp; vẫn trở về form, chưa có Page xác nhận. Chủ studio kiểm tra trực tiếp trên tab đang mở |
 | Reddit | Tài khoản cá nhân của chủ studio (chưa ghi username) | Chưa kiểm tra | Chủ studio | Kiểm tra tuổi tài khoản/karma trước bài đầu; xem [hướng dẫn](channels/reddit/README.md) |
 | Google Cloud (YouTube API) | Project OAuth cho [tool upload](../../tools/youtube/README.md) | Chưa tạo | `khanhvu.dev@gmail.com` | Chủ kênh tạo project, bật YouTube Data API v3, tạo Desktop client; secret chỉ ở `.secrets/` local |
 | Apple Developer | Email studio | Người dùng xác nhận đang dùng email này; chưa audit quyền | `khanhvu.dev@gmail.com` | Kiểm tra lại trong Apple khi thay đổi quyền |
@@ -61,6 +61,14 @@ Solo dev building iOS apps & offline games. Notes on shipping, privacy and app m
 ```
 
 Đã kiểm tra trực quan avatar mảnh ghép mới, kế thừa từ Instagram, cùng bio và link website sau reload.
+
+## Facebook Page — chưa tạo thành công
+
+Chủ studio đã đồng ý tạo **KV Apps**, category **Software**, bio “Apps & Games by Khanh Vu. Small apps. Everyday joy.” và chấp nhận Pages, Groups and Events Policies tại bước Create Page ngày 18/10/2026.
+
+Đã thử form tạo Page ban đầu, luồng **Pages → Create Page → Public Page → Get started** và nút Create Page qua giao diện trực tiếp. Form xác nhận tên/category hợp lệ; nút có xử lý Loading rồi quay lại form. Chưa quan sát được Page mới hoặc thông báo nêu lý do. Danh sách Pages chưa hiển thị Page quản lý; trình chuyển hồ sơ cũng chưa tải xong. Không suy đoán tài khoản bị hạn chế, thời gian phải chờ hoặc lỗi điều khoản khi UI chưa xác nhận.
+
+Đã giữ tab ở form điền sẵn để chủ studio thử bấm trực tiếp và báo kết quả. Avatar, cover, email, website và username Page chưa được lưu vì chưa có Page để cấu hình. Chưa thêm Facebook lên website; không dùng URL dự kiến như URL đã xác nhận.
 
 ## Nội dung và ảnh để hoàn thiện profile
 
