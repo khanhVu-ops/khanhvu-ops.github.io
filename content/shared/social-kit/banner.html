@@ -1,0 +1,21 @@
+<!doctype html>
+<!-- Source for youtube-banner-2560x1440.png and facebook-cover-1640x683.png. Render: see README.md -->
+<html><head><meta charset="utf-8"><style>
+  html,body{margin:0;width:100vw;height:100vh;overflow:hidden;background:#090d16;font-family:-apple-system,"SF Pro Display",sans-serif;color:#f8fafc}
+  body{background:radial-gradient(ellipse at 30% 40%,rgba(56,189,248,.18),transparent 55%),radial-gradient(ellipse at 75% 65%,rgba(129,140,248,.16),transparent 55%),#090d16;display:flex;align-items:center;justify-content:center}
+  /* everything sits inside the safe box; outer area is decoration that may be cropped */
+  .safe{width:var(--w);height:var(--h);display:flex;align-items:center;justify-content:space-between;gap:calc(var(--h)*.12)}
+  .brand{display:flex;align-items:center;gap:calc(var(--h)*.08)}
+  .mark{width:calc(var(--h)*.62);height:calc(var(--h)*.62);border-radius:22%;background:#121826;border:2px solid #232f48;display:flex;align-items:center;justify-content:center}
+  .mark svg{width:72%}
+  h1{margin:0;font-size:calc(var(--h)*.26);letter-spacing:-.02em;line-height:1}
+  p{margin:calc(var(--h)*.05) 0 0;font-size:calc(var(--h)*.105);color:#94a3b8}
+  .apps{display:flex;gap:calc(var(--h)*.07)}
+  .apps img{width:calc(var(--h)*.36);height:calc(var(--h)*.36);border-radius:22%}
+</style></head><body><div class="safe">
+  <div class="brand">
+    <div class="mark"><svg viewBox="12 17 52 30"><path fill="#7dd3fc" d="M13 18h6v12l9-12h7L24 32l12 14h-8L19 35v11h-6zm22 0h7l6 19 6-19h7L51 46h-6z"/></svg></div>
+    <div><h1>KV Apps</h1><p>Small apps. Everyday joy.</p></div>
+  </div>
+  <div class="apps"><img src="veilnest.png" alt=""><img src="color-meter.png" alt=""><img src="paper-drift.png" alt=""></div>
+</div></body></html>

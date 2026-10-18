@@ -8,6 +8,7 @@ Tài khoản và quyền quản trị: [ACCOUNTS.md](../ACCOUNTS.md). Kế hoạ
 | TikTok | Thử hook/tình huống, demo ngắn và gameplay | [Hướng dẫn](tiktok/README.md) · [Nhật ký bài đăng](tiktok/POSTS.md) |
 | Instagram | Reels tái sử dụng creative, profile giới thiệu danh mục | [Hướng dẫn](instagram/README.md) · [Nhật ký bài đăng](instagram/POSTS.md) |
 | Facebook | Page studio, cập nhật phát hành và hướng dẫn hỗ trợ | [Hướng dẫn](facebook/README.md) · [Nhật ký bài đăng](facebook/POSTS.md) |
+| Threads | Bài chữ ngắn của developer, dùng chung tài khoản Instagram | [Hướng dẫn](threads/README.md) · [Nhật ký](threads/POSTS.md) |
 | Nhóm Facebook VN | Bài hướng dẫn kèm video trong nhóm "Thủ thuật iPhone" | [Hướng dẫn + nháp](facebook-groups/README.md) · [Nhật ký](facebook-groups/POSTS.md) |
 | Reddit | Bài "I made this" ở r/iosapps, r/SideProject; trả lời thread liên quan | [Hướng dẫn + nháp](reddit/README.md) · [Nhật ký](reddit/POSTS.md) |
 

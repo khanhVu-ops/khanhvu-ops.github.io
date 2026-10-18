@@ -6,9 +6,10 @@ Snapshot **18/10/2026**. Đánh dấu xong sau khi kiểm tra kết quả; trạ
 
 - [x] Tạo và kiểm tra YouTube KV Apps bằng Google studio.
 - [x] Tạo và kiểm tra handle TikTok `@khanhvuapps` bằng Google studio.
-- [ ] Thiết kế/upload avatar và banner YouTube; kiểm tra crop trên mobile.
-- [ ] Hoàn tất bio/avatar TikTok; đổi display name KV Apps khi UI cho phép từ 25/10/2026.
-- [ ] Chủ tài khoản hoàn tất đăng ký/xác minh Instagram; sau đó kiểm tra profile và quyền quản trị.
+- [x] Avatar YouTube; tên, avatar, bio TikTok; profile Instagram (kiểm tra public 18/10 tối).
+- [ ] Upload [banner YouTube](../content/shared/social-kit/youtube-banner-2560x1440.jpg); kiểm tra crop trên mobile.
+- [ ] Instagram: chuyển tài khoản chuyên nghiệp, hiện email liên hệ.
+- [ ] Tạo Threads `@khanhvuapps` từ Instagram, thêm link website.
 - [ ] Chủ tài khoản hoàn tất Facebook cá nhân thật; sau đó tạo Facebook Page KV Apps.
 - [ ] Chỉ thêm Instagram/Facebook lên website khi đã có URL xác nhận.
 
