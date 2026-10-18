@@ -8,6 +8,7 @@ Cập nhật **18/10/2026**. Google chủ sở hữu studio: **`khanhvu.dev@gmai
 | TikTok | [KV Apps · @khanhvuapps](https://www.tiktok.com/@khanhvuapps) | Tên KV Apps và bio đã lưu; trang profile vẫn hiện avatar KV cũ sau reload | Google studio; đã thấy TikTok trong Google Linked apps | Đã thử upload logo mới nhưng chưa xác nhận lưu thành công; kiểm tra/đổi lại trong app TikTok. Loại tài khoản chưa xác minh |
 | Instagram | [KV Apps · @khanhvuapps](https://www.instagram.com/khanhvuapps/) | Đã chuyển Business, category Software; logo mới và bio đã lưu | Email studio đã đối chiếu trong Accounts Center | Email business đã lưu và bật Display contact info; nút contact chỉ hiện trên mobile. Cần thêm website vào ô Links bằng app |
 | Threads | [KV Apps · @khanhvuapps](https://www.threads.com/@khanhvuapps) | Đã tạo profile public; bio, logo mới kế thừa từ Instagram và link website riêng đã kiểm tra sau reload (18/10) | Instagram `khanhvuapps` | Bài đầu tiên |
+| Meta Business Suite | [Business Suite](https://business.facebook.com/) | Đã đăng nhập bằng Instagram studio và thấy dashboard @khanhvuapps | Instagram `khanhvuapps` | Chưa có Facebook Page được kết nối; luồng Connect Facebook Page chưa hoàn tất |
 | Facebook cá nhân | Tài khoản thật của chủ studio | Chưa hoàn tất đăng ký mới | Form dùng email studio | Chủ tài khoản hoàn tất thông tin cá nhân và xác minh |
 | Facebook Page | Tên dự kiến KV Apps; `facebook.com/khanhvuapps` chưa có trang public (18/10) | Chưa tạo | Sẽ do Facebook cá nhân quản trị | Tạo sau khi có tài khoản cá nhân hoạt động |
 | Reddit | Tài khoản cá nhân của chủ studio (chưa ghi username) | Chưa kiểm tra | Chủ studio | Kiểm tra tuổi tài khoản/karma trước bài đầu; xem [hướng dẫn](channels/reddit/README.md) |
@@ -60,7 +61,7 @@ Chủ studio đã xác nhận điều khoản ở nút Join Threads. Tạo bằn
 Solo dev building iOS apps & offline games. Notes on shipping, privacy and app marketing. Small apps. Everyday joy.
 ```
 
-Đã kiểm tra trực quan avatar mảnh ghép mới, kế thừa từ Instagram. Kiểm tra cuối bằng DOM và screenshot trình duyệt sau khi cây accessibility bị chậm.
+Đã kiểm tra trực quan avatar mảnh ghép mới, kế thừa từ Instagram, cùng bio và link website sau reload.
 
 ## Nội dung và ảnh để hoàn thiện profile
 

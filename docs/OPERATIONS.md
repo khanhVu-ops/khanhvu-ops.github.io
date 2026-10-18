@@ -14,6 +14,7 @@ Snapshot **18/10/2026**. Đánh dấu xong sau khi kiểm tra kết quả; trạ
 - [ ] Thêm website vào trường Links Instagram bằng app; hiện địa chỉ mới ở text bio.
 - [x] Tạo Threads public `@khanhvuapps` từ Instagram; thêm bio và link website riêng.
 - [x] Kiểm tra trực quan logo Threads và xác nhận bio/link còn hiển thị sau reload.
+- [x] Đăng nhập Meta Business Suite bằng Instagram studio; kiểm tra dashboard @khanhvuapps.
 - [ ] Chủ tài khoản hoàn tất Facebook cá nhân thật; sau đó tạo Facebook Page KV Apps.
 - [x] Thêm link Instagram và Threads đã xác nhận lên website.
 - [ ] Thêm Facebook lên website sau khi Page có URL xác nhận.
