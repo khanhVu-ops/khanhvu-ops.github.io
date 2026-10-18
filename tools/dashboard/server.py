@@ -11,6 +11,8 @@ Standard library only. Binds to 127.0.0.1 and refuses requests from other origin
 from __future__ import annotations
 
 import argparse
+import errno
+import http.client
 import json
 import mimetypes
 import re
@@ -303,13 +305,36 @@ class Handler(BaseHTTPRequestHandler):
                 pass
 
 
+def already_running(port: int) -> bool:
+    """True when the process on that port is this dashboard (answers /api/state as we do)."""
+    try:
+        conn = http.client.HTTPConnection("127.0.0.1", port, timeout=2)
+        conn.request("GET", "/", headers={"Host": f"127.0.0.1:{port}"})
+        res = conn.getresponse()
+        return res.getheader("Server", "").startswith(Handler.server_version)
+    except OSError:
+        return False
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--port", type=int, default=8790)
     parser.add_argument("--no-open", action="store_true", help="không tự mở trình duyệt")
     args = parser.parse_args(argv)
-    server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
     url = f"http://127.0.0.1:{args.port}/"
+    try:
+        server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
+    except OSError as exc:
+        if exc.errno != errno.EADDRINUSE:
+            raise
+        if already_running(args.port):
+            print(f"Dashboard đã chạy sẵn ở {url} — mở lại trong trình duyệt.")
+            if not args.no_open:
+                webbrowser.open(url)
+            return 0
+        print(f"Cổng {args.port} đang bị chương trình khác dùng. Chạy với cổng khác, ví dụ: "
+              f"python3 tools/dashboard/server.py --port {args.port + 1}", file=sys.stderr)
+        return 1
     print(f"KV Apps dashboard → {url}  (Ctrl+C để dừng)")
     if not args.no_open:
         threading.Timer(0.4, lambda: webbrowser.open(url)).start()

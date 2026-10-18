@@ -55,6 +55,47 @@ python3 -m unittest discover -s tools/dashboard
 
 Test ghi vào bản sao tạm của POSTS.md và campaign-links.json. Test server chạy trên một cổng ngẫu nhiên và kiểm tra cả các lớp chặn Host, Origin và đường dẫn.
 
-## Giai đoạn sau
+## Trạng thái và việc còn lại
 
-Instagram và Threads (đăng bài + Insights) cần một Meta app. TikTok cần app được TikTok duyệt. Facebook Page chờ tạo được Page. Trong lúc chờ, đăng tay theo bộ đăng bài và nhập số ở trang Số liệu.
+Cập nhật 19/10/2026. Bảng dưới phân biệt rõ phần **đã chạy thật**, phần **chỉ mới test bằng dữ liệu giả** và phần **chưa làm**. Khi một mục xong, chuyển dòng đó sang “Đã chạy”, ghi ngày và cách đã kiểm tra.
+
+### Đã chạy và đã kiểm tra
+
+| Tính năng | Cách đã kiểm tra (19/10/2026) |
+|---|---|
+| Đọc repo: creative, hook, lịch 14 ngày, ACCOUNTS.md, check-content | Chạy trên repo thật; test `RepoStateTests` |
+| Ghi bài đã đăng vào POSTS.md, ghi cột kết quả 24h/7d | Test trên bản sao tạm; thử qua API với dữ liệu giả rồi `git checkout` lại; `check-content.py` đọc đúng định dạng kết quả |
+| Nhập, xem, xoá số liệu (SQLite `.dashboard/`) | Test `StoreTests`; thử 4 bài giả trên giao diện rồi xoá DB |
+| Biểu đồ view theo bài, so sánh hook A/B/C, lịch sử đo | Xem trên trình duyệt với dữ liệu giả; hiện đang trống vì chưa có bài thật |
+| Tạo/xoá campaign link, gợi ý `ct`, URL có `pt`/`ppid` | Test `CampaignTests`; tạo thử một link trên giao diện rồi xoá file |
+| Xem video, ảnh bìa, ảnh review vùng an toàn trong Content | Render thử bằng master giả trong `exports/` rồi xoá |
+| YouTube **dry-run** (kiểm tra metadata + file, không gửi gì) | Gọi thật qua dashboard, `upload.py` trả “Dry run: … nothing was sent” |
+| Chặn Host/Origin lạ, chặn đọc file ngoài `content/`, Range cho video | Test `ServerTests` + `curl` |
+| Báo lỗi thân thiện khi cổng đã bị dùng | Thử cả hai trường hợp: dashboard đang chạy sẵn và chương trình khác chiếm cổng |
+
+### Chưa chạy được: chờ thiết lập bên ngoài
+
+| Tính năng | Thiếu | Việc cần làm (ai) | Sau khi xong, kiểm tra |
+|---|---|---|---|
+| **Upload YouTube private** | OAuth client + token | Chủ kênh làm theo [tools/youtube/README.md](../youtube/README.md): tạo Google Cloud project, bật YouTube Data API v3 **và** YouTube Analytics API, tạo Desktop client vào `.secrets/youtube-client.json`, `cp .env.example .env`, chạy `upload.py auth` | Trang Kênh: cả 3 dấu tick xanh; upload private một bản render, thấy dòng mới trong UPLOADS.md |
+| **Đồng bộ số liệu YouTube** | Như trên. Code `youtube_sync.py` **chưa từng gọi API thật** | Sau khi có token và một video public, bấm “Đồng bộ YouTube” | Số view khớp YouTube Studio; nhãn `24h`/`7d`/`lifetime` đúng thời điểm đo; thời gian xem và tỷ lệ xem hết có mặt (Analytics có thể trễ 1–2 ngày). Sửa code nếu tên trường API khác |
+| **Campaign link được Apple ghi nhận** | Provider token `pt` | Chủ app lấy `pt` trong App Store Connect → Apps → Veilnest → Analytics → Acquisition → Campaigns, nhập ở trang Campaign link, tạo link cho từng kênh × ngôn ngữ | Sau 1–2 ngày có lượt truy cập, campaign xuất hiện trong Analytics → Sources (Apple ẩn số dưới ngưỡng) |
+| **Custom Product Page** | CPP chưa được duyệt | Tạo CPP (ví dụ `decoy`, `calculator`) trong App Store Connect; khi duyệt, thêm `ppid` vào link | Link mở đúng trang CPP |
+| **Facebook Page** | Page chưa tạo được (xem [ACCOUNTS.md](../../docs/social/ACCOUNTS.md)) | Chủ studio thử tạo lại; cập nhật ACCOUNTS.md | Kênh tự mở khoá trong trang Đăng bài khi trạng thái không còn “Chưa tạo” |
+
+### Chưa làm: giai đoạn sau
+
+| Hạng mục | Điều kiện | Ghi chú triển khai |
+|---|---|---|
+| Instagram Reels + Threads: đăng bài và đọc Insights | Một Meta app (chế độ dev, chủ tài khoản là admin/tester) với Instagram API (Instagram Login) và Threads API | Thêm `meta_sync.py` theo khuôn `youtube_sync.py`: chỉ đọc trước, token trong `.secrets/`, ghi snapshot nguồn `Instagram API`/`Threads API`. Đăng bài: luôn qua nút xác nhận, mặc định không tự đăng |
+| TikTok: đăng bài và đọc số | App TikTok for Developers được duyệt (Content Posting API, `video.list`) | App chưa duyệt chỉ đăng được private. Trong lúc chờ: đăng tay, nhập số tay |
+| Lượt tải theo campaign tự động | App Store Connect API key (Analytics Reports) | Chỉ làm nếu báo cáo tách được theo campaign; cần xác minh trước. Key lưu `.secrets/`, không commit |
+| Tự đồng bộ theo lịch | Server phải đang chạy hoặc dùng launchd/cron | Ví dụ chạy sync mỗi sáng; không tự đăng bài |
+| Lịch cho Color Meter, Paper Drift | Có brief và lịch như `VEILNEST_14_DAYS.md` | Parser `read_plan` hiện chỉ đọc file Veilnest; tổng quát hoá khi có lịch thứ hai |
+| Sao lưu số liệu | — | Hiện chép tay `.dashboard/dashboard.db`; có thể thêm nút export CSV (vào thư mục gitignored) |
+
+### Còn phải kiểm tra trên giao diện
+
+- Nút “Mở thư mục” / “Hiện file trong Finder” (`open -R`), các nút Copy (clipboard) và hộp xác nhận khi xoá: phía API đã có test, nhưng chưa bấm thử trên trình duyệt thật.
+- Trên mobile, thanh menu trên cùng hơi tràn và phải kéo ngang. Chấp nhận được vì dashboard dùng chủ yếu trên Mac; nếu cần thì gom bớt icon.
+- Sau khi có bài thật: kiểm tra biểu đồ khi có hơn 10 bài, khi một concept có đủ cả A/B/C trên cùng kênh, và khi tên creative dài.
