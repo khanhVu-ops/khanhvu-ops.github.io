@@ -1,6 +1,6 @@
 # Kết nối Meta cho dashboard studio
 
-Cập nhật **19/10/2026**. Chưa có Meta app hoặc token được tạo trong phiên thiết lập. Cổng [Meta for Developers](https://developers.facebook.com/apps/) đang yêu cầu chủ tài khoản hoàn tất xác minh trước khi vào danh sách ứng dụng. Trạng thái trong [ACCOUNTS.md](ACCOUNTS.md) là nguồn sự thật; Business Suite đã đăng nhập không đồng nghĩa với app Developer đã được tạo.
+Cập nhật **19/10/2026**. Chưa có Meta app hoặc token được tạo trong phiên thiết lập. Chủ studio đã thực hiện bước truy cập; kiểm tra lại [Meta for Developers](https://developers.facebook.com/apps/) vẫn chưa vào được danh sách ứng dụng. Chờ thông báo từ Meta trước khi tiếp tục. Trạng thái trong [ACCOUNTS.md](ACCOUNTS.md) là nguồn sự thật; Business Suite đã đăng nhập không đồng nghĩa với app Developer đã được tạo. Không lưu ảnh hoặc dữ liệu xác minh cá nhân trong repo.
 
 ## Cấu hình dự kiến
 
@@ -12,7 +12,8 @@ Cập nhật **19/10/2026**. Chưa có Meta app hoặc token được tạo tron
 
 ## Các bước còn lại
 
-- [ ] Chủ tài khoản hoàn tất bước truy cập Meta for Developers trực tiếp trên trang.
+- [x] Chủ tài khoản thực hiện bước truy cập trực tiếp trên trang ngày 19/10.
+- [ ] Meta cho phép truy cập cổng Developers; chỉ kiểm tra lại khi có thông báo hoặc trạng thái thay đổi.
 - [ ] Kiểm tra hoặc hoàn tất đăng ký Developer; xác nhận điều khoản tại màn hình chấp nhận nếu Meta yêu cầu.
 - [ ] Tạo app theo use case được hỗ trợ; ghi lại tên, App ID, tài khoản quản trị và trạng thái Development thực tế.
 - [ ] Cấu hình Instagram Login và Threads tương ứng, thêm tài khoản studio vào vai trò thử nghiệm nếu cần.

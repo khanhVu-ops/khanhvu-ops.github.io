@@ -89,7 +89,7 @@ Cập nhật 19/10/2026. Bảng dưới phân biệt rõ phần **đã chạy th
 
 | Hạng mục | Điều kiện | Ghi chú triển khai |
 |---|---|---|
-| Thiết lập Meta app (bắt đầu 19/10) | Chủ studio hoàn tất bước truy cập cổng Meta for Developers | Chưa tạo app/token. [Checklist hiện tại](../../docs/social/META_SETUP.md); chưa tích hợp API Instagram/Threads vào dashboard |
+| Thiết lập Meta app (bắt đầu 19/10) | Chờ Meta cho phép truy cập cổng Developers; chủ studio đã thực hiện bước truy cập | Chưa tạo app/token. [Checklist hiện tại](../../docs/social/META_SETUP.md); chưa tích hợp API Instagram/Threads vào dashboard |
 | Instagram Reels + Threads: đăng bài và đọc Insights | Meta app theo từng use case được hỗ trợ, chủ tài khoản là admin/tester; cần kiểm tra Meta có yêu cầu app riêng cho Threads hay không | Thêm `meta_sync.py` theo khuôn `youtube_sync.py`: chỉ đọc trước, token trong `.secrets/`, ghi snapshot nguồn `Instagram API`/`Threads API`. Đăng bài: luôn qua nút xác nhận, mặc định không tự đăng |
 | TikTok: đăng bài và đọc số | App TikTok for Developers được duyệt (Content Posting API, `video.list`) | App chưa duyệt chỉ đăng được private. Trong lúc chờ: đăng tay, nhập số tay |
 | Lượt tải theo campaign tự động | App Store Connect API key (Analytics Reports) | Chỉ làm nếu báo cáo tách được theo campaign; cần xác minh trước. Key lưu `.secrets/`, không commit |
