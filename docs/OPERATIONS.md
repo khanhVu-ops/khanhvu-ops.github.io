@@ -1,6 +1,6 @@
 # Việc cần làm — studio
 
-Snapshot **18/10/2026**. Đánh dấu xong sau khi kiểm tra kết quả; trạng thái tài khoản chi tiết cập nhật tại [sổ tài khoản](social/ACCOUNTS.md).
+Snapshot **19/10/2026**. Đánh dấu xong sau khi kiểm tra kết quả; trạng thái tài khoản chi tiết cập nhật tại [sổ tài khoản](social/ACCOUNTS.md).
 
 ## Thiết lập kênh
 
@@ -22,6 +22,7 @@ Snapshot **18/10/2026**. Đánh dấu xong sau khi kiểm tra kết quả; trạ
 
 ## Nội dung và tăng trưởng
 
+- [x] Chốt [quy trình chăm sóc account có điều kiện](social/ACCOUNT_ROUTINE.md) cho toàn bộ kênh; không đặt lịch lướt/like/follow mặc định hoặc coi đó là điều kiện tăng reach.
 - [x] Đưa ba bộ Veilnest vào kho nội dung studio và ghi nguồn nhập.
 - [ ] Chọn một hướng để hoàn thiện: POV v2 hoặc Gemini continuation; không dựng cả hai như cùng một video.
 - [ ] Thay UI tham chiếu bằng capture build thực, hoàn tất motion/voice/subtitle, kiểm tra claim và audio.

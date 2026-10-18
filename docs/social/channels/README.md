@@ -2,6 +2,8 @@
 
 Tài khoản và quyền quản trị: [ACCOUNTS.md](../ACCOUNTS.md). Kế hoạch chung: [STRATEGY.md](../STRATEGY.md). Đây là nơi quản lý profile, cách đăng và nhật ký riêng của từng kênh; video gốc nằm ở [content/](../../../content/README.md).
 
+Chăm sóc/“nuôi” account chỉ khi có mục đích hoặc điều kiện cụ thể: [quy trình cho tất cả nền tảng](../ACCOUNT_ROUTINE.md). Không mặc định trì hoãn bài đầu để lướt vài ngày.
+
 | Kênh | Vai trò dự kiến | Quản lý |
 |---|---|---|
 | YouTube | Shorts demo, tutorial ngắn, gameplay; video hướng dẫn dài khi cần | [Hướng dẫn](youtube/README.md) · [Nhật ký bài đăng](youtube/POSTS.md) · [Sổ upload API](youtube/UPLOADS.md) |
