@@ -15,6 +15,7 @@ Snapshot **19/10/2026**. Đánh dấu xong sau khi kiểm tra kết quả; trạ
 - [x] Tạo Threads public `@khanhvuapps` từ Instagram; thêm bio và link website riêng.
 - [x] Kiểm tra trực quan logo Threads và xác nhận bio/link còn hiển thị sau reload.
 - [x] Đăng nhập Meta Business Suite bằng Instagram studio; kiểm tra dashboard @khanhvuapps.
+- [ ] Tạo Meta app cho Instagram/Threads: đã mở cổng Developers ngày 19/10; đang chờ chủ tài khoản hoàn tất xác minh trực tiếp. App, token và tích hợp API với dashboard chưa tạo. [Checklist](social/META_SETUP.md).
 - [x] Chủ tài khoản hoàn tất Facebook cá nhân thật; đã kiểm tra phiên đăng nhập.
 - [ ] Tạo Facebook Page KV Apps; chủ studio đã xác nhận chính sách và đã thử tạo qua các luồng Facebook nhưng vẫn quay lại form. Chủ studio đã kiểm tra trực tiếp, nghi do tài khoản mới; chưa có thông báo Facebook xác nhận lý do/thời gian chờ. Chưa có Page để thêm logo/cover.
 - [x] Thêm link Instagram và Threads đã xác nhận lên website.
