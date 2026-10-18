@@ -15,389 +15,165 @@
     <meta property="og:description" content="Small apps. Everyday joy. Discover a private photo vault, creative tools and an offline puzzle game.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://khanhvu-ops.github.io/">
-    <style>
-        :root {
-            --bg: #090d16;
-            --surface: #121826;
-            --surface-hover: #182235;
-            --surface-border: #232f48;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent: #38bdf8;
-            --accent-glow: rgba(56, 189, 248, 0.15);
-            --gradient-accent: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            line-height: 1.6;
-        }
-
-        .ambient-glow {
-            position: fixed;
-            top: -200px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 700px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(99, 102, 241, 0.08) 50%, transparent 80%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        header {
-            position: relative;
-            z-index: 10;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(12px);
-            background: rgba(9, 13, 22, 0.7);
-        }
-
-        .nav-container {
-            max-width: 1080px;
-            margin: 0 auto;
-            padding: 18px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .brand-logo {
-            font-weight: 700;
-            font-size: 1.15rem;
-            color: var(--text-primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            letter-spacing: -0.02em;
-        }
-
-        .brand-badge {
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            background: rgba(56, 189, 248, 0.15);
-            color: var(--accent);
-            padding: 3px 8px;
-            border-radius: 999px;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            font-weight: 600;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.95rem;
-            margin-left: 24px;
-            transition: color 0.2s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--text-primary);
-        }
-
-        main {
-            position: relative;
-            z-index: 10;
-            flex: 1;
-            max-width: 1080px;
-            margin: 0 auto;
-            padding: 60px 24px 80px;
-            width: 100%;
-        }
-
-        .hero {
-            text-align: center;
-            padding: 12px 0 60px;
-        }
-
-        .studio-byline { color: var(--accent); font-size: 0.9rem; font-weight: 600; margin-bottom: 16px; }
-        .hero-action { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 22px; border-radius: 12px; text-decoration: none; font-weight: 600; }
-        .hero-action.primary { background: var(--accent); color: var(--bg); }
-        .hero-action.secondary { color: var(--text-primary); border: 1px solid var(--surface-border); }
-
-        .app-icon-wrapper {
-            margin: 0 auto 28px;
-            width: 110px;
-            height: 110px;
-            border-radius: 26px;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .app-icon-wrapper img { display: block; width: 100%; height: 100%; }
-
-        .hero h1 {
-            font-size: clamp(2.4rem, 5vw, 3.4rem);
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            line-height: 1.15;
-            margin-bottom: 16px;
-            background: linear-gradient(180deg, #ffffff 30%, #94a3b8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p.tagline {
-            font-size: clamp(1.05rem, 2vw, 1.25rem);
-            color: var(--text-secondary);
-            max-width: 640px;
-            margin: 0 auto 36px;
-            font-weight: 400;
-        }
-
-        .badge-group {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .app-store-btn {
-            display: inline-block;
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .app-store-btn:hover {
-            transform: scale(1.04);
-        }
-
-        .app-store-btn img {
-            height: 48px;
-            border-radius: 8px;
-        }
-
-        .grid-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-            gap: 20px;
-            margin: 70px 0 40px;
-        }
-
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--surface-border);
-            border-radius: 20px;
-            padding: 30px;
-            transition: border-color 0.2s, transform 0.2s;
-        }
-
-        .card:hover {
-            border-color: rgba(56, 189, 248, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .card-icon {
-            font-size: 1.8rem;
-            margin-bottom: 16px;
-            display: inline-block;
-        }
-
-        .card h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            letter-spacing: -0.01em;
-            color: var(--text-primary);
-        }
-
-        .card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.55;
-        }
-
-        footer {
-            position: relative;
-            z-index: 10;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 32px 24px;
-            background: var(--bg);
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 1080px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent);
-        }
-
-        .copyright {
-            color: #64748b;
-            font-size: 0.85rem;
-        }
-        body { overflow-wrap: anywhere; }
-        a:focus-visible { outline: 2px solid #38bdf8; outline-offset: 4px; }
-        .brand-logo { flex-shrink: 0; white-space: nowrap; }
-        .nav-links { display: flex; flex-wrap: wrap; gap: 12px 24px; }
-        .nav-links a { margin-left: 0; white-space: nowrap; }
-        .app-feature { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 28px; align-items: center; padding: 36px; border: 1px solid #2b6661; border-radius: 28px; background: linear-gradient(130deg, #153c3d, #121826); }
-        .app-feature + .app-feature { margin-top: 24px; }
-        .app-feature.vault { border-color: #51436f; background: linear-gradient(130deg, #2b2043, #121826); }
-        .app-feature.color { border-color: #304d78; background: linear-gradient(130deg, #172b49, #121826); }
-        .app-feature img { width: 112px; height: 112px; border-radius: 26px; }
-        .app-feature h3 { font-size: 2rem; letter-spacing: -0.04em; margin: 8px 0; }
-        .app-feature p { color: #c3d8d3; max-width: 650px; }
-        .app-feature.vault p, .app-feature.color p { color: #cbd5e1; }
-        .app-status { color: #ffe4a0; font-size: 0.8rem; font-weight: 600; }
-        .app-status.available { color: #a7f3d0; }
-        .app-status.category { color: #93c5fd; }
-        .app-actions { display: flex; gap: 12px 22px; flex-wrap: wrap; margin-top: 20px; }
-        .app-actions a { color: #b7eee3; text-underline-offset: 4px; }
-        .app-actions .primary-link { color: #183e38; padding: 9px 16px; background: #ffe4a0; border-radius: 10px; text-decoration: none; font-weight: 700; }
-        .app-actions a:not(.primary-link) { align-self: center; }
-        .section-intro { color: var(--text-secondary); margin: 12px 0 24px; }
-        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
-        @media (max-width: 640px) {
-            .nav-container { align-items: flex-start; flex-direction: column; gap: 16px; }
-            .nav-links { gap: 12px 20px; }
-            .app-feature { grid-template-columns: minmax(0, 1fr); padding: 24px; gap: 18px; }
-            .app-feature img { width: 88px; height: 88px; border-radius: 22px; }
-        }
-    </style>
+    <meta name="theme-color" content="#040915" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f5f8fc" media="(prefers-color-scheme: light)">
+    <link rel="stylesheet" href="assets/site.css">
     <link rel="icon" href="assets/kv-apps.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/kv-apps-avatar.png">
 </head>
 <body>
-    <div class="ambient-glow"></div>
-
-    <header>
-        <div class="nav-container">
-            <a href="index.html" class="brand-logo">
-                <img src="assets/kv-mark.svg" width="46" height="28" alt="">
-                <span>KV Apps</span>
-                <span class="brand-badge">iOS Studio</span>
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="aurora" aria-hidden="true"></div>
+    <header class="site-header">
+        <div class="wrap">
+            <a class="brand" href="index.html" aria-label="KV Apps home">
+                <picture><source srcset="assets/kv-mark-on-light.svg" media="(prefers-color-scheme: light)"><img src="assets/kv-mark.svg" width="42" height="26" alt=""></picture>
+                <span>KV Apps</span><small>iOS Studio</small>
             </a>
-            <nav class="nav-links" aria-label="Main navigation">
-                <a href="#apps">Apps &amp; games</a>
-                <a href="support.html">Support</a>
-                <a href="privacy.html">Privacy</a>
-                <a href="terms.html">Terms</a>
-            </nav>
+            <nav class="site-nav" aria-label="Main navigation"><a href="index.html#apps" aria-current="page">Apps</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
         </div>
-</header>
+    </header>
 
-    <main>
+    <main id="main">
         <section class="hero">
-            <div class="app-icon-wrapper" aria-hidden="true"><img src="assets/kv-apps-avatar.png" width="110" height="110" alt=""></div>
-
-            <p class="studio-byline">Apps &amp; Games by Khanh Vu</p>
-            <h1>Small apps.<br>Everyday joy.</h1>
-            <p class="tagline">A private space for your photos, tools for your creativity and little games for your downtime. Independently made for iOS.</p>
-
-            <div class="badge-group">
-                <a href="#apps" class="hero-action primary">Explore our apps</a>
-                <a href="support.html" class="hero-action secondary">Get support</a>
+            <div class="wrap">
+                <div>
+                    <p class="eyebrow rise" style="--i:0">Apps &amp; Games by Khanh Vu</p>
+                    <h1 class="rise" style="--i:1">Small apps.<br><span class="gradient-text">Everyday joy.</span></h1>
+                    <p class="lede rise" style="--i:2">A private space for your photos, tools for your creativity and little games for your downtime. Independently made for iOS.</p>
+                    <div class="actions rise" style="--i:3">
+                        <a href="#apps" class="btn btn-primary">Explore our apps <span class="arrow" aria-hidden="true">→</span></a>
+                        <a href="support.html" class="btn">Get support</a>
+                    </div>
+                    <p class="meta rise" style="--i:4"><span>Made for iPhone</span><span>Independent studio</span><span>Help in English &amp; Vietnamese</span></p>
+                </div>
+                <div class="orbit rise" style="--i:2" aria-hidden="true">
+                    <div class="ring"></div>
+                    <div class="ring inner"></div>
+                    <div class="core"><picture><source srcset="assets/kv-mark-on-light.svg" media="(prefers-color-scheme: light)"><img src="assets/kv-mark.svg" width="160" height="99" alt=""></picture></div>
+                    <a class="planet p1" href="#veilnest" tabindex="-1"><img src="assets/veilnest/icon.png" width="96" height="96" alt=""></a>
+                    <a class="planet p2" href="#color-meter" tabindex="-1"><img src="assets/color-meter/icon.png" width="96" height="96" alt=""></a>
+                    <a class="planet p3" href="#paper-drift" tabindex="-1"><img src="assets/paper-drift/icon.png" width="96" height="96" alt=""></a>
+                    <span class="spark s1"></span><span class="spark s2"></span>
+                </div>
             </div>
         </section>
 
-        <section id="apps" aria-labelledby="apps-title">
-            <h2 id="apps-title">Find your next everyday app.</h2>
-            <p class="section-intro">Explore our apps and a puzzle game in the making. Each product has its own features, purchase options and privacy information.</p>
-            <article class="app-feature vault" id="veilnest" aria-labelledby="veilnest-title">
-                <img src="assets/veilnest/icon.png" width="112" height="112" alt="Veilnest app icon" loading="lazy">
-                <div>
-                    <span class="app-status available">PRIVATE PHOTO VAULT · ON THE APP STORE</span>
-                    <h3 id="veilnest-title">Veilnest</h3>
-                    <p>Keep private photos and videos in an encrypted space with a PIN you choose. Capture directly into your vault, organize your collection and edit in the app. No account required.</p>
-                    <div class="app-actions"><a class="primary-link" href="https://apps.apple.com/app/id6813747332">View on the App Store →</a><a href="how-to-hide-photos-iphone.html">How to hide photos on iPhone</a><a href="support.html#veilnest">Veilnest support</a><a href="privacy.html#veilnest">Privacy</a><a href="terms.html">Terms</a></div>
+        <section class="section" id="apps" aria-labelledby="apps-title">
+            <div class="wrap">
+                <div class="section-head reveal">
+                    <p class="eyebrow">Our apps</p>
+                    <h2 id="apps-title">Find your next everyday app.</h2>
+                    <p>Explore our apps and a puzzle game in the making. Each product has its own features, purchase options and privacy information.</p>
                 </div>
-            </article>
-            <article class="app-feature color" id="color-meter" aria-labelledby="color-meter-title">
-                <img src="assets/color-meter/icon.png" width="112" height="112" alt="Color Meter app icon" loading="lazy">
-                <div>
-                    <span class="app-status category">COLOR TOOLS · CREATIVITY</span>
-                    <h3 id="color-meter-title">Color Meter</h3>
-                    <p>Find colors in camera views and photos, explore the color wheel and keep your favorite colors in local collections. A pocket companion for your next creative project.</p>
-                    <div class="app-actions"><a class="primary-link" href="support.html#color-meter">Explore Color Meter →</a><a href="privacy.html#color-meter">Privacy</a><a href="terms.html">Terms</a></div>
+                <div class="apps">
+                    <article class="app-card veilnest reveal" id="veilnest" aria-labelledby="veilnest-title">
+                        <img class="icon" src="assets/veilnest/icon.png" width="128" height="128" alt="Veilnest app icon" loading="lazy">
+                        <div>
+                            <span class="chip live">Private photo vault · On the App Store</span>
+                            <h3 id="veilnest-title">Veilnest</h3>
+                            <p>Keep private photos and videos in an encrypted space with a PIN you choose. Capture directly into your vault, organize your collection and edit in the app. No account required.</p>
+                            <div class="links"><a class="btn btn-primary" href="https://apps.apple.com/app/id6813747332">View on the App Store <span class="arrow" aria-hidden="true">→</span></a><a href="how-to-hide-photos-iphone.html">How to hide photos on iPhone</a><a href="support.html#veilnest">Veilnest support</a><a href="privacy.html#veilnest">Privacy</a><a href="terms.html">Terms</a></div>
+                        </div>
+                    </article>
+                    <article class="app-card color-meter reveal" id="color-meter" aria-labelledby="color-meter-title">
+                        <img class="icon" src="assets/color-meter/icon.png" width="128" height="128" alt="Color Meter app icon" loading="lazy">
+                        <div>
+                            <span class="chip">Color tools · Creativity</span>
+                            <h3 id="color-meter-title">Color Meter</h3>
+                            <p>Find colors in camera views and photos, explore the color wheel and keep your favorite colors in local collections. A pocket companion for your next creative project.</p>
+                            <div class="links"><a class="btn" href="support.html#color-meter">Explore Color Meter <span class="arrow" aria-hidden="true">→</span></a><a href="privacy.html#color-meter">Privacy</a><a href="terms.html">Terms</a></div>
+                        </div>
+                    </article>
+                    <article class="app-card paper-drift reveal" id="paper-drift" aria-labelledby="paper-drift-title">
+                        <img class="icon" src="assets/paper-drift/icon.png" width="128" height="128" alt="Paper Drift icon: two paper boats on teal water" loading="lazy">
+                        <div>
+                            <span class="chip dev">2D puzzle game · In development</span>
+                            <h3 id="paper-drift-title">Paper Drift</h3>
+                            <p>One current. One way home. Guide paper boats across the lagoon, read the rhythm of the water and light up your mail dock. The current build has 1,000 offline levels and needs no account.</p>
+                            <div class="links"><a class="btn" href="paper-drift.html">Explore the game <span class="arrow" aria-hidden="true">→</span></a><a href="support.html#paper-drift">Game support</a><a href="privacy.html#paper-drift">Privacy</a><a href="terms.html#paper-drift">Terms</a></div>
+                        </div>
+                    </article>
                 </div>
-            </article>
-            <article class="app-feature" id="paper-drift">
-                <img src="assets/paper-drift/icon.png" width="112" height="112" alt="Paper Drift icon: two paper boats on teal water" loading="lazy">
-                <div>
-                    <span class="app-status">2D PUZZLE GAME · IN DEVELOPMENT</span>
-                    <h3>Paper Drift</h3>
-                    <p>One current. One way home. Guide paper boats across the lagoon, read the rhythm of the water and light up your mail dock. The current build has 1,000 offline levels and needs no account.</p>
-                    <div class="app-actions"><a class="primary-link" href="paper-drift.html">Explore the game →</a><a href="support.html#paper-drift">Game support</a><a href="privacy.html#paper-drift">Privacy</a><a href="terms.html#paper-drift">Terms</a></div>
-                </div>
-            </article>
+            </div>
         </section>
 
-        <section class="grid-features">
-            <div class="card">
-                <span class="card-icon">🎨</span>
-                <h3>Make something yours</h3>
-                <p>Pick a color, collect an idea or keep a personal moment in its own space. Small tools for the things you care about.</p>
+        <section class="section" aria-labelledby="pillars-title">
+            <div class="wrap">
+                <div class="section-head reveal">
+                    <p class="eyebrow">What we make</p>
+                    <h2 id="pillars-title">Little tools, made with care.</h2>
+                </div>
+                <div class="pillars">
+                    <div class="pillar reveal">
+                        <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/><path d="M12 2a10 10 0 0 0 0 20c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1.1.9-2 2-2h2.4A5.6 5.6 0 0 0 22 9.8C22 5.5 17.5 2 12 2z"/></svg></span>
+                        <h3>Make something yours</h3>
+                        <p>Pick a color, collect an idea or keep a personal moment in its own space. Small tools for the things you care about.</p>
+                    </div>
+                    <div class="pillar reveal">
+                        <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12h4M8 10v4"/><circle cx="15" cy="13" r="1"/><circle cx="18" cy="11" r="1"/><path d="M17.3 5H6.7a4 4 0 0 0-4 3.6l-.7 6A3 3 0 0 0 5 18c1 0 1.9-.5 2.4-1.3L9 15h6l1.6 1.7c.5.8 1.4 1.3 2.4 1.3a3 3 0 0 0 3-3.4l-.7-6A4 4 0 0 0 17.3 5z"/></svg></span>
+                        <h3>A little time to play</h3>
+                        <p>Discover thoughtful puzzles for a quiet break. Explore Paper Drift and follow the journey as we bring the game to life.</p>
+                    </div>
+                    <div class="pillar reveal">
+                        <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
+                        <h3>Know your apps</h3>
+                        <p>Find product-specific support and privacy information, or reach Khanh Vu directly at <a href="mailto:khanhvu.dev@gmail.com">khanhvu.dev@gmail.com</a>.</p>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <div class="card">
-                <span class="card-icon">⚡</span>
-                <h3>A little time to play</h3>
-                <p>Discover thoughtful puzzles for a quiet break. Explore Paper Drift and follow the journey as we bring the game to life.</p>
-            </div>
-
-            <div class="card">
-                <span class="card-icon">🛡️</span>
-                <h3>Know your apps</h3>
-                <p>Find product-specific support and privacy information, or reach Khanh Vu directly at <a href="mailto:khanhvu.dev@gmail.com" style="color: var(--accent);">khanhvu.dev@gmail.com</a>.</p>
+        <section class="section" aria-labelledby="contact-title">
+            <div class="wrap">
+                <div class="cta-band reveal">
+                    <div>
+                        <h2 id="contact-title">Questions about an app?</h2>
+                        <p>Write to Khanh Vu in English or Vietnamese. Include the app name so we can check the right product.</p>
+                    </div>
+                    <div class="actions" style="display:flex;flex-wrap:wrap;gap:12px">
+                        <a class="btn btn-primary" href="mailto:khanhvu.dev@gmail.com?subject=KV%20Apps">Email us <span class="arrow" aria-hidden="true">→</span></a>
+                        <a class="btn" href="support.html">Support center</a>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="index.html">Home</a>
-                <a href="privacy.html">Privacy Policy</a>
-                <a href="terms.html">Terms of Use</a>
-                <a href="support.html">Support</a>
-                <a href="https://www.youtube.com/@khanhvuapps">YouTube</a>
-                <a href="https://www.tiktok.com/@khanhvuapps">TikTok</a>
-                <a href="https://www.instagram.com/khanhvuapps/">Instagram</a>
-                <a href="https://www.threads.com/@khanhvuapps">Threads</a>
-                <a href="app-ads.txt">app-ads.txt</a>
+    <footer class="site-footer">
+        <div class="wrap">
+            <div class="about">
+                <a class="brand" href="index.html"><picture><source srcset="assets/kv-mark-on-light.svg" media="(prefers-color-scheme: light)"><img src="assets/kv-mark.svg" width="42" height="26" alt=""></picture><span>KV Apps</span></a>
+                <p>Apps &amp; Games by Khanh Vu. Small apps. Everyday joy.</p>
             </div>
-            <p class="copyright">© 2026 Khanh Vu (KV Apps). All rights reserved.</p>
+            <div>
+                <h2>Apps</h2>
+                <ul>
+                    <li><a href="https://apps.apple.com/app/id6813747332">Veilnest</a></li>
+                    <li><a href="support.html#color-meter">Color Meter</a></li>
+                    <li><a href="paper-drift.html">Paper Drift</a></li>
+                    <li><a href="how-to-hide-photos-iphone.html">Hide photos on iPhone</a></li>
+                </ul>
+            </div>
+            <div>
+                <h2>Help</h2>
+                <ul>
+                    <li><a href="support.html">Support</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Use</a></li>
+                    <li><a href="mailto:khanhvu.dev@gmail.com">khanhvu.dev@gmail.com</a></li>
+                </ul>
+            </div>
+            <div>
+                <h2>Follow</h2>
+                <ul>
+                    <li><a href="https://www.youtube.com/@khanhvuapps">YouTube</a></li>
+                    <li><a href="https://www.tiktok.com/@khanhvuapps">TikTok</a></li>
+                    <li><a href="https://www.instagram.com/khanhvuapps/">Instagram</a></li>
+                    <li><a href="https://www.threads.com/@khanhvuapps">Threads</a></li>
+                </ul>
+            </div>
+            <div class="legal"><span>© 2026 Khanh Vu (KV Apps). All rights reserved.</span><a href="app-ads.txt">app-ads.txt</a></div>
         </div>
     </footer>
 </body>

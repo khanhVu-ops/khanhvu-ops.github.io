@@ -55,6 +55,44 @@
         footer { max-width: 1120px; margin: auto; padding: 34px 28px; font-size: 0.85rem; color: var(--muted); }
         footer nav { margin: 20px 0; }
         @media (max-width: 720px) { .hero, .dock { grid-template-columns: minmax(0, 1fr); gap: 32px; } .hero { padding: 40px 0; } .hero-preview { max-width: 380px; justify-self: center; width: 100%; } .features { grid-template-columns: minmax(0, 1fr); } .chapter { padding: 40px 0; } .dock .phone { width: 210px; } main, .nav, footer { padding-left: 22px; padding-right: 22px; } }
+        /* Motion: page transitions shared with the studio pages, a gently bobbing icon and phones, water that breathes. */
+        @view-transition { navigation: auto; }
+        ::view-transition-old(root) { animation: pd-out 0.22s ease both; }
+        ::view-transition-new(root) { animation: pd-in 0.42s cubic-bezier(0.22, 1, 0.36, 1) both; }
+        @keyframes pd-out { to { opacity: 0; transform: translateY(-8px); } }
+        @keyframes pd-in { from { opacity: 0; transform: translateY(14px); } }
+        header { position: sticky; top: 0; z-index: 5; background: rgba(255, 248, 223, 0.82); -webkit-backdrop-filter: saturate(150%) blur(14px); backdrop-filter: saturate(150%) blur(14px); }
+        nav a { text-decoration: none; padding: 6px 2px; border-bottom: 2px solid transparent; transition: border-color 0.2s; }
+        nav a:hover { border-color: var(--gold); }
+        .brand img { transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+        .brand:hover img { transform: rotate(-6deg) scale(1.06); }
+        .hero > div:first-child > * { animation: pd-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+        .hero > div:first-child > :nth-child(2) { animation-delay: 80ms; }
+        .hero > div:first-child > :nth-child(3) { animation-delay: 160ms; }
+        .hero > div:first-child > :nth-child(4) { animation-delay: 240ms; }
+        .hero > div:first-child > :nth-child(n+5) { animation-delay: 320ms; }
+        @keyframes pd-rise { from { opacity: 0; transform: translateY(18px); } }
+        .icon { animation: pd-bob 5s ease-in-out infinite; }
+        .phone-stage { animation: pd-breathe 7s ease-in-out infinite; }
+        .hero .phone { animation: pd-float 6s ease-in-out infinite; }
+        .dock .phone { animation: pd-float 7s ease-in-out infinite -2s; }
+        @keyframes pd-bob { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-6px) rotate(-3deg); } }
+        @keyframes pd-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes pd-breathe { 0%, 100% { background-size: 100% 100%; } 50% { background-size: 112% 108%; } }
+        .phone-stage { background-position: center; background-repeat: no-repeat; }
+        .button { transition: transform 0.2s, box-shadow 0.2s; }
+        .button:hover { transform: translateY(-2px); box-shadow: 0 5px 0 #be9444; }
+        .button:active { transform: translateY(2px); box-shadow: 0 1px 0 #be9444; }
+        .feature { transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s; }
+        .feature:hover { transform: translateY(-4px) rotate(-0.4deg); box-shadow: 0 18px 40px -20px #174c4740; }
+        @supports (animation-timeline: view()) {
+            .chapter > *, .feature { animation: pd-reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 55%; }
+            @keyframes pd-reveal { from { opacity: 0; transform: translateY(26px); } }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+            @view-transition { navigation: none; }
+        }
     </style>
     <link rel="icon" href="assets/kv-apps.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/kv-apps-avatar.png">

@@ -27,156 +27,26 @@
         "mainEntityOfPage": "https://khanhvu-ops.github.io/how-to-hide-photos-iphone.html"
     }
     </script>
-    <style>
-        :root {
-            --bg: #090d16;
-            --surface: #121826;
-            --surface-border: #232f48;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent: #38bdf8;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text-primary);
-            line-height: 1.7;
-            padding: 40px 20px 80px;
-            overflow-wrap: anywhere;
-        }
-
-        .container {
-            max-width: 820px;
-            margin: 0 auto;
-            background: var(--surface);
-            padding: 48px;
-            border-radius: 20px;
-            border: 1px solid var(--surface-border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        }
-
-        @media (max-width: 640px) {
-            .container { padding: 24px; }
-        }
-
-        a { color: var(--accent); }
-        a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
-
-        .back-link {
-            display: inline-block;
-            text-decoration: none;
-            font-size: 0.95rem;
-            margin-bottom: 24px;
-            font-weight: 500;
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            line-height: 1.25;
-            margin-bottom: 12px;
-            letter-spacing: -0.02em;
-        }
-
-        h2 {
-            font-size: 1.4rem;
-            margin: 40px 0 16px;
-        }
-
-        h3 {
-            font-size: 1.1rem;
-            color: var(--accent);
-            margin: 24px 0 8px;
-        }
-
-        p, li { color: var(--text-secondary); }
-        p { margin-bottom: 16px; }
-        ol, ul { padding-left: 24px; margin-bottom: 16px; }
-        li { margin-bottom: 8px; }
-        strong { color: var(--text-primary); }
-
-        .intro { font-size: 1.05rem; }
-        .meta { font-size: 0.9rem; }
-
-        .page-nav { display: flex; flex-wrap: wrap; gap: 16px; margin: 24px 0 8px; }
-
-        .compare {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 8px 0 24px;
-            font-size: 0.95rem;
-        }
-
-        .compare th, .compare td {
-            text-align: left;
-            vertical-align: top;
-            padding: 12px 10px;
-            border-bottom: 1px solid var(--surface-border);
-            color: var(--text-secondary);
-        }
-
-        .compare th { color: var(--text-primary); }
-        .compare th, .compare td { overflow-wrap: normal; }
-        .compare th[scope="row"] { white-space: nowrap; }
-
-        .shots {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 16px;
-            margin: 8px 0 24px;
-        }
-
-        .shots figure { margin: 0; }
-        .shots img { width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--surface-border); }
-        .shots figcaption { color: var(--text-secondary); font-size: 0.85rem; margin-top: 6px; }
-
-        .cta-box {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(99, 102, 241, 0.08));
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 16px;
-            padding: 28px;
-            margin: 32px 0;
-        }
-
-        .cta-box p:last-child { margin-bottom: 0; }
-
-        .button {
-            display: inline-block;
-            max-width: 100%;
-            background: #38bdf8;
-            color: #090d16;
-            font-weight: 600;
-            padding: 12px 24px;
-            border-radius: 10px;
-            text-decoration: none;
-        }
-
-        .button:hover { background: #7dd3fc; }
-
-        .footer-note { margin-top: 40px; font-size: 0.9rem; }
-
-        @media (max-width: 400px) {
-            .cta-box { padding: 20px; }
-            .compare th, .compare td { padding: 10px 6px; }
-            .compare { font-size: 0.85rem; }
-        }
-        .back-link { display: inline-flex; align-items: center; gap: 12px; }
-        .back-link img { flex-shrink: 0; }
-    </style>
+    <meta name="theme-color" content="#040915" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f5f8fc" media="(prefers-color-scheme: light)">
+    <link rel="stylesheet" href="assets/site.css">
     <link rel="icon" href="assets/kv-apps.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/kv-apps-avatar.png">
 </head>
 <body>
-    <main class="container">
-        <a href="index.html" class="back-link"><img src="assets/kv-mark.svg" width="52" height="32" alt="">KV Apps home</a>
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="aurora" aria-hidden="true"></div>
+    <header class="site-header">
+        <div class="wrap">
+            <a class="brand" href="index.html" aria-label="KV Apps home">
+                <picture><source srcset="assets/kv-mark-on-light.svg" media="(prefers-color-scheme: light)"><img src="assets/kv-mark.svg" width="42" height="26" alt=""></picture>
+                <span>KV Apps</span><small>iOS Studio</small>
+            </a>
+            <nav class="site-nav" aria-label="Main navigation"><a href="index.html#apps">Apps</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
+        </div>
+    </header>
+    <main class="doc" id="main">
+        <div class="container">
         <h1>How to hide photos on iPhone</h1>
         <p class="meta">By Khanh Vu, developer of Veilnest · Updated October 18, 2026</p>
         <p class="intro">Your iPhone already has a free way to hide photos: the Hidden album in Photos. For many people it is enough. This guide shows how to use it, where it stops helping, and when a separate vault app with its own PIN is worth considering.</p>
@@ -268,6 +138,43 @@
         </section>
 
         <p class="footer-note">Apple, iPhone, iCloud and Face ID are trademarks of Apple Inc. This guide is not affiliated with or endorsed by Apple. <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></p>
+        </div>
     </main>
+    <footer class="site-footer">
+        <div class="wrap">
+            <div class="about">
+                <a class="brand" href="index.html"><picture><source srcset="assets/kv-mark-on-light.svg" media="(prefers-color-scheme: light)"><img src="assets/kv-mark.svg" width="42" height="26" alt=""></picture><span>KV Apps</span></a>
+                <p>Apps &amp; Games by Khanh Vu. Small apps. Everyday joy.</p>
+            </div>
+            <div>
+                <h2>Apps</h2>
+                <ul>
+                    <li><a href="https://apps.apple.com/app/id6813747332">Veilnest</a></li>
+                    <li><a href="support.html#color-meter">Color Meter</a></li>
+                    <li><a href="paper-drift.html">Paper Drift</a></li>
+                    <li><a href="how-to-hide-photos-iphone.html">Hide photos on iPhone</a></li>
+                </ul>
+            </div>
+            <div>
+                <h2>Help</h2>
+                <ul>
+                    <li><a href="support.html">Support</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Use</a></li>
+                    <li><a href="mailto:khanhvu.dev@gmail.com">khanhvu.dev@gmail.com</a></li>
+                </ul>
+            </div>
+            <div>
+                <h2>Follow</h2>
+                <ul>
+                    <li><a href="https://www.youtube.com/@khanhvuapps">YouTube</a></li>
+                    <li><a href="https://www.tiktok.com/@khanhvuapps">TikTok</a></li>
+                    <li><a href="https://www.instagram.com/khanhvuapps/">Instagram</a></li>
+                    <li><a href="https://www.threads.com/@khanhvuapps">Threads</a></li>
+                </ul>
+            </div>
+            <div class="legal"><span>© 2026 Khanh Vu (KV Apps). All rights reserved.</span><a href="app-ads.txt">app-ads.txt</a></div>
+        </div>
+    </footer>
 </body>
 </html>
