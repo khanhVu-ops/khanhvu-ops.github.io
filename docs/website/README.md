@@ -21,6 +21,8 @@ Thông tin tài khoản/chủ sở hữu và các bước social còn lại đư
 | Terms link trong app/paywall/description | https://khanhvu-ops.github.io/terms.html |
 | Support URL | https://khanhvu-ops.github.io/support.html |
 | AdMob seller file | https://khanhvu-ops.github.io/app-ads.txt |
+| Hướng dẫn SEO Veilnest | https://khanhvu-ops.github.io/how-to-hide-photos-iphone.html |
+| Sitemap / robots | https://khanhvu-ops.github.io/sitemap.xml · /robots.txt |
 
 Các đường dẫn giữ nguyên để app đã phát hành không cần đổi link. Các trang public viết bằng tiếng Anh; hỗ trợ qua email nhận tiếng Anh hoặc tiếng Việt.
 
@@ -38,6 +40,8 @@ Paper Drift 1.0.0 đang phát triển: save local, không account/cloud sync; Ad
 `index.html` giới thiệu Veilnest, Color Meter và Paper Drift; `paper-drift.html` là trang marketing riêng với icon và ảnh native từ project game. Asset được giữ local trong `assets/`; site không thêm script analytics, font/CDN hay embed bên thứ ba.
 
 ## Phạm vi nội dung
+
+- **how-to-hide-photos-iphone.html** (18/10/2026): hướng dẫn Hidden album theo [Apple](https://support.apple.com/en-us/104987), giới hạn của nó, rồi Veilnest. Claim Veilnest chỉ lấy từ listing **1.3 đang live** (không nhắc Share extension hay backup cho tới khi bản đó phát hành). Ảnh là screenshot store en-US thu nhỏ trong `assets/veilnest/`. Có JSON-LD `Article` (dữ liệu, không phải script chạy). Thêm trang mới thì thêm vào `sitemap.xml`; `check-site.py` báo lỗi nếu thiếu.
 
 - **privacy.html**: nội dung local và permission; Apple IAP; AdMob/ATT/consent; email hỗ trợ/hosting; retention, deletion và quyền người dùng. Những tính năng tuỳ chọn chỉ áp dụng cho app có tính năng đó. Có mục riêng `#color-meter` dựa trên implementation đã kiểm tra.
 - **terms.html**: cho phép công việc cá nhân và thương mại, quyền với nội dung đầu ra, IAP/subscription/lifetime, restore/refund, quảng cáo, consumer rights. Apple Standard EULA là mặc định trừ khi app có custom EULA được cấu hình riêng.
@@ -96,7 +100,7 @@ Color Meter privacy notice also covers Firebase Analytics, Crashlytics and Remot
 
 ## Website language
 
-All five public pages are English-only static HTML. There is no language switch, translation resource, JavaScript or language preference storage. Existing `?lang=en` or `?lang=vi` links still serve the same English page; section anchors are unchanged. The native Paper Drift app has its own 19-language first-launch picker and saved setting.
+All public pages are English-only static HTML. There is no language switch, translation resource, JavaScript or language preference storage. Existing `?lang=en` or `?lang=vi` links still serve the same English page; section anchors are unchanged. The native Paper Drift app has its own 19-language first-launch picker and saved setting.
 
 ## Privacy Paper Drift — nguồn đối chiếu ngày 09/10/2026
 

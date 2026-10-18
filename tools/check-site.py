@@ -84,6 +84,17 @@ def main():
             if url.fragment and target in pages and unquote(url.fragment) not in pages[target].ids:
                 errors.append(f"{label}: missing anchor: {ref}")
             count += 1
+    sitemap = ROOT / "sitemap.xml"
+    if sitemap.is_file():
+        listed = set(re.findall(r"<loc>https://" + re.escape(PUBLIC_HOST) + r"/([^<]*)</loc>",
+                                sitemap.read_text(encoding="utf-8")))
+        for path in pages:
+            name = path.relative_to(ROOT).as_posix()
+            if (("" if name == "index.html" else name)) not in listed:
+                errors.append(f"sitemap.xml: missing page {name}")
+        for name in listed:
+            if not (ROOT / (name or "index.html")).is_file():
+                errors.append(f"sitemap.xml: listed page does not exist: /{name}")
     if errors:
         print("\n".join(errors), file=sys.stderr)
         return 1

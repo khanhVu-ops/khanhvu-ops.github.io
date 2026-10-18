@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Hide Photos on iPhone: Hidden Album and a Private Vault — KV Apps</title>
+    <meta name="description" content="Step-by-step: hide photos on iPhone with the built-in Hidden album, what its limits are, and when a separate photo vault with its own PIN makes sense.">
+    <link rel="canonical" href="https://khanhvu-ops.github.io/how-to-hide-photos-iphone.html">
+    <meta property="og:title" content="How to hide photos on iPhone">
+    <meta property="og:description" content="Use the built-in Hidden album, understand its limits, and decide whether you need a separate vault.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://khanhvu-ops.github.io/how-to-hide-photos-iphone.html">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "How to hide photos on iPhone: the Hidden album and a private vault",
+        "datePublished": "2026-10-18",
+        "dateModified": "2026-10-18",
+        "author": {"@type": "Person", "name": "Khanh Vu"},
+        "publisher": {"@type": "Organization", "name": "KV Apps", "url": "https://khanhvu-ops.github.io/"},
+        "mainEntityOfPage": "https://khanhvu-ops.github.io/how-to-hide-photos-iphone.html"
+    }
+    </script>
+    <style>
+        :root {
+            --bg: #090d16;
+            --surface: #121826;
+            --surface-border: #232f48;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.7;
+            padding: 40px 20px 80px;
+            overflow-wrap: anywhere;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            background: var(--surface);
+            padding: 48px;
+            border-radius: 20px;
+            border: 1px solid var(--surface-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        @media (max-width: 640px) {
+            .container { padding: 24px; }
+        }
+
+        a { color: var(--accent); }
+        a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+        .back-link {
+            display: inline-block;
+            text-decoration: none;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            line-height: 1.25;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            margin: 40px 0 16px;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin: 24px 0 8px;
+        }
+
+        p, li { color: var(--text-secondary); }
+        p { margin-bottom: 16px; }
+        ol, ul { padding-left: 24px; margin-bottom: 16px; }
+        li { margin-bottom: 8px; }
+        strong { color: var(--text-primary); }
+
+        .intro { font-size: 1.05rem; }
+        .meta { font-size: 0.9rem; }
+
+        .page-nav { display: flex; flex-wrap: wrap; gap: 16px; margin: 24px 0 8px; }
+
+        .compare {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0 24px;
+            font-size: 0.95rem;
+        }
+
+        .compare th, .compare td {
+            text-align: left;
+            vertical-align: top;
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--surface-border);
+            color: var(--text-secondary);
+        }
+
+        .compare th { color: var(--text-primary); }
+        .compare th, .compare td { overflow-wrap: normal; }
+        .compare th[scope="row"] { white-space: nowrap; }
+
+        .shots {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin: 8px 0 24px;
+        }
+
+        .shots figure { margin: 0; }
+        .shots img { width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--surface-border); }
+        .shots figcaption { color: var(--text-secondary); font-size: 0.85rem; margin-top: 6px; }
+
+        .cta-box {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(99, 102, 241, 0.08));
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 16px;
+            padding: 28px;
+            margin: 32px 0;
+        }
+
+        .cta-box p:last-child { margin-bottom: 0; }
+
+        .button {
+            display: inline-block;
+            max-width: 100%;
+            background: #38bdf8;
+            color: #090d16;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+        }
+
+        .button:hover { background: #7dd3fc; }
+
+        .footer-note { margin-top: 40px; font-size: 0.9rem; }
+
+        @media (max-width: 400px) {
+            .cta-box { padding: 20px; }
+            .compare th, .compare td { padding: 10px 6px; }
+            .compare { font-size: 0.85rem; }
+        }
+    </style>
+    <link rel="icon" href="assets/kv-apps.svg" type="image/svg+xml">
+</head>
+<body>
+    <main class="container">
+        <a href="index.html" class="back-link">← KV Apps home</a>
+        <h1>How to hide photos on iPhone</h1>
+        <p class="meta">By Khanh Vu, developer of Veilnest · Updated October 18, 2026</p>
+        <p class="intro">Your iPhone already has a free way to hide photos: the Hidden album in Photos. For many people it is enough. This guide shows how to use it, where it stops helping, and when a separate vault app with its own PIN is worth considering.</p>
+        <nav class="page-nav" aria-label="On this page"><a href="#hidden-album">Use the Hidden album</a><a href="#limits">Its limits</a><a href="#vault">Use a private vault</a><a href="#compare">Compare</a><a href="#faq">FAQ</a></nav>
+
+        <section aria-labelledby="hidden-album">
+            <h2 id="hidden-album">1. Hide photos with the built-in Hidden album</h2>
+            <p>Hidden photos move to the Hidden album. They stop appearing in your Library, in other albums and in the Photos widget on your Home Screen.</p>
+            <h3>Hide a photo or video</h3>
+            <ol>
+                <li>Open <strong>Photos</strong> and open the photo or video. To hide several, tap <strong>Select</strong> and choose them.</li>
+                <li>Tap the <strong>More</strong> button (•••).</li>
+                <li>Tap <strong>Hide</strong> and confirm.</li>
+            </ol>
+            <h3>Find and unhide them</h3>
+            <ol>
+                <li>In Photos, go to <strong>Collections</strong> and tap <strong>Hidden</strong> under <strong>Utilities</strong>.</li>
+                <li>Tap <strong>View Album</strong> and unlock with Face ID, Touch ID or your passcode. On iOS 16 and later the album is locked by default.</li>
+                <li>To unhide, select the item, tap <strong>More</strong>, then <strong>Unhide</strong>.</li>
+            </ol>
+            <h3>Hide the Hidden album itself</h3>
+            <p>Go to <strong>Settings → Apps → Photos</strong> and turn off <strong>Show Hidden Album</strong>. The album no longer appears in Photos until you turn the setting back on.</p>
+            <p>Menu names can shift slightly between iOS versions. Apple keeps the current steps in <a href="https://support.apple.com/en-us/104987" rel="noopener noreferrer">Hide photos with the Hidden album</a>.</p>
+        </section>
+
+        <section aria-labelledby="limits">
+            <h2 id="limits">2. What the Hidden album does not do</h2>
+            <ul>
+                <li><strong>It opens with your iPhone passcode.</strong> Anyone who knows your device passcode, such as a partner, child or friend you once told, can open it.</li>
+                <li><strong>It stays inside your photo library.</strong> With iCloud Photos on, hidden items stay hidden on your other devices, but they remain part of the same library and account.</li>
+                <li><strong>New photos land in your Library first.</strong> A photo you take with the Camera app appears in Recents until you hide it.</li>
+                <li><strong>It cannot disguise itself.</strong> There is no cover screen or second, decoy set of photos.</li>
+            </ul>
+            <p>None of this makes the Hidden album bad. It is built in, free and synced. It is designed to keep photos out of casual view, not to keep them from someone who knows your passcode.</p>
+        </section>
+
+        <section aria-labelledby="vault">
+            <h2 id="vault">3. Use a private vault with its own PIN</h2>
+            <p>A vault app keeps photos in a separate space that does not open with your device passcode. Veilnest is the one I make, so I will be specific about what it does and does not do.</p>
+            <div class="shots">
+                <figure>
+                    <img src="assets/veilnest/02-your-pin.jpg" width="480" height="1043" alt="Veilnest unlock screen asking for a six-digit PIN or Face ID" loading="lazy">
+                    <figcaption>A six-digit PIN you choose, separate from your iPhone passcode.</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/veilnest/03-calculator-cover.jpg" width="480" height="1043" alt="Veilnest calculator cover showing a working calculator in front of a locked vault" loading="lazy">
+                    <figcaption>Optional calculator cover. The calculator does arithmetic; it does not take a PIN.</figcaption>
+                </figure>
+            </div>
+            <ol>
+                <li><strong>Install Veilnest</strong> and choose a six-digit PIN. Face ID or Touch ID is optional. No account is required.</li>
+                <li><strong>Import</strong> from Photos or Files. Import makes a copy, so the original stays in Photos until you delete it there. If you delete it, also check <strong>Recently Deleted</strong>.</li>
+                <li><strong>Capture directly</strong> with the in-app camera, so new photos and videos skip your camera roll.</li>
+                <li><strong>Optional cover:</strong> in Settings, enable Panic Protection, choose Calculator and turn on face-down or shake. While the vault is open, that gesture locks it and shows a working calculator.</li>
+            </ol>
+            <p><strong>Know the trade-offs.</strong> Vault content stays on your iPhone. There is no automatic cloud sync and no service that can recover your PIN. If you lose the device, delete the app or lose access, the content can be gone for good, so export a separate copy of anything you cannot afford to lose. The free version holds a limited number of items; Pro adds more storage and features such as a separate decoy vault with its own PIN.</p>
+            <div class="cta-box">
+                <p>Veilnest is a private photo and video vault for iPhone.</p>
+                <p><a class="button" href="https://apps.apple.com/app/id6813747332">View Veilnest on the App Store</a></p>
+            </div>
+        </section>
+
+        <section aria-labelledby="compare">
+            <h2 id="compare">Hidden album vs. a private vault</h2>
+            <table class="compare">
+                <thead>
+                    <tr><th scope="col"></th><th scope="col">Hidden album</th><th scope="col">Veilnest</th></tr>
+                </thead>
+                <tbody>
+                    <tr><th scope="row">Price</th><td>Free, built in</td><td>Free with an item limit; Pro is paid</td></tr>
+                    <tr><th scope="row">Unlocks with</th><td>Face ID, Touch ID or iPhone passcode</td><td>Its own six-digit PIN, optional Face ID or Touch ID</td></tr>
+                    <tr><th scope="row">New photos</th><td>Land in Library, then you hide them</td><td>In-app camera saves straight to the vault</td></tr>
+                    <tr><th scope="row">Cloud</th><td>Syncs with iCloud Photos</td><td>On device only, no automatic cloud sync</td></tr>
+                    <tr><th scope="row">Disguise</th><td>Can hide the album from Photos</td><td>Optional working calculator cover</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section aria-labelledby="faq">
+            <h2 id="faq">Questions</h2>
+            <h3>Does hiding a photo delete it?</h3>
+            <p>No. In Photos, hiding only moves it to the Hidden album. In Veilnest, importing copies it; the original stays in Photos until you delete it.</p>
+            <h3>Can someone see hidden photos on my other devices?</h3>
+            <p>With iCloud Photos, photos hidden on one device are hidden on your other devices too, and the Hidden album there opens with that device's authentication.</p>
+            <h3>Is the calculator in Veilnest a PIN pad?</h3>
+            <p>No. The calculator cover is a real calculator. Typing your PIN into it does not open the vault; you leave the cover and unlock with your PIN or Face ID.</p>
+            <h3>Where can I get help?</h3>
+            <p>See <a href="support.html#veilnest">Veilnest support</a> and <a href="privacy.html#veilnest">Veilnest privacy</a>, or email <a href="mailto:khanhvu.dev@gmail.com?subject=Veilnest">khanhvu.dev@gmail.com</a>.</p>
+        </section>
+
+        <p class="footer-note">Apple, iPhone, iCloud and Face ID are trademarks of Apple Inc. This guide is not affiliated with or endorsed by Apple. <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a></p>
+    </main>
+</body>
+</html>
