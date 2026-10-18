@@ -40,6 +40,8 @@ Kiểm tra public tối 18/10/2026: tên `KV Apps`, avatar KV và bio “iOS app
 
 ## Nội dung và ảnh để hoàn thiện profile
 
+Logo đổi ngày 18/10/2026. Avatar YouTube, TikTok và Instagram đang public vẫn là chữ KV cũ; cần upload lại [avatar mới](../../content/shared/logo/avatar-light-1024.png) ở cả ba kênh.
+
 Tên, bio, link, avatar, banner YouTube và cover Facebook cho mọi kênh, kể cả Threads: [content/shared/social-kit/](../../content/shared/social-kit/README.md).
 
 ## Quy tắc cập nhật

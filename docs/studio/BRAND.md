@@ -16,7 +16,7 @@ Nội dung quốc tế ưu tiên tiếng Anh; Việt hóa hoặc dịch creative
 
 Giọng thương hiệu: trực tiếp, nhẹ nhàng, demo trước khi giải thích dài. Mỗi bài cho thấy một lợi ích thật của một app. Với game, cho thấy gameplay; với tiện ích, cho thấy tình huống và kết quả. Không dùng chung các claim về encryption, tracking, giá hay offline cho toàn bộ danh mục.
 
-Logo hiện có ở [website/assets/kv-apps.svg](../../website/assets/kv-apps.svg). Icon từng app giữ trong [website/assets/](../../website/assets/); bản dùng cho social cần kiểm tra kích thước và vùng cắt tròn trước khi tải lên. Avatar/banner social chưa được coi là hoàn thành chỉ vì đã có asset website.
+Logo (đổi ngày 18/10/2026) nằm ở [content/shared/logo/](../../content/shared/logo/README.md); favicon website [website/assets/kv-apps.svg](../../website/assets/kv-apps.svg) là bản từ cùng nguồn. Icon từng app giữ trong [website/assets/](../../website/assets/); bản dùng cho social cần kiểm tra kích thước và vùng cắt tròn trước khi tải lên. Avatar/banner social chưa được coi là hoàn thành chỉ vì đã có asset website.
 
 Bio studio dùng lại:
 

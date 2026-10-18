@@ -8,9 +8,9 @@ Lập ngày 18/10/2026. Mọi kênh dùng **một nhận diện**: tên `KV Apps
 
 | File | Dùng cho | Kích thước | Ghi chú |
 |---|---|---|---|
-| [`../branding/avatar-1024.png`](../branding/avatar-1024.png) | Avatar mọi kênh | 1024 × 1024 | Chữ KV nằm giữa, an toàn khi bị cắt tròn |
-| [`youtube-banner-2560x1440.jpg`](youtube-banner-2560x1440.jpg) | Banner YouTube | 2560 × 1440, 186 KB | Logo và icon nằm trong vùng giữa ~1500 × 400, phần còn lại có thể bị cắt trên mobile |
-| [`facebook-cover-1640x683.jpg`](facebook-cover-1640x683.jpg) | Ảnh bìa Facebook Page | 1640 × 683 (2.4:1), 74 KB | Nội dung ở giữa, chừa góc dưới trái cho avatar |
+| [`../logo/avatar-light-1024.png`](../logo/avatar-light-1024.png) | Avatar mọi kênh (logo mới 18/10) | 1024 × 1024 | Nền trắng; bản nền tối: `avatar-dark-1024.png`. Xem [logo](../logo/README.md) |
+| [`youtube-banner-2560x1440.jpg`](youtube-banner-2560x1440.jpg) | Banner YouTube | 2560 × 1440, 248 KB | Logo và icon nằm trong vùng giữa ~1500 × 400, phần còn lại có thể bị cắt trên mobile |
+| [`facebook-cover-1640x683.jpg`](facebook-cover-1640x683.jpg) | Ảnh bìa Facebook Page | 1640 × 683 (2.4:1), 96 KB | Nội dung ở giữa, chừa góc dưới trái cho avatar |
 
 Nguồn của banner và cover là [`banner.html`](banner.html). Muốn sửa thì chỉnh file đó rồi chụp lại bằng Chrome headless:
 
@@ -26,7 +26,7 @@ Kích thước tham chiếu: [YouTube channel branding](https://support.google.c
 
 ### YouTube — [@khanhvuapps](https://www.youtube.com/@khanhvuapps)
 
-Đã có tên, handle, mô tả, link và avatar. **Còn thiếu banner.**
+Đã có tên, handle, mô tả, link. **Còn thiếu banner; avatar cần thay bằng logo mới.**
 
 YouTube Studio → **Customization → Branding → Banner image → Upload** → chọn `youtube-banner-2560x1440.jpg` → kiểm tra khung TV/desktop/mobile → **Publish**.
 
@@ -82,7 +82,7 @@ Apps & Games by Khanh Vu. Small apps. Everyday joy.
 ```
 
 4. Contact: email `khanhvu.dev@gmail.com`, website `https://khanhvu-ops.github.io/`.
-5. Avatar `avatar-1024.png`, cover `facebook-cover-1640x683.jpg`.
+5. Avatar `../logo/avatar-light-1024.png`, cover `facebook-cover-1640x683.jpg`.
 6. **Settings → Username**: thử `khanhvuapps` (hiện `facebook.com/khanhvuapps` chưa có trang nào công khai). Nếu đã có người dùng thì thử `kvappsstudio`.
 7. Nút hành động: **Send email** tới `khanhvu.dev@gmail.com`.
 8. Kiểm tra trang ở chế độ xem public, cập nhật sổ tài khoản.

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>KV Apps avatar</title>
+  <defs>
+    <linearGradient id="bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a7fd0"/><stop offset="1" stop-color="#1d4f96"/></linearGradient>
+    <linearGradient id="arm" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#079fa8"/><stop offset="1" stop-color="#25e6d3"/></linearGradient>
+    <linearGradient id="tri" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1fcaf0"/><stop offset="1" stop-color="#1263d4"/></linearGradient>
+    <linearGradient id="leg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f5fae"/><stop offset="1" stop-color="#0c9ad6"/></linearGradient>
+    <linearGradient id="vee" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14e8f8"/><stop offset="1" stop-color="#0a84ee"/></linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="#0b1220"/>
+  <g transform="translate(-19.2 104.7) scale(0.8122)">
+  <path fill="url(#bar)" d="M260 280Q260 262 276 270L392 333Q404 341 404 358V606L270 734Q260 742 260 728Z"/>
+  <path fill="url(#arm)" d="M418 440Q418 428 428 420L540 315Q555 303 575 303H720Q732 305 724 316L430 596Q418 606 418 590Z"/>
+  <path fill="url(#tri)" d="M406 622L526 734Q532 741 522 741H273Q263 741 270 734Z"/>
+  <path fill="url(#leg)" d="M562 500Q572 492 582 502L822 731Q830 741 816 741H650Q620 741 600 720L478 592Q470 583 478 576Z"/>
+  <path fill="url(#vee)" d="M746 628L852 445Q875 405 915 405H1034Q1048 407 1040 419L848 727Q840 738 831 729L749 641Q741 634 746 628Z"/>
+  </g>
+</svg>
