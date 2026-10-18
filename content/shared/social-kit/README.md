@@ -32,7 +32,7 @@ YouTube Studio → **Customization → Branding → Banner image → Upload** �
 
 ### TikTok — [@khanhvuapps](https://www.tiktok.com/@khanhvuapps)
 
-Tên và bio đã lưu; logo mới chưa được xác nhận trên profile sau Apply/Save. Trạng thái gần nhất xem sổ tài khoản. Bio đang dùng (≤ 80 ký tự):
+Tên, bio và avatar logo mảnh ghép mới nền trắng đã lưu; logo vẫn hiển thị sau reload profile ngày 18/10/2026. Trạng thái gần nhất xem sổ tài khoản. Bio đang dùng (≤ 80 ký tự):
 
 ```text
 iOS apps & offline games by Khanh Vu. Small apps. Everyday joy.

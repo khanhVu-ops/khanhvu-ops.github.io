@@ -8,7 +8,7 @@ Snapshot **18/10/2026**. Đánh dấu xong sau khi kiểm tra kết quả; trạ
 - [x] Tạo và kiểm tra handle TikTok `@khanhvuapps` bằng Google studio.
 - [x] Profile YouTube, TikTok, Instagram đã tạo; tên và bio đã kiểm tra.
 - [x] Avatar YouTube và Instagram đã đổi sang logo mảnh ghép mới.
-- [ ] Xác nhận logo mới trên TikTok; lần kiểm tra cuối vẫn hiện KV cũ sau khi Apply/Save.
+- [x] Đổi avatar TikTok sang logo mảnh ghép mới nền trắng; kiểm tra profile và avatar thanh bên sau reload.
 - [x] Upload [banner YouTube](../content/shared/social-kit/youtube-banner-2560x1440.jpg), Publish và kiểm tra trên trang kênh.
 - [x] Instagram Business, category Software; lưu email business và bật Display contact info.
 - [x] Thêm website vào Links Instagram qua Meta Business Suite; kiểm tra link bấm và bio sau reload.

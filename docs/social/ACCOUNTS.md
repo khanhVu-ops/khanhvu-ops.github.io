@@ -5,7 +5,7 @@ Cập nhật **18/10/2026**. Google chủ sở hữu studio: **`khanhvu.dev@gmai
 | Nền tảng | Hồ sơ / định danh | Trạng thái | Chủ sở hữu / quản trị | Việc còn lại |
 |---|---|---|---|---|
 | YouTube | [KV Apps · @khanhvuapps](https://www.youtube.com/@khanhvuapps), ID `UC7kW-0SrYs4FGm1LFT9zJRw` | Đã tạo; avatar logo mảnh ghép mới và banner đã hiện trên trang kênh (18/10) | Google studio đã đối chiếu | Video đầu tiên |
-| TikTok | [KV Apps · @khanhvuapps](https://www.tiktok.com/@khanhvuapps) | Tên KV Apps và bio đã lưu; trang profile vẫn hiện avatar KV cũ sau reload | Google studio; đã thấy TikTok trong Google Linked apps | Đã thử upload logo mới nhưng chưa xác nhận lưu thành công; kiểm tra/đổi lại trong app TikTok. Loại tài khoản chưa xác minh |
+| TikTok | [KV Apps · @khanhvuapps](https://www.tiktok.com/@khanhvuapps) | Tên KV Apps, bio và avatar logo mảnh ghép mới nền trắng đã lưu; kiểm tra profile sau reload (18/10) | Google studio; đã thấy TikTok trong Google Linked apps | Video đầu tiên; loại tài khoản chưa xác minh |
 | Instagram | [KV Apps · @khanhvuapps](https://www.instagram.com/khanhvuapps/) | Đã chuyển Business, category Software; logo mới và bio đã lưu | Email studio đã đối chiếu trong Accounts Center | Website trong trường Links đã lưu qua Meta Business Suite và xác nhận trên profile sau reload; nút contact cần kiểm tra trong app mobile |
 | Threads | [KV Apps · @khanhvuapps](https://www.threads.com/@khanhvuapps) | Đã tạo profile public; bio, logo mới kế thừa từ Instagram và link website riêng đã kiểm tra sau reload (18/10) | Instagram `khanhvuapps` | Bài đầu tiên |
 | Meta Business Suite | [Business Suite](https://business.facebook.com/) | Đã đăng nhập bằng Instagram studio và thấy dashboard @khanhvuapps | Instagram `khanhvuapps` | Chưa có Facebook Page được kết nối; luồng Connect Facebook Page chưa hoàn tất |
@@ -37,7 +37,7 @@ Support: khanhvu.dev@gmail.com
 
 ## TikTok — profile
 
-Tên `KV Apps` và bio “iOS apps & offline games by Khanh Vu. Small apps. Everyday joy.” đã hiển thị sau reload. Đã chọn logo mảnh ghép mới, Apply và Save với cả PNG và JPEG, nhưng lần kiểm tra cuối sau reload vẫn hiện avatar KV cũ; chưa coi việc đổi logo là xong và chưa có bằng chứng để kết luận nguyên nhân. Không thử đổi nickname đang có giới hạn tới 25/10. Chưa xác nhận Business account. [Hướng dẫn vận hành](channels/tiktok/README.md).
+Tên `KV Apps` và bio “iOS apps & offline games by Khanh Vu. Small apps. Everyday joy.” đã hiển thị sau reload. Avatar đã đổi thành [logo mảnh ghép mới nền trắng](../../content/shared/logo/avatar-light-1024.png): chọn PNG trong Edit profile, Apply phần cắt, đợi quay lại form rồi Save qua giao diện trình duyệt trực tiếp. Form đóng, avatar mới xuất hiện trên profile và vẫn còn sau reload; đã kiểm tra trực quan cả avatar chính và avatar ở thanh bên. Không đổi nickname đang có giới hạn tới 25/10. Chưa xác nhận Business account. [Hướng dẫn vận hành](channels/tiktok/README.md).
 
 ## Instagram — Business
 
@@ -72,7 +72,7 @@ Chủ studio đã phản hồi sau khi kiểm tra trực tiếp rằng có thể
 
 ## Nội dung và ảnh để hoàn thiện profile
 
-Logo đổi ngày 18/10/2026. [Avatar mới](../../content/shared/logo/avatar-light-1024.png) đã hiện trên YouTube và Instagram; Threads cũng đã xác nhận logo mới; TikTok còn chờ xác nhận. Không đánh dấu hoàn tất chỉ dựa vào preview trong form upload.
+Logo đổi ngày 18/10/2026. [Avatar mới](../../content/shared/logo/avatar-light-1024.png) đã hiện trên YouTube, Instagram, Threads và TikTok; đã kiểm tra logo TikTok vẫn hiển thị sau reload. Không đánh dấu hoàn tất chỉ dựa vào preview trong form upload.
 
 Tên, bio, link, avatar, banner YouTube và cover Facebook cho mọi kênh, kể cả Threads: [content/shared/social-kit/](../../content/shared/social-kit/README.md).
 
