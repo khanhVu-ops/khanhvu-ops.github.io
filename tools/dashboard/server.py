@@ -27,6 +27,7 @@ from urllib.parse import parse_qs, unquote, urlparse
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
+import appstore  # noqa: E402
 import repo  # noqa: E402
 import store  # noqa: E402
 
@@ -35,6 +36,8 @@ STATIC = HERE / "static"
 YT_PY = ROOT / "tools/youtube/.venv/bin/python"
 MEDIA_ROOTS = (ROOT / "content",)
 DB_LOCK = threading.Lock()
+ASC_LOCK = threading.Lock()  # one App Store Connect write at a time
+ASC_CACHE: dict[str, dict] = {}  # app → last remote listing read from App Store Connect
 
 
 class ApiError(Exception):
@@ -136,6 +139,53 @@ def youtube_upload(body: dict) -> dict:
     return {"ok": True, "dry_run": body.get("dry_run", True), "output": output[-2000:]}
 
 
+def asc_listing(app: str, refresh: bool) -> dict:
+    local = appstore.local_listing(app)
+    remote = ASC_CACHE.get(app)
+    if refresh:
+        remote = ASC_CACHE[app] = appstore.remote_listing(appstore.Client(), app)
+    return {"local": local, "remote": remote, "compare": appstore.compare(local, remote)}
+
+
+def asc_metadata(body: dict) -> dict:
+    """dry_run (default) returns the operations; otherwise runs them against a fresh read of ASC."""
+    app = str(body.get("app", ""))
+    with ASC_LOCK:
+        client = appstore.Client()
+        remote = ASC_CACHE[app] = appstore.remote_listing(client, app, screenshots=False) | {
+            "screenshots": (ASC_CACHE.get(app) or {}).get("screenshots", {})}
+        ops = appstore.plan_metadata(appstore.local_listing(app), remote, body.get("items") or [])
+        if body.get("dry_run", True):
+            return {"dry_run": True, "ops": ops, "version": remote["version"], "info": remote["info"]}
+        done = appstore.apply_metadata(client, ops)
+        ASC_CACHE[app] = appstore.remote_listing(client, app)
+        return {"dry_run": False, "done": done}
+
+
+def asc_screenshots(body: dict) -> dict:
+    app, locale = str(body.get("app", "")), str(body.get("locale", ""))
+    with ASC_LOCK:
+        client = appstore.Client()
+        remote = ASC_CACHE[app] = appstore.remote_listing(client, app)
+        plan = appstore.plan_screenshots(app, remote, locale)
+        if body.get("dry_run", True):
+            return {"dry_run": True, "plan": plan}
+        result = appstore.apply_screenshots(client, app, plan)
+        ASC_CACHE[app] = appstore.remote_listing(client, app)
+        return {"dry_run": False, "plan": plan, **result}
+
+
+def asc_shot_file(query: dict) -> Path | None:
+    """A local screenshot of a configured app, and nothing else."""
+    src = appstore.store_paths(query.get("app", [""])[0])
+    if not src:
+        return None
+    target = (src["screenshots"] / query.get("locale", [""])[0] / query.get("file", [""])[0]).resolve()
+    if src["screenshots"] not in target.parents or target.suffix.lower() not in appstore.IMAGE_EXT:
+        return None
+    return target if target.is_file() else None
+
+
 def reveal(path: str) -> dict:
     target = (ROOT / path).resolve()
     if ROOT not in target.parents or not target.exists():
@@ -193,7 +243,7 @@ class Handler(BaseHTTPRequestHandler):
             body = self.read_json() if method in ("POST", "DELETE") else {}
             data = self.route(method, path, body)
             self.send_json(data)
-        except (ApiError, repo.RepoError, store.StoreError) as exc:
+        except (ApiError, repo.RepoError, store.StoreError, appstore.AscError) as exc:
             self.send_json({"error": str(exc)}, getattr(exc, "status", 400))
         except Exception as exc:  # noqa: BLE001 — surface to the UI instead of a dropped socket
             self.send_json({"error": f"lỗi máy chủ: {exc}"}, 500)
@@ -206,6 +256,7 @@ class Handler(BaseHTTPRequestHandler):
             state["metric_defs"] = {k: {"label": v[0], "kind": v[1]} for k, v in store.METRICS.items()}
             state["windows"] = store.WINDOWS
             state["youtube"] = youtube_status()
+            state["appstore"] = appstore.status()
             return state
         if method == "POST" and path == "/api/snapshots":
             with DB_LOCK, store.session() as conn:
@@ -235,6 +286,16 @@ class Handler(BaseHTTPRequestHandler):
             return youtube_sync()
         if method == "POST" and path == "/api/youtube/upload":
             return youtube_upload(body)
+        if method == "GET" and path == "/api/appstore/status":
+            return appstore.status()
+        if method == "POST" and path == "/api/appstore/listing":
+            return asc_listing(str(body.get("app", "")), bool(body.get("refresh")))
+        if method == "POST" and path == "/api/appstore/metadata":
+            return asc_metadata(body)
+        if method == "POST" and path == "/api/appstore/screenshots":
+            return asc_screenshots(body)
+        if method == "POST" and path == "/api/appstore/products":
+            return appstore.products(appstore.Client(), str(body.get("app", "")))
         if method == "POST" and path == "/api/reveal":
             return reveal(str(body.get("path", "")))
         raise ApiError("không có endpoint này", 404)
@@ -249,6 +310,11 @@ class Handler(BaseHTTPRequestHandler):
             rel_path = unquote(parse_qs(parsed.query).get("path", [""])[0])
             target = (ROOT / rel_path).resolve()
             if not any(r in target.parents for r in MEDIA_ROOTS) or not target.is_file():
+                return self.send_error(HTTPStatus.NOT_FOUND)
+            return self.send_file(target)
+        if parsed.path == "/asc-shot":
+            target = asc_shot_file(parse_qs(parsed.query))
+            if not target:
                 return self.send_error(HTTPStatus.NOT_FOUND)
             return self.send_file(target)
         name = "index.html" if parsed.path in ("/", "") else parsed.path.lstrip("/")

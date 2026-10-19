@@ -44,6 +44,10 @@ const P = {
   facebook: '<path d="M14 21v-8h3l.5-3.5H14V7.5c0-1 .4-1.8 1.8-1.8h1.8V2.6A22 22 0 0 0 15 2.5c-2.6 0-4.3 1.6-4.3 4.5v2.5H8V13h2.7v8"/>',
   reddit: '<circle cx="12" cy="13.5" r="7"/><circle cx="9.3" cy="13" r=".8"/><circle cx="14.7" cy="13" r=".8"/><path d="M9.5 16.3a4 4 0 0 0 5 0M12 6.5l1.2-3.5 3.3.8"/><circle cx="18" cy="4.3" r="1.3"/>',
   group: '<circle cx="12" cy="9" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/>',
+  bag: '<path d="M5 8h14l-1.2 11.5a2 2 0 0 1-2 1.5H8.2a2 2 0 0 1-2-1.5Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  image: '<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>',
+  tag2: '<path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9Z"/><circle cx="8" cy="8" r="1.5"/>',
   server: '<rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/>',
 };
 const icon = (name, cls = "") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[name] || ""}</svg>`;
@@ -151,6 +155,7 @@ const ROUTES = [
   { path: "plan", label: "Lịch 14 ngày", icon: "calendar", view: viewPlan },
   { path: "publish", label: "Đăng bài", icon: "send", view: viewPublish },
   { path: "analytics", label: "Số liệu", icon: "chart", view: viewAnalytics, count: () => S.posts.length || null },
+  { path: "store", label: "App Store", icon: "bag", view: viewStore },
   { path: "links", label: "Campaign link", icon: "link", view: viewLinks, count: () => S.campaigns.links.length || null },
   { path: "channels", label: "Kênh & tài khoản", icon: "users", view: viewChannels },
 ];
@@ -172,6 +177,7 @@ function render() {
   main.innerHTML = `<div class="page">${route.view(arg)}</div>`;
   scrollTo(0, y);
   if (route.path === "content" && arg) openCreative(arg);
+  else if (route.path === "store" && arg) openAscLocale(arg);
   else closeLayer("#drawer");
   afterRender();
 }
@@ -591,6 +597,214 @@ function viewLinks() {
   </tbody></table></div></div>` : `<div class="card">${emptyState("link", "Chưa có campaign link", "Tạo một link cho mỗi kênh × ngôn ngữ (vd. yt_shorts_en). Khi một creative chạy tốt, tạo link riêng cho creative đó để so sánh.")}</div>`}`;
 }
 
+
+/* ---------- views: app store ---------- */
+const FIELD_KEYS = ["name", "subtitle", "keywords", "promotional_text", "description", "whats_new"];
+const FIELD_SHORT = { name: "Tên", subtitle: "Sub", keywords: "Key", promotional_text: "Promo", description: "Mô tả", whats_new: "New" };
+const FIELD_LABEL = { name: "Tên app", subtitle: "Subtitle", keywords: "Keywords", promotional_text: "Promotional text", description: "Mô tả", whats_new: "What's New" };
+const STATUS_VI = { same: "Giống ASC", changed: "Khác ASC", new: "ASC đang trống", empty: "Local trống", local: "Chưa so với ASC" };
+ui.asc = { app: null, data: null, loading: false, error: null, filter: "all", q: "", sel: new Set(), fields: new Set(FIELD_KEYS), tab: "listing", products: null, pending: null };
+
+async function ascLoad(refresh = false, btn = null) {
+  const app = ui.asc.app;
+  ui.asc.loading = true; ui.asc.error = null;
+  try {
+    const data = await busy(btn, () => api("/api/appstore/listing", { method: "POST", body: { app, refresh } }));
+    if (app === ui.asc.app) ui.asc.data = data;
+    if (refresh) toast("Đã tải listing từ App Store Connect");
+  } catch (e) {
+    ui.asc.error = e.message;
+    if (refresh) toast("Không tải được từ App Store Connect", "err", e.message);
+  } finally {
+    ui.asc.loading = false;
+    if (current().route.path === "store") render();
+  }
+}
+const ascRemote = () => ui.asc.data?.remote;
+function ascVisible() {
+  const rows = ui.asc.data?.compare.rows || [];
+  const q = ui.asc.q.trim().toLowerCase();
+  return rows.filter((r) => (!q || `${r.locale} ${r.fields.name.local}`.toLowerCase().includes(q)) &&
+    (ui.asc.filter === "all" || (ui.asc.filter === "changed" ? ascPushable(r).length || ["missing", "changed"].includes(r.shots_status)
+      : r.problems.length || Object.values(r.fields).some((f) => f.over))));
+}
+// Fields of a row that would actually be sent: chosen, changed, within limit, editable now.
+const ascPushable = (r) => FIELD_KEYS.filter((k) => ui.asc.fields.has(k) && ["changed", "new"].includes(r.fields[k].status) && !r.fields[k].over && r.fields[k].editable);
+
+function fchip(k, f) {
+  const st = f.over ? "over" : f.status || "local";
+  const tip = attr({ t: FIELD_LABEL[k], r: [["Độ dài", `${f.len} / ${f.limit}`], ["Trạng thái", f.over ? "Vượt giới hạn" : STATUS_VI[st]], ...(f.why ? [["Không sửa được", f.why]] : [])] });
+  return `<span class="fchip s-${st}${f.editable === false ? " locked" : ""}" data-tip="${tip}">${FIELD_SHORT[k]}</span>`;
+}
+const SHOTS_VI = { none: ["Không có ảnh", ""], missing: ["ASC chưa có", "warn"], changed: ["Khác ASC", "warn"], same_names: ["Cùng tên file", "good"] };
+
+function viewStore() {
+  const st = S.appstore;
+  const apps = st.apps.filter((a) => a.has_source);
+  if (!apps.length) return `<div class="page-head"><div><div class="eyebrow">App Store</div><h1>Listing & screenshot</h1></div></div>${emptyState("bag", "Chưa có app nào có nguồn listing", "Thêm khoá store vào repo.APPS trong tools/dashboard/repo.py, trỏ tới thư mục locales/ và screenshots/ của repo app.")}`;
+  if (!apps.some((a) => a.id === ui.asc.app)) ui.asc.app = apps[0].id;
+  const appInfo = apps.find((a) => a.id === ui.asc.app);
+  if (!ui.asc.data && !ui.asc.loading && !ui.asc.error) setTimeout(() => ascLoad(false), 0);
+  const d = ui.asc.data, remote = d?.remote;
+  const head = `<div class="page-head"><div><div class="eyebrow">App Store</div><h1>Listing & screenshot</h1>
+    <p>Copy theo locale đọc từ <code>${esc(appInfo.source)}</code>, so với App Store Connect rồi đẩy những gì bạn chọn. Không bao giờ tự submit review.</p></div>
+    <div class="actions">${apps.length > 1 ? `<div class="seg">${apps.map((a) => `<button class="${a.id === ui.asc.app ? "on" : ""}" data-act="asc-app" data-app="${a.id}">${esc(a.name)}</button>`).join("")}</div>` : ""}
+    <button class="btn primary" data-act="asc-refresh" ${st.configured ? "" : "disabled"} title="${st.configured ? "" : "Cần API key"}">${icon("refresh")}${remote ? "Tải lại từ ASC" : "Tải từ App Store Connect"}</button></div></div>`;
+  if (!d) return head + (ui.asc.error ? `<div class="callout bad">${icon("xCircle")}<div>${esc(ui.asc.error)}</div></div>` : `<div class="loading"><span class="spinner"></span>Đang đọc listing local…</div>`);
+  const rows = d.compare.rows;
+  const changed = remote ? rows.filter((r) => ascPushable(r).length).length : 0;
+  const over = rows.filter((r) => r.problems.length || Object.values(r.fields).some((f) => f.over)).length;
+  const shots = rows.reduce((a, r) => a + r.shots, 0);
+  const v = remote?.version;
+  return head + (st.configured ? "" : ascSetup(st)) + `
+  <div class="grid cols-4">
+    ${kpi("globe", "Locale local", rows.length, `${rows.filter((r) => r.tier === 1).length} tier 1 · ${remote ? rows.filter((r) => r.remote_exists).length + " đã có trên ASC" : "chưa so với ASC"}`)}
+    ${kpi("pen", "Cần đẩy", remote ? changed : "—", remote ? "locale có field khác ASC" : "Tải từ ASC để so sánh")}
+    ${kpi("alert", "Vượt giới hạn", over, over ? "sửa trong locale.json" : "mọi field trong giới hạn")}
+    ${kpi("image", "Screenshot", shots, `${rows.filter((r) => r.shots).length} locale có ảnh`)}
+  </div>
+  ${remote ? `<div class="card card-pad asc-status" style="margin-top:16px">
+    <div><span class="faint small">Version</span><b>${esc(v ? v.version : "—")}</b>${v ? stPill(v.state, v.editable) : ""}</div>
+    <div><span class="faint small">App Information</span>${remote.info ? stPill(remote.info.state, remote.info.editable) : "—"}</div>
+    <div><span class="faint small">Primary locale</span><b>${esc(remote.app.primary_locale || "—")}</b></div>
+    <div><span class="faint small">Đọc lúc</span><b>${dateVN(remote.fetched_at)}</b></div>
+    ${d.compare.remote_only.length ? `<div><span class="faint small">Chỉ có trên ASC</span><b>${esc(d.compare.remote_only.join(", "))}</b></div>` : ""}
+  </div>
+  ${v && !v.editable ? `<div class="callout warn" style="margin-top:12px">${icon("info")}<div>Chưa có version mới ở <b>Prepare for Submission</b>. Lúc này chỉ <b>Promotional text</b> sửa được. Tạo version mới trong App Store Connect (hoặc upload build) rồi tải lại để sửa mô tả, keyword, What's New, screenshot. Tên và subtitle cần App Information ở trạng thái chuẩn bị.</div></div>` : ""}` : ""}
+  <div class="toolbar" style="margin-top:20px">
+    <div class="seg">${[["listing", "Listing theo locale"], ["products", "Gói giá"]].map(([k, l]) => `<button class="${ui.asc.tab === k ? "on" : ""}" data-act="asc-tab" data-tab="${k}">${l}</button>`).join("")}</div>
+  </div>
+  ${ui.asc.tab === "products" ? ascProducts(st) : ascListing(rows, remote)}`;
+}
+const stPill = (state, editable) => `<span class="pill ${editable ? "good" : ""}" style="margin-left:8px">${esc((state || "—").replaceAll("_", " ").toLowerCase())}${editable ? " · sửa được" : ""}</span>`;
+
+function ascSetup(st) {
+  return `<div class="card card-pad stack" style="margin-bottom:16px"><div class="row"><b>Kết nối App Store Connect API</b><span class="spacer"></span><span class="pill warn">Chưa kết nối</span></div>
+    <div class="small muted">Không có key vẫn xem và kiểm tra copy local được. Muốn so sánh và đẩy lên ASC, cần một API key của team <b>Van Khanh Vu</b>:</div>
+    <ol class="small" style="margin:0;padding-left:18px;line-height:1.7">
+      <li>App Store Connect → <b>Users and Access → Integrations → App Store Connect API → Team Keys</b> → Generate. Quyền: <b>App Manager</b>.</li>
+      <li>Tải file <code>AuthKey_&lt;KEY_ID&gt;.p8</code> (chỉ tải được một lần) vào <code>.secrets/appstore/</code>.</li>
+      <li>Thêm vào <code>.env</code>: <code>ASC_KEY_ID=…</code> và <code>ASC_ISSUER_ID=…</code> (Issuer ID ở đầu trang Team Keys). Bấm <kbd>R</kbd>.</li>
+    </ol>
+    <div class="row small">${[["Key ID", !!st.key_id], ["Issuer ID", st.issuer], [st.key_path, st.key_file]].map(([l, ok]) => `<span class="pill ${ok ? "good" : ""}">${icon(ok ? "check" : "x")}${esc(l)}</span>`).join("")}</div></div>`;
+}
+
+function ascListing(rows, remote) {
+  const list = ascVisible();
+  const sel = ui.asc.sel;
+  const pushable = [...sel].map((c) => rows.find((r) => r.locale === c)).filter((r) => r && ascPushable(r).length);
+  return `<div class="toolbar">
+    <div class="seg" data-filter="asc">${[["all", "Tất cả"], ...(remote ? [["changed", "Khác ASC"]] : []), ["problems", "Có lỗi"]].map(([k, l]) => `<button class="${ui.asc.filter === k ? "on" : ""}" data-val="${k}">${l}</button>`).join("")}</div>
+    <label class="search">${icon("search")}<input type="search" id="asc-q" placeholder="Locale hoặc tên…" value="${esc(ui.asc.q)}"></label>
+    <span class="spacer"></span>
+    <div class="row field-pick">${FIELD_KEYS.map((k) => `<label><input type="checkbox" data-asc-field="${k}" ${ui.asc.fields.has(k) ? "checked" : ""}>${FIELD_LABEL[k]}</label>`).join("")}</div>
+  </div>
+  ${remote ? `<div class="card card-pad row asc-bulk"><span><b>${sel.size}</b> locale đã chọn${sel.size ? ` · <b>${pushable.length}</b> có field sẽ đẩy` : ""}</span>
+    <button class="btn sm ghost" data-act="asc-sel-changed">Chọn locale khác ASC</button><button class="btn sm ghost" data-act="asc-sel-all">Chọn tất cả đang hiện</button>${sel.size ? `<button class="btn sm ghost" data-act="asc-sel-none">Bỏ chọn</button>` : ""}
+    <span class="spacer"></span><button class="btn sm primary" data-act="asc-push" ${pushable.length ? "" : "disabled"}>${icon("upload")}Xem trước & đẩy metadata</button></div>` : ""}
+  <div class="card"><div class="table-wrap"><table class="asc-table"><thead><tr>${remote ? "<th></th>" : ""}<th>Locale</th><th>Tên app · Subtitle</th><th>Field</th><th>Ảnh</th><th></th></tr></thead><tbody>
+  ${list.map((r) => {
+    const f = r.fields;
+    const shot = remote ? SHOTS_VI[r.shots_status] : null;
+    return `<tr class="${sel.has(r.locale) ? "on" : ""}">${remote ? `<td><input type="checkbox" data-asc-sel="${esc(r.locale)}" ${sel.has(r.locale) ? "checked" : ""}></td>` : ""}
+      <td class="nowrap"><b>${esc(r.locale)}</b> <span class="tag">T${r.tier ?? "?"}</span>${remote && !r.remote_exists ? ` <span class="pill warn" style="height:20px">mới</span>` : ""}</td>
+      <td style="max-width:340px"><div class="ellipsis">${esc(f.name.local)}</div><div class="small faint ellipsis">${esc(f.subtitle.local)}</div>${r.problems.length ? `<div class="small" style="color:var(--bad)">${esc(r.problems.join(" · "))}</div>` : ""}</td>
+      <td><div class="fchips">${FIELD_KEYS.map((k) => fchip(k, f[k])).join("")}</div></td>
+      <td class="nowrap small">${r.shots ? `${r.shots} ảnh` : "—"}${shot && shot[0] && r.shots ? `<div><span class="pill ${shot[1]}" style="height:20px">${shot[0]}</span></div>` : ""}</td>
+      <td class="nowrap"><a class="btn sm" href="#/store/${encodeURIComponent(r.locale)}">${icon("eye")}Chi tiết</a></td></tr>`;
+  }).join("") || `<tr><td colspan="6">${emptyState("search", "Không có locale khớp bộ lọc", "Bỏ bớt bộ lọc.")}</td></tr>`}
+  </tbody></table></div></div>
+  <div class="legend small" style="margin-top:10px"><span class="fchip s-same">Giống</span><span class="fchip s-changed">Khác ASC</span><span class="fchip s-new">ASC trống</span><span class="fchip s-over">Vượt giới hạn</span><span class="fchip s-local">Chưa so</span><span class="fchip s-changed locked">Khoá (version không sửa được)</span></div>`;
+}
+
+function openAscLocale(code) {
+  const d = ui.asc.data;
+  const r = d?.compare.rows.find((x) => x.locale === code);
+  if (!r) return;
+  const remote = d.remote;
+  const local = d.local.locales[code];
+  const rshots = remote ? Object.entries(remote.screenshots[code] || {}) : [];
+  const layer = $("#drawer");
+  layer.innerHTML = `<div class="drawer" role="dialog" aria-label="${esc(code)}">
+    <div class="drawer-head"><div style="min-width:0;flex:1"><div class="eyebrow">${esc(S.apps[ui.asc.app]?.name || ui.asc.app)} · tier ${r.tier ?? "?"}</div><h2 class="locale">${esc(code)}</h2>
+      <div class="row" style="margin-top:8px">${remote ? (r.remote_exists ? '<span class="pill good">Đã có trên ASC</span>' : '<span class="pill warn">ASC chưa có ngôn ngữ này</span>') : '<span class="pill">Chưa tải ASC</span>'}
+      ${r.whats_new_version ? `<span class="tag">What's New cho ${esc(r.whats_new_version)}</span>` : ""}${remote?.version && r.whats_new_version && r.whats_new_version !== remote.version.version ? `<span class="pill warn">ASC đang ở ${esc(remote.version.version)}</span>` : ""}</div></div>
+      ${remote ? `<button class="btn sm primary" data-act="asc-push" data-locale="${esc(code)}" ${ascPushable(r).length ? "" : "disabled"}>${icon("upload")}Đẩy metadata</button>` : ""}
+      <button class="icon-btn" data-act="close-drawer" aria-label="Đóng">${icon("x")}</button></div>
+    <div class="drawer-body">
+      ${FIELD_KEYS.map((k) => {
+        const f = r.fields[k];
+        const st = f.over ? "over" : f.status || "local";
+        return `<div class="asc-field"><div class="row"><b>${FIELD_LABEL[k]}</b><span class="fchip s-${st}">${f.over ? "Vượt giới hạn" : STATUS_VI[st]}</span><span class="spacer"></span><span class="small ${f.over ? "" : "faint"}" style="${f.over ? "color:var(--bad)" : ""}">${f.len} / ${f.limit}</span></div>
+          ${f.why ? `<div class="small faint">${icon("info").replace("<svg", '<svg style="width:13px;height:13px;vertical-align:-2px"')} ${esc(f.why)}</div>` : ""}
+          <div class="${remote ? "asc-cmp" : ""}"><div><span class="faint small">Local</span><div class="asc-text">${esc(f.local) || '<span class="faint">trống</span>'}</div></div>
+          ${remote ? `<div><span class="faint small">App Store Connect</span><div class="asc-text ${st === "changed" ? "diff" : ""}">${esc(f.remote || "") || '<span class="faint">trống</span>'}</div></div>` : ""}</div></div>`;
+      }).join("")}
+      <div><div class="section-title" style="margin-top:0"><h2>Screenshot local</h2><span class="sub">${local.screenshots.length} ảnh${local.screenshots[0] ? ` · ${local.screenshots[0].width}×${local.screenshots[0].height}` : ""}</span>
+        ${remote && local.screenshots.length ? `<span class="spacer"></span><button class="btn sm" data-act="asc-shots" data-locale="${esc(code)}">${icon("upload")}Thay screenshot trên ASC</button>` : ""}</div>
+        ${local.screenshots.length ? `<div class="shot-strip">${local.screenshots.map((s) => `<a href="/asc-shot?app=${ui.asc.app}&locale=${encodeURIComponent(code)}&file=${encodeURIComponent(s.file)}" target="_blank"><img loading="lazy" src="/asc-shot?app=${ui.asc.app}&locale=${encodeURIComponent(code)}&file=${encodeURIComponent(s.file)}" alt="${esc(s.file)}"><span>${esc(s.file)}</span></a>`).join("")}</div>` : `<div class="small muted">Không có ảnh cho locale này.</div>`}</div>
+      ${remote ? `<div><div class="section-title" style="margin-top:0"><h2>Screenshot trên ASC</h2><span class="sub">version ${esc(remote.version?.version || "—")}</span></div>
+        ${rshots.length ? rshots.map(([t, set]) => `<div class="small faint" style="margin-bottom:6px">${esc(t)} · ${set.items.length} ảnh</div><div class="shot-strip">${set.items.map((i) => `<a ${i.url ? `href="${esc(i.url)}" target="_blank"` : ""}>${i.url ? `<img loading="lazy" src="${esc(i.url)}" alt="">` : `<div class="ph"></div>`}<span>${esc(i.file || "")}</span></a>`).join("")}</div>`).join("") : `<div class="small muted">Version này chưa có screenshot cho ${esc(code)}.</div>`}</div>` : ""}
+    </div></div>`;
+  layer.hidden = false;
+}
+
+async function ascPush(locales, btn) {
+  const rows = ui.asc.data.compare.rows;
+  const items = locales.map((c) => rows.find((r) => r.locale === c)).filter(Boolean).map((r) => ({ locale: r.locale, fields: ascPushable(r) })).filter((i) => i.fields.length);
+  if (!items.length) return toast("Không có field nào cần đẩy", "err", "Field phải khác ASC, trong giới hạn và đang sửa được.");
+  const r = await busy(btn, () => api("/api/appstore/metadata", { method: "POST", body: { app: ui.asc.app, items, dry_run: true } }));
+  ui.asc.pending = items;
+  const create = r.ops.filter((o) => o.op === "create").length;
+  openModal(`<div class="modal-head"><h2>Đẩy metadata lên App Store Connect</h2><button type="button" class="icon-btn" data-act="close-modal">${icon("x")}</button></div>
+    <div class="modal-body stack">
+      <div class="small muted">Version <b>${esc(r.version?.version || "—")}</b> (${esc(r.version?.state || "")}). ${r.ops.length} lệnh${create ? `, trong đó <b>${create}</b> tạo ngôn ngữ mới` : ""}. Đọc lại ASC ngay trước khi lập danh sách này.</div>
+      <div class="table-wrap" style="max-height:46vh"><table><thead><tr><th>Locale</th><th>Phần</th><th>Lệnh</th><th>Field</th></tr></thead><tbody>
+      ${r.ops.map((o) => `<tr><td><b>${esc(o.locale)}</b></td><td class="small">${o.resource === "info" ? "App Information" : "Version"}</td><td>${o.op === "create" ? '<span class="pill warn" style="height:20px">Tạo</span>' : '<span class="pill" style="height:20px">Sửa</span>'}</td><td class="small">${o.fields.map((k) => FIELD_LABEL[k]).join(", ")}</td></tr>`).join("")}
+      </tbody></table></div>
+      <div class="callout">${icon("info")}<div>Chỉ ghi nội dung listing. Không submit review, không đổi giá, không phát hành.</div></div></div>
+    <div class="modal-foot"><button type="button" class="btn ghost" data-act="close-modal">Huỷ</button><button class="btn primary" data-act="asc-push-go">${icon("upload")}Đẩy ${r.ops.length} thay đổi</button></div>`);
+}
+async function ascPushGo(btn) {
+  const r = await busy(btn, () => api("/api/appstore/metadata", { method: "POST", body: { app: ui.asc.app, items: ui.asc.pending, dry_run: false } }));
+  closeLayer("#modal"); ui.asc.sel.clear();
+  toast(`Đã đẩy ${r.done.length} thay đổi lên App Store Connect`);
+  await ascLoad(false);
+}
+async function ascShots(locale, btn) {
+  const r = await busy(btn, () => api("/api/appstore/screenshots", { method: "POST", body: { app: ui.asc.app, locale, dry_run: true } }));
+  const p = r.plan;
+  if (p.unchanged) return toast(`${locale}: screenshot trên ASC đã giống hệt local`);
+  openModal(`<div class="modal-head"><h2>Thay screenshot · ${esc(locale)}</h2><button type="button" class="icon-btn" data-act="close-modal">${icon("x")}</button></div>
+    <div class="modal-body stack">
+      <div>Bộ <b>${esc(p.label)}</b> (${esc(p.display_type)}): ${p.delete.length ? `xoá <b>${p.delete.length}</b> ảnh đang có trên ASC, ` : ""}upload <b>${p.upload.length}</b> ảnh local theo đúng thứ tự.</div>
+      ${p.remote_files.length ? `<div class="small faint">Đang có: ${esc(p.remote_files.join(", "))}</div>` : ""}
+      <div class="shot-strip">${p.upload.map((s) => `<a><img src="/asc-shot?app=${ui.asc.app}&locale=${encodeURIComponent(locale)}&file=${encodeURIComponent(s.file)}" alt=""><span>${esc(s.file)}</span></a>`).join("")}</div>
+      <div class="callout warn">${icon("alert")}<div>Ảnh cũ bị xoá trước (mỗi bộ tối đa 10 ảnh). Nếu upload hỏng giữa chừng, bấm lại để chạy tiếp; bản gốc vẫn ở repo app.</div></div></div>
+    <div class="modal-foot"><button type="button" class="btn ghost" data-act="close-modal">Huỷ</button><button class="btn primary" data-act="asc-shots-go" data-locale="${esc(locale)}">${icon("upload")}Thay ${p.upload.length} ảnh</button></div>`);
+}
+async function ascShotsGo(locale, btn) {
+  const r = await busy(btn, () => api("/api/appstore/screenshots", { method: "POST", body: { app: ui.asc.app, locale, dry_run: false } }));
+  closeLayer("#modal");
+  toast(`${locale}: đã upload ${r.uploaded} ảnh, xoá ${r.deleted} ảnh cũ`, "ok", "Apple còn xử lý ảnh vài phút trước khi hiện trong App Store Connect.");
+  await ascLoad(false);
+}
+
+function ascProducts(st) {
+  const p = ui.asc.products;
+  const intro = `<div class="callout" style="margin-bottom:14px">${icon("info")}<div>Chỉ đọc: gói subscription và IAP của app, giá ở storefront Mỹ. Tạo gói và đổi giá theo nước chưa làm ở đây; làm trong App Store Connect.</div></div>`;
+  if (!st.configured) return intro + `<div class="card">${emptyState("tag2", "Cần API key", "Kết nối App Store Connect API ở trên để xem gói giá.")}</div>`;
+  if (!p) return intro + `<div class="card">${emptyState("tag2", "Chưa tải gói giá", "Đọc subscription group, subscription và IAP từ App Store Connect.", `<button class="btn primary" data-act="asc-products">${icon("download")}Tải gói giá</button>`)}</div>`;
+  const price = (x) => x?.price ? `$${esc(x.price)}<div class="small faint">bạn nhận $${esc(x.proceeds ?? "—")}</div>` : '<span class="faint">—</span>';
+  return intro + `<div class="row" style="margin-bottom:10px"><span class="spacer"></span><button class="btn sm" data-act="asc-products">${icon("refresh")}Tải lại</button></div>
+  ${p.groups.map((g) => `<div class="card" style="margin-bottom:14px"><div class="card-head"><h3>${esc(g.name)}</h3><span class="sub">subscription group</span></div><div class="table-wrap"><table><thead><tr><th>Gói</th><th>Product ID</th><th>Chu kỳ</th><th>Trạng thái</th><th class="num">Giá (US)</th></tr></thead><tbody>
+    ${g.subscriptions.map((s) => `<tr><td><b>${esc(s.name)}</b></td><td><code>${esc(s.product_id)}</code></td><td class="small">${esc((s.period || "").replaceAll("_", " ").toLowerCase())}</td><td>${stPill(s.state, false)}</td><td class="num">${price(s.price)}</td></tr>`).join("")}
+  </tbody></table></div></div>`).join("")}
+  <div class="card"><div class="card-head"><h3>In-App Purchase</h3><span class="sub">${p.iaps.length} sản phẩm</span></div>${p.iaps.length ? `<div class="table-wrap"><table><thead><tr><th>Tên</th><th>Product ID</th><th>Loại</th><th>Trạng thái</th></tr></thead><tbody>
+    ${p.iaps.map((i) => `<tr><td><b>${esc(i.name)}</b></td><td><code>${esc(i.product_id)}</code></td><td class="small">${esc((i.type || "").replaceAll("_", " ").toLowerCase())}</td><td>${stPill(i.state, false)}</td></tr>`).join("")}
+  </tbody></table></div>` : `<div class="card-body small muted">Không có IAP.</div>`}</div>`;
+}
+
 /* ---------- views: channels ---------- */
 function viewChannels() {
   const yt = S.youtube;
@@ -696,11 +910,12 @@ document.addEventListener("click", async (e) => {
   if (seg) {
     const key = seg.parentElement.dataset.filter;
     if (key === "chan") ui.chan = seg.dataset.val;
+    else if (key === "asc") ui.asc.filter = seg.dataset.val;
     else if (key === "hookMetric") ui.hookMetric = seg.dataset.val;
     else ui.filter[key] = seg.dataset.val;
     return render();
   }
-  if (e.target.classList.contains("drawer-layer")) { location.hash = "#/content"; return; }
+  if (e.target.classList.contains("drawer-layer")) { location.hash = `#/${current().route.path}`; return; }
   if (e.target.classList.contains("modal-layer")) return closeLayer("#modal");
   const btn = e.target.closest("[data-act]");
   if (!btn) return;
@@ -708,7 +923,21 @@ document.addEventListener("click", async (e) => {
   if (btn.tagName === "A") e.preventDefault();
   try {
     switch (a.act) {
-      case "close-drawer": location.hash = "#/content"; break;
+      case "close-drawer": location.hash = `#/${current().route.path}`; break;
+      case "asc-refresh": await ascLoad(true, btn); break;
+      case "asc-app": ui.asc.app = a.app; ui.asc.data = null; ui.asc.products = null; ui.asc.sel.clear(); render(); break;
+      case "asc-tab": ui.asc.tab = a.tab; render(); break;
+      case "asc-sel-all": ascVisible().forEach((r) => ui.asc.sel.add(r.locale)); render(); break;
+      case "asc-sel-none": ui.asc.sel.clear(); render(); break;
+      case "asc-sel-changed": ui.asc.sel = new Set(ascVisible().filter((r) => ascPushable(r).length).map((r) => r.locale)); render(); break;
+      case "asc-push": await ascPush(a.locale ? [a.locale] : [...ui.asc.sel], btn); break;
+      case "asc-push-go": await ascPushGo(btn); break;
+      case "asc-shots": await ascShots(a.locale, btn); break;
+      case "asc-shots-go": await ascShotsGo(a.locale, btn); break;
+      case "asc-products": {
+        ui.asc.products = await busy(btn, () => api("/api/appstore/products", { method: "POST", body: { app: ui.asc.app } }));
+        render(); break;
+      }
       case "close-modal": closeLayer("#modal"); break;
       case "copy": await navigator.clipboard.writeText(a.text); toast("Đã copy"); break;
       case "copy-area": await navigator.clipboard.writeText(btn.closest(".field").querySelector("textarea").value); toast("Đã copy caption"); break;
@@ -751,8 +980,16 @@ document.addEventListener("input", (e) => {
   }
   if (e.target.matches("textarea[data-counter]")) updateCounter(e.target);
   if (e.target.closest("#link-form")) linkPreview(e.target.name !== "ct");
+  if (e.target.id === "asc-q") {
+    ui.asc.q = e.target.value;
+    const pos = e.target.selectionStart;
+    render();
+    const q = $("#asc-q"); q.focus(); q.setSelectionRange(pos, pos);
+  }
 });
 document.addEventListener("change", (e) => {
+  if (e.target.dataset.ascSel) { e.target.checked ? ui.asc.sel.add(e.target.dataset.ascSel) : ui.asc.sel.delete(e.target.dataset.ascSel); render(); }
+  if (e.target.dataset.ascField) { e.target.checked ? ui.asc.fields.add(e.target.dataset.ascField) : ui.asc.fields.delete(e.target.dataset.ascField); render(); }
   if (e.target.id === "pub-creative") { ui.pub.creative = e.target.value; ui.pub.variant = null; render(); }
   if (e.target.id === "pub-variant") { ui.pub.variant = e.target.value; render(); }
   if (e.target.dataset.pubChan) { e.target.checked ? ui.pub.channels.add(e.target.dataset.pubChan) : ui.pub.channels.delete(e.target.dataset.pubChan); render(); }
@@ -808,7 +1045,7 @@ document.addEventListener("submit", async (e) => {
 });
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") { if (!$("#modal").hidden) closeLayer("#modal"); else if (!$("#drawer").hidden) location.hash = "#/content"; }
+  if (e.key === "Escape") { if (!$("#modal").hidden) closeLayer("#modal"); else if (!$("#drawer").hidden) location.hash = `#/${current().route.path}`; }
   if (e.key === "r" && !e.metaKey && !e.ctrlKey && !e.target.closest("input,textarea,select")) load();
 });
 

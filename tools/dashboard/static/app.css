@@ -576,3 +576,34 @@ kbd { font: 600 11px var(--mono); padding: 1px 5px; border-radius: 5px; border: 
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- app store ---------- */
+.fchips { display: flex; gap: 4px; flex-wrap: nowrap; }
+.fchip { display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 6px; font-size: 11.5px; font-weight: 650; border: 1px solid var(--border); background: var(--inset); color: var(--text-3); white-space: nowrap; cursor: default; }
+.fchip.s-same { color: var(--good); background: color-mix(in oklab, var(--good) 10%, transparent); border-color: color-mix(in oklab, var(--good) 26%, transparent); }
+.fchip.s-changed { color: var(--warn); background: color-mix(in oklab, var(--warn) 11%, transparent); border-color: color-mix(in oklab, var(--warn) 30%, transparent); }
+.fchip.s-new { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in oklab, var(--accent) 30%, transparent); }
+.fchip.s-over { color: var(--bad); background: color-mix(in oklab, var(--bad) 12%, transparent); border-color: color-mix(in oklab, var(--bad) 32%, transparent); }
+.fchip.s-local { color: var(--text-2); }
+.fchip.locked { border-style: dashed; opacity: 0.7; }
+.legend .fchip { margin-right: 2px; }
+.asc-status { display: flex; flex-wrap: wrap; gap: 14px 32px; align-items: center; }
+.asc-status > div { display: flex; flex-direction: column; gap: 3px; }
+.asc-status > div > b, .asc-status > div > .pill { margin-left: 0 !important; }
+.asc-bulk { margin-bottom: 12px; gap: 10px; flex-wrap: wrap; }
+.field-pick { gap: 4px 12px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-2); }
+.field-pick label { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
+.asc-table tr.on td { background: var(--accent-soft); }
+.drawer-body > *, .asc-field > *, .asc-cmp > * { min-width: 0; }
+.asc-field { display: grid; gap: 8px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.asc-cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 720px) { .asc-cmp { grid-template-columns: 1fr; } }
+.asc-text { margin-top: 4px; padding: 10px 12px; border-radius: 10px; background: var(--inset); border: 1px solid var(--border); white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; line-height: 1.5; max-height: 260px; overflow: auto; }
+.asc-text.diff { border-color: color-mix(in oklab, var(--warn) 40%, transparent); }
+.shot-strip { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
+.shot-strip a { flex: none; width: 104px; display: grid; gap: 4px; color: var(--text-3); font-size: 10.5px; text-decoration: none; }
+.shot-strip img, .shot-strip .ph { width: 104px; aspect-ratio: 1206 / 2622; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); background: var(--inset); }
+.shot-strip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.callout.bad { border-color: color-mix(in oklab, var(--bad) 35%, transparent); color: var(--text); }
+.callout.bad svg { color: var(--bad); }
+.drawer-head h2.locale { text-transform: none; }

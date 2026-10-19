@@ -1,6 +1,6 @@
 # KV Studio dashboard (chạy local)
 
-Web dashboard để theo dõi toàn bộ việc marketing: pipeline content, lịch 14 ngày, bộ đăng bài từng kênh, số liệu từng bài, campaign link App Store, và trạng thái tài khoản.
+Web dashboard để theo dõi toàn bộ việc marketing: pipeline content, lịch 14 ngày, bộ đăng bài từng kênh, số liệu từng bài, listing App Store (localize, screenshot, gói giá), campaign link App Store, và trạng thái tài khoản.
 
 ```sh
 python3 tools/dashboard/server.py
@@ -19,6 +19,7 @@ Lệnh này mở [http://127.0.0.1:8790](http://127.0.0.1:8790) và chỉ cần 
 | Bài đã đăng | `docs/social/channels/<kênh>/POSTS.md` | **Có**: thêm dòng khi bấm “Đã đăng xong”; ghi cột kết quả 24h/7d khi bấm “POSTS.md” |
 | Upload YouTube | `docs/social/channels/youtube/UPLOADS.md` | Qua `upload.py` |
 | Campaign link | `docs/social/campaign-links.json` | **Có** |
+| Listing App Store: copy theo locale, screenshot | Repo app, khai trong `repo.APPS[app]["store"]` (Veilnest: `../IOS-Vault/Docs/ASO/locales/*/locale.json` và `screenshots/<locale>/`) | Không. Chỉ đọc; ghi **lên App Store Connect** khi bạn xác nhận |
 | Số liệu chi tiết từng lần đo | `.dashboard/dashboard.db` (SQLite) | **Có**. Thư mục này nằm trong gitignore và **không vào repo public** |
 
 Repo vẫn là nguồn sự thật. Mỗi lần mở trang hoặc bấm làm mới (phím <kbd>R</kbd>), dashboard đọc lại toàn bộ file. Các thay đổi do dashboard ghi là thay đổi Git bình thường: xem diff rồi tự commit.
@@ -32,6 +33,7 @@ Muốn sao lưu số liệu riêng thì chép `.dashboard/dashboard.db` ra nơi 
 - **Lịch 14 ngày**: từng ngày cùng hook, kênh, cộng đồng và trạng thái thật (có master / đã render / đã đăng).
 - **Đăng bài**: chọn creative, hook và kênh để lấy bộ đăng cho từng kênh: caption có đếm ký tự theo giới hạn nền tảng, tiêu đề và mô tả YouTube (tự thay link App Store bằng campaign link nếu có), file video và nút mở trang đăng. Đăng xong, bấm **Đã đăng xong** rồi dán URL public để ghi vào POSTS.md.
 - **Số liệu**: nhập số từ TikTok Studio, Instagram Insights, YouTube Studio hay App Store Connect, hoặc **Đồng bộ YouTube** qua API. Có biểu đồ view theo bài, so sánh hook A/B/C theo view hoặc tỷ lệ xem hết, và lịch sử đo. Ô để trống nghĩa là chưa có số, không được tính là 0.
+- **App Store**: 34 locale của Veilnest với độ dài từng field (tên, subtitle, keywords, promotional text, mô tả, What's New) so với giới hạn của Apple, và ảnh theo locale. Có API key thì bấm **Tải từ App Store Connect** để so từng field với ASC, chọn locale và field, **Xem trước** danh sách lệnh, rồi mới đẩy. Mỗi locale có nút **Thay screenshot** (xoá bộ cũ, upload bộ local theo đúng thứ tự). Tab **Gói giá** chỉ đọc subscription và IAP kèm giá ở storefront Mỹ.
 - **Campaign link**: lưu provider token (`pt`), tạo link theo kênh × ngôn ngữ × creative × hook (`ct` được gợi ý như `yt_shorts_en_decoy-pin_a`, tối đa 40 ký tự), gắn Custom Product Page (`ppid`) khi CPP được duyệt.
 - **Kênh & tài khoản**: đọc từ ACCOUNTS.md, kèm trạng thái kết nối YouTube API.
 
@@ -42,10 +44,33 @@ Muốn sao lưu số liệu riêng thì chép `.dashboard/dashboard.db` ra nơi 
 - Cần làm theo [tools/youtube/README.md](../youtube/README.md): bật thêm **YouTube Analytics API** trong Google Cloud, rồi chạy `upload.py auth` (token cũ phải đăng nhập lại để có quyền `yt-analytics.readonly`).
 - Máy studio đã kết nối ngày **19/10/2026**: project `kvapps-studio`, client Desktop, token đủ ba quyền; `upload.py channel` trả đúng KV Apps `UC7kW-0SrYs4FGm1LFT9zJRw`, trang Kênh hiện **Đã kết nối**. Nút upload chỉ bật khi biến thể đang chọn có bản render và metadata; hiện repo chưa có bản render thật. Chưa thử upload hoặc đồng bộ số liệu thật.
 
+## App Store Connect
+
+Trang App Store đọc copy và ảnh từ repo app, không chép vào repo public này. Phần so sánh và đẩy lên App Store Connect gọi API trực tiếp, vẫn bằng thư viện chuẩn (JWT ký bằng `openssl` có sẵn trên macOS), nên không cần venv.
+
+**Cấp key (một lần, Account Holder):** App Store Connect → Users and Access → Integrations → App Store Connect API → **Team Keys** → Generate, quyền **App Manager**. Tải `AuthKey_<KEY_ID>.p8` (chỉ tải được một lần) vào `.secrets/appstore/`, rồi thêm vào `.env`:
+
+```sh
+ASC_KEY_ID=…
+ASC_ISSUER_ID=…   # ở đầu trang Team Keys
+```
+
+Bấm <kbd>R</kbd>; ô kết nối trên trang App Store chuyển xanh.
+
+**Quy tắc:**
+
+- Mọi lệnh ghi đều hai bước: dashboard đọc lại ASC, lập danh sách lệnh (tạo/sửa ngôn ngữ nào, field nào), bạn xem rồi mới bấm đẩy. Không bao giờ submit review, đổi giá hay phát hành.
+- Mô tả, keywords, What's New và screenshot chỉ sửa được trên version ở *Prepare for Submission*; tên và subtitle cần App Information ở trạng thái chuẩn bị. Khi chỉ có version đang bán, chỉ promotional text sửa được; field bị khoá hiện viền nét đứt kèm lý do.
+- Ngôn ngữ mới được tạo ở App Information trước, rồi ở version; privacy URL, support URL và marketing URL chép từ primary locale.
+- Field vượt giới hạn bị chặn; sửa trong `locale.json` của repo app rồi chạy `aso.py` như thường lệ.
+- Screenshot: kích thước quyết định display type (1206×2622 → `APP_IPHONE_61`, 1320×2868 → `APP_IPHONE_67`…). Thay một locale là xoá bộ cũ cùng display type rồi upload bộ mới, vì mỗi bộ tối đa 10 ảnh. So khớp bằng MD5, nên bấm lại khi ảnh không đổi thì không làm gì.
+
+Thêm app khác: khai `store` trong `repo.APPS` với `repo`, `locales`, `screenshots`, và giữ cùng cấu trúc `locales/<locale>/locale.json` (`metadata.name`, `subtitle`, `keywords`, `promotional_text`, `description`, `whats_new`).
+
 ## Bảo mật
 
 - Server chỉ lắng nghe trên `127.0.0.1`. Nó từ chối request có `Host` hoặc `Origin` lạ, nên trang web khác không gọi được API qua trình duyệt của bạn. Lệnh ghi bắt buộc gửi JSON.
-- `/media` chỉ phục vụ file nằm trong `content/`.
+- `/media` chỉ phục vụ file nằm trong `content/`; `/asc-shot` chỉ phục vụ ảnh nằm trong thư mục screenshot đã khai của app.
 - Không có đăng nhập vì chỉ chạy trên máy bạn. **Không** mở server ra mạng (không đổi host, không port-forward).
 
 ## Test
@@ -54,7 +79,7 @@ Muốn sao lưu số liệu riêng thì chép `.dashboard/dashboard.db` ra nơi 
 python3 -m unittest discover -s tools/dashboard
 ```
 
-Test ghi vào bản sao tạm của POSTS.md và campaign-links.json. Test server chạy trên một cổng ngẫu nhiên và kiểm tra cả các lớp chặn Host, Origin và đường dẫn.
+Test ghi vào bản sao tạm của POSTS.md và campaign-links.json. `test_appstore.py` chạy mọi lệnh App Store Connect với một server ASC giả trong bộ nhớ (version đang bán + version chuẩn bị, phân trang, upload ảnh nhiều phần) và kiểm chữ ký JWT bằng `openssl`; không gọi tới Apple. Test server chạy trên một cổng ngẫu nhiên và kiểm tra cả các lớp chặn Host, Origin và đường dẫn.
 
 ## Trạng thái và việc còn lại
 
@@ -73,6 +98,7 @@ Cập nhật 19/10/2026. Bảng dưới phân biệt rõ phần **đã chạy th
 | YouTube **dry-run** (kiểm tra metadata + file, không gửi gì) | Gọi thật qua dashboard, `upload.py` trả “Dry run: … nothing was sent” |
 | Kết nối OAuth YouTube | `upload.py auth` lưu token local đủ ba scope và refresh token; `upload.py channel` gọi API thật trả đúng ID KV Apps; trang Kênh hiện Đã kết nối, cả ba điều kiện môi trường/client/token đạt |
 | Chặn Host/Origin lạ, chặn đọc file ngoài `content/`, Range cho video | Test `ServerTests` + `curl` |
+| Trang App Store: đọc copy và ảnh local, kiểm giới hạn | Chạy trên dữ liệu thật của IOS-Vault: 34 locale, 272 ảnh 1206×2622, không field nào vượt giới hạn |
 | Báo lỗi thân thiện khi cổng đã bị dùng | Thử cả hai trường hợp: dashboard đang chạy sẵn và chương trình khác chiếm cổng |
 
 ### Chưa chạy được: chờ thiết lập bên ngoài
@@ -81,6 +107,7 @@ Cập nhật 19/10/2026. Bảng dưới phân biệt rõ phần **đã chạy th
 |---|---|---|---|
 | **Upload YouTube private** | Bản render thật được duyệt; OAuth đã xong | [Render video](../render/README.md), kiểm tra [metadata YouTube](../youtube/README.md). Chỉ thử upload khi chủ kênh yêu cầu một video cụ thể | Video private hiện trên YouTube Studio, đúng kênh KV Apps; có dòng mới trong UPLOADS.md. Chưa kiểm tra upload thật |
 | **Đồng bộ số liệu YouTube** | Video public thật. Token đã có đủ quyền; code `youtube_sync.py` **chưa từng gọi API thật** | Khi có video public, bấm “Đồng bộ YouTube” | Số view khớp YouTube Studio; nhãn `24h`/`7d`/`lifetime` đúng thời điểm đo; thời gian xem và tỷ lệ xem hết có mặt (Analytics có thể trễ 1–2 ngày). Sửa code nếu tên trường API khác |
+| **App Store Connect: so sánh, đẩy metadata, thay screenshot, xem gói giá** | API key Team Keys (App Manager). Code **chưa từng gọi API thật**: mới chạy với server ASC giả (`test_appstore.py`, và thử cả luồng trên giao diện) | Chủ tài khoản tạo key, đặt `.p8` + `.env` | Bấm Tải từ ASC: version, trạng thái và copy en-US khớp App Store Connect. Lần đẩy đầu nên chọn một locale ít quan trọng; screenshot lần đầu kiểm display type `APP_IPHONE_61` có đúng ô 6.3" không. Sửa code nếu tên trường API khác |
 | **Campaign link được Apple ghi nhận** | Provider token `pt` | Chủ app lấy `pt` trong App Store Connect → Apps → Veilnest → Analytics → Acquisition → Campaigns, nhập ở trang Campaign link, tạo link cho từng kênh × ngôn ngữ | Sau 1–2 ngày có lượt truy cập, campaign xuất hiện trong Analytics → Sources (Apple ẩn số dưới ngưỡng) |
 | **Custom Product Page** | CPP chưa được duyệt | Tạo CPP (ví dụ `decoy`, `calculator`) trong App Store Connect; khi duyệt, thêm `ppid` vào link | Link mở đúng trang CPP |
 | **Facebook Page** | Page chưa tạo được (xem [ACCOUNTS.md](../../docs/social/ACCOUNTS.md)) | Chủ studio thử tạo lại; cập nhật ACCOUNTS.md | Kênh tự mở khoá trong trang Đăng bài khi trạng thái không còn “Chưa tạo” |
@@ -92,6 +119,7 @@ Cập nhật 19/10/2026. Bảng dưới phân biệt rõ phần **đã chạy th
 | Thiết lập Meta app (bắt đầu 19/10) | Chờ Meta cho phép truy cập cổng Developers; chủ studio đã thực hiện bước truy cập | Chưa tạo app/token. [Checklist hiện tại](../../docs/social/META_SETUP.md); chưa tích hợp API Instagram/Threads vào dashboard |
 | Instagram Reels + Threads: đăng bài và đọc Insights | Meta app theo từng use case được hỗ trợ, chủ tài khoản là admin/tester; cần kiểm tra Meta có yêu cầu app riêng cho Threads hay không | Thêm `meta_sync.py` theo khuôn `youtube_sync.py`: chỉ đọc trước, token trong `.secrets/`, ghi snapshot nguồn `Instagram API`/`Threads API`. Đăng bài: luôn qua nút xác nhận, mặc định không tự đăng |
 | TikTok: đăng bài và đọc số | App TikTok for Developers được duyệt (Content Posting API, `video.list`) | App chưa duyệt chỉ đăng được private. Trong lúc chờ: đăng tay, nhập số tay |
+| Tạo gói subscription và đặt giá theo nước | API key như trên | Hiện tab Gói giá chỉ đọc. Tạo subscription cần thêm localization, ảnh review và price point theo từng territory (có equalization); làm sau khi phần listing đã chạy thật |
 | Lượt tải theo campaign tự động | App Store Connect API key (Analytics Reports) | Chỉ làm nếu báo cáo tách được theo campaign; cần xác minh trước. Key lưu `.secrets/`, không commit |
 | Tự đồng bộ theo lịch | Server phải đang chạy hoặc dùng launchd/cron | Ví dụ chạy sync mỗi sáng; không tự đăng bài |
 | Lịch cho Color Meter, Paper Drift | Có brief và lịch như `VEILNEST_14_DAYS.md` | Parser `read_plan` hiện chỉ đọc file Veilnest; tổng quát hoá khi có lịch thứ hai |

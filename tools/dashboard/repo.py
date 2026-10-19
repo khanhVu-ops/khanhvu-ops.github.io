@@ -25,7 +25,10 @@ CAMPAIGNS = ROOT / "docs/social/campaign-links.json"
 ICT = dt.timezone(dt.timedelta(hours=7))
 
 APPS = {
-    "veilnest": {"name": "Veilnest", "app_store_id": "6813747332"},
+    # `store`: where the app repo keeps its App Store listing (read by the App Store page).
+    # Paths are relative to this repository; the app repo is a private sibling checkout.
+    "veilnest": {"name": "Veilnest", "app_store_id": "6813747332", "store": {
+        "repo": "../IOS-Vault", "locales": "Docs/ASO/locales", "screenshots": "Docs/ASO/screenshots"}},
     "color-meter": {"name": "Color Meter", "app_store_id": None},
     "paper-drift": {"name": "Paper Drift", "app_store_id": None},
 }
