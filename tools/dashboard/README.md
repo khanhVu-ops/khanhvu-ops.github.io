@@ -59,6 +59,8 @@ ASC_ISSUER_ID=…   # ở đầu trang Team Keys
 
 Bấm <kbd>R</kbd>; ô kết nối trên trang App Store chuyển xanh.
 
+Server không tự nạp lại code. Sau khi `git pull` hoặc sửa `tools/dashboard/*.py`, trang hiện thanh nhắc khởi động lại: dừng bằng Ctrl+C rồi chạy lại lệnh ở đầu file.
+
 **Trạng thái từng field (và bộ screenshot):**
 
 | Trạng thái | Nghĩa | Đẩy |
@@ -77,7 +79,8 @@ Mốc lưu trong `.dashboard/dashboard.db`, ghi tự động mỗi lần đọc 
 **Quy tắc:**
 
 - Mọi lệnh ghi đều hai bước: dashboard đọc lại ASC, lập danh sách lệnh (tạo/sửa ngôn ngữ nào, field nào), bạn xem rồi mới bấm đẩy. Không bao giờ submit review, đổi giá hay phát hành.
-- Mô tả, keywords, What's New và screenshot chỉ sửa được trên version ở *Prepare for Submission*; tên và subtitle cần App Information ở trạng thái chuẩn bị. Khi chỉ có version đang bán, chỉ promotional text sửa được; field bị khoá hiện viền nét đứt kèm lý do.
+- Dashboard luôn so với **version tạo gần nhất**, dù nó đang ở trạng thái nào, và hiện cả version đang bán. Ví dụ 1.4 đang *Waiting for Review*: trang hiện 1.4 (khoá, kèm hướng dẫn Remove from Review nếu cần sửa), không lùi về 1.3 đang bán.
+- Mô tả, keywords, What's New và screenshot chỉ sửa được trên version ở *Prepare for Submission* (hoặc bị từ chối, đã rút khỏi review); tên và subtitle cần App Information ở trạng thái chuẩn bị. Khi chỉ có version đang bán, chỉ promotional text sửa được; field bị khoá hiện viền nét đứt kèm lý do.
 - Ngôn ngữ mới được tạo ở App Information trước, rồi ở version; privacy URL, support URL và marketing URL chép từ primary locale.
 - Field vượt giới hạn bị chặn; sửa trong `locale.json` của repo app rồi chạy `aso.py` như thường lệ.
 - Screenshot: kích thước quyết định display type (1206×2622 → `APP_IPHONE_61`, 1320×2868 → `APP_IPHONE_67`…). Thay một locale là xoá bộ cũ cùng display type rồi upload bộ mới, vì mỗi bộ tối đa 10 ảnh. So khớp bằng MD5, nên bấm lại khi ảnh không đổi thì không làm gì.

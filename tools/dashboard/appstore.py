@@ -62,6 +62,16 @@ DISPLAY_LABELS = {"APP_IPHONE_67": 'iPhone 6.9"', "APP_IPHONE_65": 'iPhone 6.5"'
                   "APP_IPHONE_58": 'iPhone 5.8"', "APP_IPHONE_55": 'iPhone 5.5"',
                   "APP_IPAD_PRO_3GEN_129": 'iPad 13"'}
 IMAGE_EXT = {".jpg", ".jpeg", ".png"}
+# What each version state means for editing, in the words the page shows.
+VERSION_VI = {
+    "PREPARE_FOR_SUBMISSION": "đang chuẩn bị", "READY_FOR_REVIEW": "sẵn sàng gửi review",
+    "DEVELOPER_REJECTED": "bạn đã rút khỏi review", "REJECTED": "bị từ chối", "METADATA_REJECTED": "metadata bị từ chối",
+    "INVALID_BINARY": "build lỗi", "WAITING_FOR_REVIEW": "đang chờ review", "IN_REVIEW": "đang được review",
+    "WAITING_FOR_EXPORT_COMPLIANCE": "chờ khai export compliance", "PENDING_DEVELOPER_RELEASE": "đã duyệt, chờ bạn phát hành",
+    "PENDING_APPLE_RELEASE": "đã duyệt, chờ Apple phát hành", "PROCESSING_FOR_DISTRIBUTION": "đang xử lý phát hành",
+    "READY_FOR_DISTRIBUTION": "đang bán", "REPLACED_WITH_NEW_VERSION": "đã thay bằng version mới",
+}
+LIVE_INFO = {"READY_FOR_DISTRIBUTION", "ACCEPTED", "REPLACED_WITH_NEW_INFO"}
 
 
 class AscError(Exception):
@@ -323,13 +333,16 @@ def remote_listing(client: Client, app: str, screenshots: bool = True) -> dict:
 
     versions, _ = client.get_all(f"/v1/apps/{asc_id}/appStoreVersions",
                                  {"filter[platform]": "IOS", "limit": 10})
-    versions.sort(key=lambda v: v["attributes"].get("createdDate") or "", reverse=True)
-    editable = next((v for v in versions if state_of(v["attributes"]) in EDITABLE), None)
+    # Always the newest version, whatever its state: if 1.4 is waiting for review, the page shows 1.4 (locked),
+    # never quietly falls back to the live 1.3. Newest = created last; version number breaks ties.
+    versions.sort(key=lambda v: (v["attributes"].get("createdDate") or "", version_key(v["attributes"].get("versionString"))),
+                  reverse=True)
+    version = versions[0] if versions else None
     live = next((v for v in versions if state_of(v["attributes"]) == "READY_FOR_DISTRIBUTION"), None)
-    version = editable or live or (versions[0] if versions else None)
 
+    # App Information follows the same rule: the record for the upcoming version, else the live one.
     infos, _ = client.get_all(f"/v1/apps/{asc_id}/appInfos")
-    info = next((i for i in infos if state_of(i["attributes"]) in EDITABLE), None) or (infos[0] if infos else None)
+    info = next((i for i in infos if state_of(i["attributes"]) not in LIVE_INFO), None) or (infos[0] if infos else None)
 
     locales: dict[str, dict] = {}
     if info:
@@ -356,13 +369,19 @@ def remote_listing(client: Client, app: str, screenshots: bool = True) -> dict:
                 shots[code] = sets
 
     def vinfo(v):
-        return v and {"id": v["id"], "version": v["attributes"].get("versionString"),
-                      "state": state_of(v["attributes"]), "editable": state_of(v["attributes"]) in EDITABLE}
+        if not v:
+            return None
+        st = state_of(v["attributes"])
+        return {"id": v["id"], "version": v["attributes"].get("versionString"), "state": st,
+                "state_vi": VERSION_VI.get(st, st.replace("_", " ").lower()), "editable": st in EDITABLE,
+                "created": v["attributes"].get("createdDate"), "live": st == "READY_FOR_DISTRIBUTION"}
 
     return {
         "app": {"id": asc_id, "name": app_attrs.get("name"), "bundle_id": app_attrs.get("bundleId"),
                 "primary_locale": app_attrs.get("primaryLocale")},
-        "version": vinfo(version), "live_version": vinfo(live),
+        "version": vinfo(version) and {**vinfo(version),
+                                       "locked": None if vinfo(version)["editable"] else locked_reason(vinfo(version))},
+        "live_version": vinfo(live), "versions": [vinfo(v) for v in versions[:5]],
         "info": info and {"id": info["id"], "state": state_of(info["attributes"]),
                           "editable": state_of(info["attributes"]) in EDITABLE},
         "locales": locales, "screenshots": shots,
@@ -447,18 +466,37 @@ def remote_shots(remote: dict, code: str, dtype: str | None) -> list[dict]:
     return ((remote.get("screenshots", {}).get(code) or {}).get(dtype) or {}).get("items") or []
 
 
+def version_key(text: str | None) -> tuple:
+    return tuple(int(p) if p.isdigit() else 0 for p in (text or "").split("."))
+
+
+def locked_reason(v: dict) -> str:
+    """Why the newest version cannot be edited, and what to do about it."""
+    st, name = v["state"], f"version {v['version']} {VERSION_VI.get(v['state'], v['state'])}"
+    if st in ("WAITING_FOR_REVIEW", "IN_REVIEW", "WAITING_FOR_EXPORT_COMPLIANCE"):
+        return f"{name}: Apple khoá metadata. Muốn sửa thì Remove from Review trong App Store Connect rồi tải lại"
+    if st in ("PENDING_DEVELOPER_RELEASE", "PENDING_APPLE_RELEASE", "PROCESSING_FOR_DISTRIBUTION"):
+        return f"{name}: sửa ở version sau"
+    if st == "READY_FOR_DISTRIBUTION":
+        return f"{name}: tạo version mới trong App Store Connect để sửa"
+    return name
+
+
 def field_editable(remote: dict, key: str) -> tuple[bool, str]:
     resource = FIELDS[key][0]
     if resource == "info":
         if not remote.get("info"):
             return False, "app chưa có App Information"
-        return (True, "") if remote["info"]["editable"] else (False, "chỉ sửa khi có version mới đang chuẩn bị")
+        if remote["info"]["editable"]:
+            return True, ""
+        v = remote.get("version")
+        return False, (locked_reason(v) if v and not v["editable"] else "App Information đang khoá; chỉ sửa khi version mới đang chuẩn bị")
     v = remote.get("version")
     if not v:
         return False, "app chưa có version nào"
     if v["editable"] or key == "promotional_text":
         return True, ""
-    return False, f"version {v['version']} đang {v['state']}, chưa có version mới để sửa"
+    return False, locked_reason(v)
 
 
 def compare(local: dict, remote: dict | None, marks: dict | None = None) -> dict:
@@ -603,8 +641,10 @@ def plan_screenshots(app: str, remote: dict, code: str, marks: dict | None = Non
     if len(shots) > 10:
         raise AscError(f"{code}: {len(shots)} ảnh, App Store nhận tối đa 10", 422)
     v = remote.get("version")
-    if not v or not v["editable"]:
-        raise AscError("Screenshot chỉ thay được trên version đang chuẩn bị (Prepare for Submission).", 409)
+    if not v:
+        raise AscError("App chưa có version nào.", 409)
+    if not v["editable"]:
+        raise AscError(f"Không thay được screenshot: {locked_reason(v)}.", 409)
     loc = remote["locales"].get(code, {})
     if not loc.get("version_loc_id"):
         raise AscError(f"{code}: version chưa có ngôn ngữ này. Đẩy metadata của locale trước.", 409)

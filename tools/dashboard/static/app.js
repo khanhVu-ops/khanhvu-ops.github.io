@@ -183,7 +183,8 @@ function render() {
   const main = $("#main");
   const y = main.dataset.route === route.path ? scrollY : 0;
   main.dataset.route = route.path;
-  main.innerHTML = `<div class="page">${route.view(arg)}</div>`;
+  const stale = S.stale_code ? `<div class="callout warn" style="margin-bottom:16px">${icon("refresh")}<div><b>Code dashboard đã đổi sau khi server khởi động.</b> Trang này vẫn chạy bản cũ. Dừng server (Ctrl+C) rồi chạy lại <code>python3 tools/dashboard/server.py</code>.</div></div>` : "";
+  main.innerHTML = `<div class="page">${stale}${route.view(arg)}</div>`;
   scrollTo(0, y);
   if (route.path === "content" && arg) openCreative(arg);
   else if (route.path === "store" && arg) openAscLocale(arg);
@@ -689,7 +690,8 @@ function viewStore() {
     <div><span class="faint small">Repo</span><b>${app.repo_path ? `<code>${esc(app.repo_path)}</code>` : `<span style="color:var(--bad)">không thấy ${esc(app.repo || "—")}</span>`}</b></div>
     <div><span class="faint small">Listing local</span><b>${app.source ? `<code>${esc(app.source)}</code>` : '<span class="faint">chưa có</span>'}</b></div>
     <div><span class="faint small">App Store Connect</span><b>${linked ? `<a href="https://appstoreconnect.apple.com/apps/${esc(app.app_store_id)}" target="_blank" rel="noreferrer">${esc(app.app_store_id)}</a>` : '<span class="faint">chưa liên kết</span>'}</b></div>
-    ${remote ? `<div><span class="faint small">Version</span><b>${esc(remote.version?.version || "—")}${remote.version ? stPill(remote.version.state, remote.version.editable) : ""}</b></div>
+    ${remote ? `<div><span class="faint small">Version mới nhất</span><b>${esc(remote.version?.version || "—")}${remote.version ? verPill(remote.version) : ""}</b></div>
+    ${remote.live_version && remote.live_version.id !== remote.version?.id ? `<div><span class="faint small">Đang bán</span><b>${esc(remote.live_version.version)}</b></div>` : ""}
     <div><span class="faint small">App Information</span>${remote.info ? stPill(remote.info.state, remote.info.editable) : "—"}</div>
     <div><span class="faint small">Đọc lúc</span><b>${dateVN(remote.fetched_at)}</b></div>` : ""}
   </div>`;
@@ -707,13 +709,14 @@ function viewStore() {
     ${kpi("upload", "Cần đẩy", remote ? todo : "—", remote ? "có field ASC trống hoặc local mới hơn" : "")}
     ${kpi("alert", "Cần xem", remote ? check : rows.filter((r) => r.problems.length).length, remote ? "ASC sửa tay hoặc khác chưa có mốc" : "lỗi giới hạn")}
   </div>
-  ${v && !v.editable ? `<div class="callout warn" style="margin-top:12px">${icon("info")}<div>Chưa có version mới ở <b>Prepare for Submission</b>, nên lúc này chỉ <b>Promotional text</b> sửa được. Tạo version mới trong App Store Connect rồi tải lại để sửa mô tả, keyword, What's New và screenshot. Tên và subtitle cần App Information ở trạng thái chuẩn bị.</div></div>` : ""}
+  ${v && !v.editable ? `<div class="callout warn" style="margin-top:12px">${icon("info")}<div>${esc(v.locked || "")}. Trong lúc này chỉ <b>Promotional text</b> sửa được; mô tả, keyword, What's New, screenshot, tên và subtitle đều khoá.</div></div>` : ""}
   ${d.compare.remote_only.length ? `<div class="callout" style="margin-top:12px">${icon("info")}<div>ASC có ${d.compare.remote_only.length} ngôn ngữ chưa có ở local: <b>${esc(d.compare.remote_only.join(", "))}</b>. <button class="btn sm" data-act="asc-import" style="margin-left:6px">${icon("download")}Nhập về repo</button></div></div>` : ""}
   <div class="toolbar" style="margin-top:20px">
     <div class="seg">${[["listing", "Listing theo locale"], ["products", "Gói giá"]].map(([k, l]) => `<button class="${ui.asc.tab === k ? "on" : ""}" data-act="asc-tab" data-tab="${k}">${l}</button>`).join("")}</div>
   </div>
   ${ui.asc.tab === "products" ? ascProducts(st, linked) : ascListing(rows, remote)}`;
 }
+const verPill = (v) => `<span class="pill ${v.editable ? "good" : v.live ? "" : "warn"}" style="margin-left:8px">${esc(v.state_vi || v.state)}${v.editable ? " · sửa được" : ""}</span>`;
 const stPill = (state, editable) => `<span class="pill ${editable ? "good" : ""}" style="margin-left:8px">${esc((state || "—").replaceAll("_", " ").toLowerCase())}${editable ? " · sửa được" : ""}</span>`;
 
 function ascNoSource(app, st, remote, d) {

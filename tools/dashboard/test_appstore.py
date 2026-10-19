@@ -302,8 +302,11 @@ class AppStoreTests(unittest.TestCase):
 
     def test_remote_listing_picks_editable_version_and_follows_pages(self):
         remote = appstore.remote_listing(self.client, "veilnest")
-        self.assertEqual(remote["version"], {"id": "v-next", "version": "1.5", "state": "PREPARE_FOR_SUBMISSION",
-                                             "editable": True})
+        v = remote["version"]
+        self.assertEqual((v["id"], v["version"], v["state"], v["editable"], v["locked"]),
+                         ("v-next", "1.5", "PREPARE_FOR_SUBMISSION", True, None))
+        self.assertEqual(remote["live_version"]["version"], "1.4")
+        self.assertEqual([x["version"] for x in remote["versions"]], ["1.5", "1.4"])
         self.assertEqual(remote["info"]["id"], "i-next")
         self.assertEqual(sorted(remote["locales"]), ["de-DE", "en-US"])
         self.assertEqual(remote["locales"]["de-DE"]["version_loc_id"], "vl-de")  # second page
@@ -400,6 +403,26 @@ class AppStoreTests(unittest.TestCase):
                    if r["locale"] == "de-DE")
         self.assertEqual(row["fields"]["description"]["status"], "ahead")
 
+    def test_newest_version_wins_even_while_in_review(self):
+        """1.5 waiting for review must be what the page shows and compares against, not the live 1.4."""
+        self.fake.versions["v-next"]["appVersionState"] = "WAITING_FOR_REVIEW"
+        self.fake.infos["i-next"]["state"] = "WAITING_FOR_REVIEW"
+        local = appstore.local_listing("veilnest")
+        remote = appstore.remote_listing(self.client, "veilnest")
+        self.assertEqual((remote["version"]["id"], remote["version"]["editable"]), ("v-next", False))
+        self.assertEqual(remote["info"]["id"], "i-next")
+        self.assertIn("Remove from Review", remote["version"]["locked"])
+        self.assertEqual(remote["locales"]["en-US"]["version_loc_id"], "vl-en", "fields come from 1.5")
+        with self.assertRaisesRegex(appstore.AscError, "1.5 đang chờ review: Apple khoá metadata"):
+            appstore.plan_metadata(local, remote, [{"locale": "en-US", "fields": ["whats_new"]}])
+        with self.assertRaisesRegex(appstore.AscError, "chờ review"):
+            appstore.plan_metadata(local, remote, [{"locale": "en-US", "fields": ["subtitle"], "override": ["subtitle"]}])
+        ops = appstore.plan_metadata(local, remote, [{"locale": "en-US", "fields": ["promotional_text"],
+                                                      "override": ["promotional_text"]}])
+        self.assertEqual(ops[0]["id"], "vl-en")
+        with self.assertRaisesRegex(appstore.AscError, "Không thay được screenshot: version 1.5 đang chờ review"):
+            appstore.plan_screenshots("veilnest", remote, "de-DE")
+
     def test_only_promo_is_editable_on_a_live_version(self):
         del self.fake.versions["v-next"]
         self.fake.infos.pop("i-next")
@@ -413,9 +436,9 @@ class AppStoreTests(unittest.TestCase):
         ops = appstore.plan_metadata(local, remote, [{"locale": "en-US", "fields": ["promotional_text"],
                                                       "override": ["promotional_text"]}])
         self.assertEqual([o["fields"] for o in ops], [["promotional_text"]])
-        with self.assertRaisesRegex(appstore.AscError, "chưa có version mới"):
+        with self.assertRaisesRegex(appstore.AscError, "version 1.4 đang bán: tạo version mới"):
             appstore.plan_metadata(local, remote, [{"locale": "en-US", "fields": ["whats_new"]}])
-        with self.assertRaisesRegex(appstore.AscError, "version mới đang chuẩn bị"):
+        with self.assertRaisesRegex(appstore.AscError, "Subtitle: version 1.4 đang bán"):
             appstore.plan_metadata(local, remote, [{"locale": "en-US", "fields": ["subtitle"],
                                                     "override": ["subtitle"]}])
 
@@ -560,6 +583,12 @@ class AppStoreServerTests(unittest.TestCase):
             return res.status, res.read()
         finally:
             conn.close()
+
+    def test_state_flags_stale_server_code(self):
+        with mock.patch.object(store, "DB_PATH", self.workspace / "s.db"):
+            self.assertFalse(json.loads(self.request("GET", "/api/state")[1])["stale_code"])
+            with mock.patch.object(server, "CODE_STAMP", server.CODE_STAMP - 60):
+                self.assertTrue(json.loads(self.request("GET", "/api/state")[1])["stale_code"])
 
     def test_listing_without_key_and_shot_files(self):
         status, body = self.request("POST", "/api/appstore/listing", {"app": "veilnest"})

@@ -36,6 +36,10 @@ STATIC = HERE / "static"
 YT_PY = ROOT / "tools/youtube/.venv/bin/python"
 MEDIA_ROOTS = (ROOT / "content",)
 DB_LOCK = threading.Lock()
+# Newest edit to the dashboard's own code when this process started. If the files change later, /api/state
+# says so and the page asks for a restart, instead of quietly serving old behaviour.
+CODE_FILES = (HERE / "server.py", HERE / "repo.py", HERE / "store.py", HERE / "appstore.py")
+CODE_STAMP = max(f.stat().st_mtime for f in CODE_FILES)
 ASC_LOCK = threading.Lock()  # one App Store Connect write at a time
 ASC_CACHE: dict[str, dict] = {}  # app → last remote listing read from App Store Connect
 
@@ -308,6 +312,7 @@ class Handler(BaseHTTPRequestHandler):
             state["windows"] = store.WINDOWS
             state["youtube"] = youtube_status()
             state["appstore"] = appstore.status()
+            state["stale_code"] = max(f.stat().st_mtime for f in CODE_FILES) > CODE_STAMP
             return state
         if method == "POST" and path == "/api/snapshots":
             with DB_LOCK, store.session() as conn:
