@@ -10,6 +10,7 @@ from __future__ import annotations
 import datetime as dt
 import importlib.util
 import json
+import os
 import re
 import secrets
 import sys
@@ -24,14 +25,49 @@ ACCOUNTS = ROOT / "docs/social/ACCOUNTS.md"
 CAMPAIGNS = ROOT / "docs/social/campaign-links.json"
 ICT = dt.timezone(dt.timedelta(hours=7))
 
-APPS = {
-    # `store`: where the app repo keeps its App Store listing (read by the App Store page).
-    # Paths are relative to this repository; the app repo is a private sibling checkout.
-    "veilnest": {"name": "Veilnest", "app_store_id": "6813747332", "store": {
-        "repo": "../IOS-Vault", "locales": "Docs/ASO/locales", "screenshots": "Docs/ASO/screenshots"}},
-    "color-meter": {"name": "Color Meter", "app_store_id": None},
-    "paper-drift": {"name": "Paper Drift", "app_store_id": None},
-}
+REGISTRY = ROOT / "docs/apps/registry.json"
+# Where the app repos live: ~/personal, with apps grouped under Apps/, packages under Packages/, …
+WORKSPACE = Path(os.environ.get("KV_WORKSPACE") or ROOT.parent).expanduser()
+WORKSPACE_GROUPS = ("Apps", "Templates", "Packages", "Lab")
+
+
+def load_registry() -> dict[str, dict]:
+    """App id → {name, bundle_id, app_store_id, repo, store}. One file so adding an app is data, not code."""
+    data = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    return {a["id"]: {k: v for k, v in a.items() if k != "id"} for a in data["apps"]}
+
+
+def save_app(app_id: str, entry: dict) -> None:
+    """Adds the app, or merges `entry` into it in place (order and other keys kept)."""
+    data = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    for app in data["apps"]:
+        if app["id"] == app_id:
+            app.update(entry)
+            break
+    else:
+        data["apps"].append({"id": app_id, **entry})
+    REGISTRY.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    APPS.clear()
+    APPS.update(load_registry())
+
+
+def app_repo(app: str) -> Path | None:
+    """The app's checkout. Falls back to finding the folder by name, so a repo that has not been moved into
+    its group yet (or was moved since) still resolves."""
+    rel = APPS.get(app, {}).get("repo")
+    if not rel:
+        return None
+    path = WORKSPACE / rel
+    if path.is_dir():
+        return path
+    name = Path(rel).name
+    for candidate in [WORKSPACE / name, *(WORKSPACE / g / name for g in WORKSPACE_GROUPS)]:
+        if candidate.is_dir():
+            return candidate
+    return None
+
+
+APPS = load_registry()
 
 # Fixed order = fixed categorical colour slot in the UI (never re-assigned by rank).
 CHANNELS = [

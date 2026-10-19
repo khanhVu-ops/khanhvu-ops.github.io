@@ -139,12 +139,28 @@ def youtube_upload(body: dict) -> dict:
     return {"ok": True, "dry_run": body.get("dry_run", True), "output": output[-2000:]}
 
 
+def asc_marks(app: str) -> dict:
+    with DB_LOCK, store.session() as conn:
+        return store.sync_marks(conn, app)
+
+
+def asc_mark(app: str, rows: list[tuple[str, str, str]], how: str, remote_hashes: dict | None = None) -> None:
+    """rows: (locale, field, local_hash). Remote hash = local hash unless given (accepting the ASC text)."""
+    with DB_LOCK, store.session() as conn:
+        for locale, field, lh in rows:
+            store.set_sync_mark(conn, app, locale, field, lh, (remote_hashes or {}).get((locale, field), lh), how)
+
+
 def asc_listing(app: str, refresh: bool) -> dict:
     local = appstore.local_listing(app)
     remote = ASC_CACHE.get(app)
     if refresh:
         remote = ASC_CACHE[app] = appstore.remote_listing(appstore.Client(), app)
-    return {"local": local, "remote": remote, "compare": appstore.compare(local, remote)}
+    compared = appstore.compare(local, remote, asc_marks(app))
+    # Equal on both sides (pushed by us or pasted by hand): remember it, so a later local edit reads as "ahead".
+    asc_mark(app, compared.pop("matched"), "matched")
+    return {"local": local, "remote": remote, "compare": compared, "marks": {
+        f"{loc}|{field}": m for (loc, field), m in asc_marks(app).items()}}
 
 
 def asc_metadata(body: dict) -> dict:
@@ -154,10 +170,10 @@ def asc_metadata(body: dict) -> dict:
         client = appstore.Client()
         remote = ASC_CACHE[app] = appstore.remote_listing(client, app, screenshots=False) | {
             "screenshots": (ASC_CACHE.get(app) or {}).get("screenshots", {})}
-        ops = appstore.plan_metadata(appstore.local_listing(app), remote, body.get("items") or [])
+        ops = appstore.plan_metadata(appstore.local_listing(app), remote, body.get("items") or [], asc_marks(app))
         if body.get("dry_run", True):
             return {"dry_run": True, "ops": ops, "version": remote["version"], "info": remote["info"]}
-        done = appstore.apply_metadata(client, ops)
+        done = appstore.apply_metadata(client, ops, on_done=lambda op: asc_mark(app, appstore.pushed_marks(op), "pushed"))
         ASC_CACHE[app] = appstore.remote_listing(client, app)
         return {"dry_run": False, "done": done}
 
@@ -167,12 +183,46 @@ def asc_screenshots(body: dict) -> dict:
     with ASC_LOCK:
         client = appstore.Client()
         remote = ASC_CACHE[app] = appstore.remote_listing(client, app)
-        plan = appstore.plan_screenshots(app, remote, locale)
+        plan = appstore.plan_screenshots(app, remote, locale, asc_marks(app), bool(body.get("override")))
         if body.get("dry_run", True):
             return {"dry_run": True, "plan": plan}
         result = appstore.apply_screenshots(client, app, plan)
+        asc_mark(app, [(locale, "screenshots", plan["key"])], "pushed")
         ASC_CACHE[app] = appstore.remote_listing(client, app)
         return {"dry_run": False, "plan": plan, **result}
+
+
+def asc_accept(body: dict) -> dict:
+    """Keep what is on ASC for these fields: no push until the local text changes again."""
+    app, locale = str(body.get("app", "")), str(body.get("locale", ""))
+    remote = ASC_CACHE.get(app)
+    if not remote:
+        raise ApiError("Tải từ App Store Connect trước", 409)
+    local = appstore.local_listing(app)["locales"].get(locale)
+    if not local:
+        raise ApiError(f"{locale}: không có trong dữ liệu local")
+    rows, remote_hashes = [], {}
+    for field in body.get("fields") or []:
+        if field == "screenshots":
+            dtype = next((s["display_type"] for s in local["screenshots"] if s["display_type"]), None)
+            lv = appstore.shots_key(local["screenshots"])
+            rv = appstore.shots_key(appstore.remote_shots(remote, locale, dtype))
+        elif field in appstore.FIELDS:
+            lv = appstore.normalize(field, local["fields"][field])
+            rv = appstore.normalize(field, (remote["locales"].get(locale) or {}).get(field))
+        else:
+            continue
+        rows.append((locale, field, appstore.digest(lv)))
+        remote_hashes[(locale, field)] = appstore.digest(rv)
+    asc_mark(app, rows, "accepted", remote_hashes)
+    return {"ok": True, "fields": [r[1] for r in rows]}
+
+
+def asc_import(body: dict) -> dict:
+    app = str(body.get("app", ""))
+    with ASC_LOCK:
+        remote = ASC_CACHE[app] = appstore.remote_listing(appstore.Client(), app)
+        return appstore.import_listing(app, remote)
 
 
 def asc_shot_file(query: dict) -> Path | None:
@@ -180,8 +230,9 @@ def asc_shot_file(query: dict) -> Path | None:
     src = appstore.store_paths(query.get("app", [""])[0])
     if not src:
         return None
-    target = (src["screenshots"] / query.get("locale", [""])[0] / query.get("file", [""])[0]).resolve()
-    if src["screenshots"] not in target.parents or target.suffix.lower() not in appstore.IMAGE_EXT:
+    root = src["screenshots"].resolve()
+    target = (root / query.get("locale", [""])[0] / query.get("file", [""])[0]).resolve()
+    if root not in target.parents or target.suffix.lower() not in appstore.IMAGE_EXT:
         return None
     return target if target.is_file() else None
 
@@ -294,6 +345,16 @@ class Handler(BaseHTTPRequestHandler):
             return asc_metadata(body)
         if method == "POST" and path == "/api/appstore/screenshots":
             return asc_screenshots(body)
+        if method == "POST" and path == "/api/appstore/accept":
+            return asc_accept(body)
+        if method == "POST" and path == "/api/appstore/import":
+            return asc_import(body)
+        if method == "POST" and path == "/api/appstore/discover":
+            return {"apps": appstore.discover(appstore.Client())}
+        if method == "POST" and path == "/api/appstore/link":
+            with ASC_LOCK:
+                return {"app": appstore.link_app(appstore.Client(), str(body.get("app_store_id", ""))),
+                        "status": appstore.status()}
         if method == "POST" and path == "/api/appstore/products":
             return appstore.products(appstore.Client(), str(body.get("app", "")))
         if method == "POST" and path == "/api/reveal":

@@ -1,7 +1,7 @@
 """App Store listing: local copy (app repo) ↔ App Store Connect API.
 
 Local side, needs nothing: reads `locales/<locale>/locale.json` and `screenshots/<locale>/*.jpg|png`
-from the app repo configured in `repo.APPS[app]["store"]`, and checks App Store limits.
+from the app repo listed in `docs/apps/registry.json` (`repo` + `store`), and checks App Store limits.
 
 Remote side, needs an App Store Connect API key in `.env` (gitignored):
 
@@ -25,6 +25,7 @@ import os
 import struct
 import subprocess
 import time
+import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -97,10 +98,13 @@ def status() -> dict:
     cred = credentials()
     apps = []
     for app_id, app in repo.APPS.items():
+        base = repo.app_repo(app_id)
         src = store_paths(app_id)
         apps.append({"id": app_id, "name": app["name"], "app_store_id": app.get("app_store_id"),
+                     "bundle_id": app.get("bundle_id"), "repo": app.get("repo"),
+                     "repo_path": str(base.relative_to(repo.WORKSPACE)) if base else None,
                      "has_source": bool(src and src["locales"].is_dir()),
-                     "source": str(src["locales"].relative_to(src["repo"].parent)) if src else None})
+                     "source": str(src["locales"].relative_to(repo.WORKSPACE)) if src else None})
     return {"configured": cred["ready"], "key_id": cred["key_id"] or None, "issuer": bool(cred["issuer_id"]),
             "key_file": cred["key_path"].is_file(),
             "key_path": str(cred["key_path"]).replace(str(repo.ROOT) + "/", "") if cred["key_id"]
@@ -110,9 +114,9 @@ def status() -> dict:
 
 def store_paths(app: str) -> dict | None:
     conf = repo.APPS.get(app, {}).get("store")
-    if not conf:
+    base = repo.app_repo(app)
+    if not conf or not base:
         return None
-    base = (repo.ROOT / conf["repo"]).resolve()
     return {"repo": base, "locales": base / conf["locales"], "screenshots": base / conf["screenshots"]}
 
 
@@ -139,12 +143,20 @@ def image_size(path: Path) -> tuple[int, int] | None:
             f.seek(length - 2, 1)
 
 
+_MD5_CACHE: dict[tuple, str] = {}
+
+
 def md5(path: Path) -> str:
+    st = path.stat()
+    key = (str(path), st.st_size, st.st_mtime_ns)
+    if key in _MD5_CACHE:
+        return _MD5_CACHE[key]
     h = hashlib.md5()
     with path.open("rb") as f:
         for chunk in iter(lambda: f.read(1 << 20), b""):
             h.update(chunk)
-    return h.hexdigest()
+    _MD5_CACHE[key] = h.hexdigest()
+    return _MD5_CACHE[key]
 
 
 def local_screenshots(app: str, locale: str, checksum: bool = False) -> list[dict]:
@@ -165,11 +177,12 @@ def local_screenshots(app: str, locale: str, checksum: bool = False) -> list[dic
 
 
 def local_listing(app: str) -> dict:
+    """Empty (not an error) when the app has no listing in its repo yet: the page then offers an import."""
+    if app not in repo.APPS:
+        raise AscError(f"Không có app {app} trong docs/apps/registry.json", 404)
     src = store_paths(app)
-    if not src:
-        raise AscError(f"{app}: chưa cấu hình nguồn listing (repo.APPS['{app}']['store'])", 404)
-    if not src["locales"].is_dir():
-        raise AscError(f"Không thấy {src['locales']}. Clone repo app cạnh repo này.", 404)
+    if not src or not src["locales"].is_dir():
+        return {"app": app, "source": None, "locales": {}}
     locales = {}
     for path in sorted(src["locales"].glob("*/locale.json")):
         try:
@@ -179,7 +192,7 @@ def local_listing(app: str) -> dict:
         meta = data.get("metadata", {})
         fields = {k: (meta.get(k) or "").strip() for k in FIELDS}
         problems = [f"{FIELDS[k][3]} {len(v)}/{FIELDS[k][2]}" for k, v in fields.items() if len(v) > FIELDS[k][2]]
-        shots = local_screenshots(app, path.parent.name)
+        shots = local_screenshots(app, path.parent.name, checksum=True)
         sizes = {(s["width"], s["height"]) for s in shots}
         if shots and len(sizes) > 1:
             problems.append("ảnh khác kích thước nhau")
@@ -300,7 +313,7 @@ def state_of(attrs: dict) -> str:
 def app_store_id(app: str) -> str:
     asc_id = repo.APPS.get(app, {}).get("app_store_id")
     if not asc_id:
-        raise AscError(f"{app} chưa có App Store ID trong repo.APPS", 404)
+        raise AscError(f"{app} chưa liên kết App Store Connect (thiếu app_store_id trong docs/apps/registry.json)", 404)
     return asc_id
 
 
@@ -382,6 +395,57 @@ def thumb(asset: dict | None, width: int = 300) -> str | None:
 
 
 # --- compare -------------------------------------------------------------------------------
+#
+# A field's state, from the local text, the text on ASC and the last mark both sides agreed on:
+#   same      equal after normalizing (also when you pasted it into ASC by hand)
+#   new       ASC has nothing yet
+#   ahead     ASC still holds what we last agreed on; only local changed → safe to push
+#   conflict  ASC changed after the last mark (edited in App Store Connect) → push only on explicit override
+#   differs   they differ and there is no mark: unknown which side is newer → override only
+#   accepted  you chose to keep the ASC text; stays put until local changes again (then: ahead)
+#   empty     nothing local to send
+
+AUTO = {"new", "ahead"}
+OVERRIDE = {"conflict", "differs", "accepted"}
+STATE_VI = {"same": "đã khớp", "new": "ASC còn trống", "ahead": "local mới hơn", "conflict": "ASC đã sửa tay sau lần đồng bộ",
+            "differs": "khác ASC, chưa có mốc", "accepted": "đang giữ bản ASC", "empty": "local trống"}
+
+
+def normalize(key: str, text: str | None) -> str:
+    """What App Store Connect treats as the same text: NFC, \n newlines, no trailing spaces; keywords as a list."""
+    t = unicodedata.normalize("NFC", text or "").replace("\r\n", "\n").replace("\r", "\n")
+    t = "\n".join(line.rstrip() for line in t.split("\n")).strip()
+    if key == "keywords":
+        t = ",".join(k.strip() for k in t.split(",") if k.strip())
+    return t
+
+
+def digest(value: str) -> str:
+    return hashlib.sha256(value.encode()).hexdigest()[:20]
+
+
+def state(local: str, remote: str, mark: dict | None) -> str:
+    if not local:
+        return "empty"
+    if not remote:
+        return "new"
+    lh, rh = digest(local), digest(remote)
+    if lh == rh:
+        return "same"
+    if not mark:
+        return "differs"
+    if mark["remote_hash"] != rh:
+        return "conflict"
+    return "accepted" if mark["local_hash"] == lh else "ahead"
+
+
+def shots_key(shots: list[dict]) -> str:
+    return ",".join(s.get("checksum") or "" for s in shots)
+
+
+def remote_shots(remote: dict, code: str, dtype: str | None) -> list[dict]:
+    return ((remote.get("screenshots", {}).get(code) or {}).get(dtype) or {}).get("items") or []
+
 
 def field_editable(remote: dict, key: str) -> tuple[bool, str]:
     resource = FIELDS[key][0]
@@ -397,8 +461,11 @@ def field_editable(remote: dict, key: str) -> tuple[bool, str]:
     return False, f"version {v['version']} đang {v['state']}, chưa có version mới để sửa"
 
 
-def compare(local: dict, remote: dict | None) -> dict:
-    rows = []
+def compare(local: dict, remote: dict | None, marks: dict | None = None) -> dict:
+    """Rows for the page, plus `matched`: fields equal on both sides whose mark should be (re)recorded, so a
+    later local edit shows as `ahead` instead of `differs`."""
+    marks = marks or {}
+    rows, matched = [], []
     for code, l in local["locales"].items():
         r = (remote or {}).get("locales", {}).get(code)
         fields = {}
@@ -406,43 +473,42 @@ def compare(local: dict, remote: dict | None) -> dict:
             value = l["fields"][key]
             entry = {"local": value, "len": len(value), "limit": limit, "over": len(value) > limit}
             if remote is not None:
-                current = (r or {}).get(key)
-                entry["remote"] = current
-                entry["status"] = ("empty" if not value else "same" if (current or "").strip() == value
-                                   else "new" if not current else "changed")
+                current = (r or {}).get(key) or ""
+                mark = marks.get((code, key))
+                st = state(normalize(key, value), normalize(key, current), mark)
+                entry.update(remote=current, status=st, mark=mark and {"how": mark["how"], "at": mark["at"]})
                 entry["editable"], entry["why"] = field_editable(remote, key)
+                if st == "same" and (not mark or mark["local_hash"] != digest(normalize(key, value))):
+                    matched.append((code, key, digest(normalize(key, value))))
             fields[key] = entry
         row = {"locale": code, "tier": l["tier"], "fields": fields, "problems": l["problems"],
                "whats_new_version": l["whats_new_version"], "shots": len(l["screenshots"]),
                "display_type": next((s["display_type"] for s in l["screenshots"] if s["display_type"]), None)}
         if remote is not None:
             row["remote_exists"] = bool(r)
-            row["changed"] = sum(1 for f in fields.values() if f["status"] in ("changed", "new"))
-            row["shots_status"] = shots_status(local, remote, code)
+            remote_items = remote_shots(remote, code, row["display_type"])
+            lk, rk = shots_key(l["screenshots"]), shots_key(remote_items)
+            mark = marks.get((code, "screenshots"))
+            row["shots_status"] = "none" if not l["screenshots"] else state(lk, rk, mark)
+            row["shots_remote"] = len(remote_items)
+            if row["shots_status"] == "same" and (not mark or mark["local_hash"] != digest(lk)):
+                matched.append((code, "screenshots", digest(lk)))
         rows.append(row)
     extra = sorted(set((remote or {}).get("locales", {})) - set(local["locales"]))
-    return {"rows": rows, "remote_only": extra}
-
-
-def shots_status(local: dict, remote: dict, code: str) -> str:
-    shots = local["locales"][code]["screenshots"]
-    if not shots:
-        return "none"
-    dtype = shots[0]["display_type"]
-    current = remote.get("screenshots", {}).get(code, {}).get(dtype)
-    if not current or not current["items"]:
-        return "missing"
-    if [i["file"] for i in current["items"]] != [s["file"] for s in shots]:
-        return "changed"
-    return "same_names"
+    return {"rows": rows, "remote_only": extra, "matched": matched}
 
 
 # --- metadata push -------------------------------------------------------------------------
 
-def plan_metadata(local: dict, remote: dict, items: list[dict]) -> list[dict]:
-    """items: [{locale, fields: [key…]}] → ordered operations. Raises on anything that would be rejected."""
+def plan_metadata(local: dict, remote: dict, items: list[dict], marks: dict | None = None) -> list[dict]:
+    """items: [{locale, fields: [key…], override: [key…]}] → ordered operations.
+
+    Equal fields are skipped, so pushing twice never sends anything twice. `ahead`/`new` fields go through;
+    a field ASC changed by hand (`conflict`, `differs`, `accepted`) only when it is listed in `override`.
+    Raises on anything App Store Connect would reject."""
     if not items:
         raise AscError("Chưa chọn locale hay field nào.", 400)
+    marks = marks or {}
     primary = remote["locales"].get(remote["app"]["primary_locale"]) or {}
     ops = []
     for item in items:
@@ -450,13 +516,20 @@ def plan_metadata(local: dict, remote: dict, items: list[dict]) -> list[dict]:
         if code not in local["locales"]:
             raise AscError(f"{code}: không có trong dữ liệu local", 400)
         wanted = [k for k in item.get("fields") or [] if k in FIELDS]
+        override = set(item.get("override") or [])
         l, r = local["locales"][code]["fields"], remote["locales"].get(code, {})
         for resource in ("info", "version"):
             attrs, keys = {}, []
             for key in wanted:
                 res, attr, limit, label = FIELDS[key]
-                if res != resource or not l[key] or (r.get(key) or "").strip() == l[key]:
+                if res != resource:
                     continue
+                st = state(normalize(key, l[key]), normalize(key, r.get(key)), marks.get((code, key)))
+                # Equal, nothing local, or "keep the ASC text": skip quietly unless explicitly overridden.
+                if st in ("same", "empty") or (st == "accepted" and key not in override):
+                    continue
+                if st in OVERRIDE and key not in override:
+                    raise AscError(f"{code} · {label}: {STATE_VI[st]}. Tick ghi đè nếu muốn thay bản trên ASC.", 409)
                 if len(l[key]) > limit:
                     raise AscError(f"{code} · {label} dài {len(l[key])}/{limit} ký tự", 422)
                 ok, why = field_editable(remote, key)
@@ -468,9 +541,10 @@ def plan_metadata(local: dict, remote: dict, items: list[dict]) -> list[dict]:
                 continue
             loc_id = r.get(f"{resource}_loc_id")
             target = remote[resource]["id"]
+            values = {k: l[k] for k in keys}
             if loc_id:
                 ops.append({"op": "update", "resource": resource, "locale": code, "id": loc_id,
-                            "fields": keys, "attributes": attrs})
+                            "fields": keys, "attributes": attrs, "values": values})
                 continue
             if resource == "info" and primary.get("privacy_url"):
                 attrs["privacyPolicyUrl"] = primary["privacy_url"]
@@ -479,7 +553,7 @@ def plan_metadata(local: dict, remote: dict, items: list[dict]) -> list[dict]:
                     if primary.get(src):
                         attrs[dst] = primary[src]
             ops.append({"op": "create", "resource": resource, "locale": code, "parent": target,
-                        "fields": keys, "attributes": {"locale": code, **attrs}})
+                        "fields": keys, "attributes": {"locale": code, **attrs}, "values": values})
     # A new language must exist in App Information before its version localization.
     ops.sort(key=lambda o: (o["locale"], o["resource"] != "info"))
     return ops
@@ -489,7 +563,9 @@ RESOURCE = {"info": ("appInfoLocalizations", "appInfo", "appInfos"),
             "version": ("appStoreVersionLocalizations", "appStoreVersion", "appStoreVersions")}
 
 
-def apply_metadata(client: Client, ops: list[dict]) -> list[dict]:
+def apply_metadata(client: Client, ops: list[dict], on_done=None) -> list[dict]:
+    """Runs ops in order. `on_done(op)` is called after each success, so marks are saved even if a later op
+    fails — the next plan then skips what already went through instead of sending it again."""
     done = []
     for op in ops:
         kind, rel, parent_type = RESOURCE[op["resource"]]
@@ -502,16 +578,21 @@ def apply_metadata(client: Client, ops: list[dict]) -> list[dict]:
                     "type": kind, "attributes": op["attributes"],
                     "relationships": {rel: {"data": {"type": parent_type, "id": op["parent"]}}}}})
         except AscError as exc:
-            done.append({**op, "ok": False, "error": str(exc)})
-            raise AscError(f"Dừng ở {op['locale']} ({op['resource']}): {exc}. Đã xong {len(done) - 1} bước trước đó.",
+            raise AscError(f"Dừng ở {op['locale']} ({op['resource']}): {exc}. {len(done)} lệnh trước đó đã xong.",
                            exc.status) from None
         done.append({**op, "ok": True})
+        if on_done:
+            on_done(op)
     return done
+
+
+def pushed_marks(op: dict) -> list[tuple[str, str, str]]:
+    return [(op["locale"], key, digest(normalize(key, value))) for key, value in op["values"].items()]
 
 
 # --- screenshots push ----------------------------------------------------------------------
 
-def plan_screenshots(app: str, remote: dict, code: str) -> dict:
+def plan_screenshots(app: str, remote: dict, code: str, marks: dict | None = None, override: bool = False) -> dict:
     shots = local_screenshots(app, code, checksum=True)
     if not shots:
         raise AscError(f"{code}: không có ảnh local", 404)
@@ -529,11 +610,14 @@ def plan_screenshots(app: str, remote: dict, code: str) -> dict:
         raise AscError(f"{code}: version chưa có ngôn ngữ này. Đẩy metadata của locale trước.", 409)
     dtype = types.pop()
     current = remote.get("screenshots", {}).get(code, {}).get(dtype) or {"set_id": None, "items": []}
-    same = [i["checksum"] for i in current["items"]] == [s["checksum"] for s in shots]
-    return {"locale": code, "display_type": dtype, "label": DISPLAY_LABELS.get(dtype, dtype),
+    st = state(shots_key(shots), shots_key(current["items"]), (marks or {}).get((code, "screenshots")))
+    if st in OVERRIDE and not override:
+        raise AscError(f"{code}: ảnh trên ASC {STATE_VI[st]}. Xác nhận ghi đè nếu muốn thay.", 409)
+    same = st == "same"
+    return {"locale": code, "display_type": dtype, "label": DISPLAY_LABELS.get(dtype, dtype), "status": st,
             "version_loc_id": loc["version_loc_id"], "set_id": current["set_id"],
             "delete": [] if same else [i["id"] for i in current["items"]],
-            "upload": [] if same else shots, "unchanged": same,
+            "upload": [] if same else shots, "unchanged": same, "key": digest(shots_key(shots)),
             "remote_files": [i["file"] for i in current["items"]]}
 
 
@@ -610,3 +694,88 @@ def subscription_price(client: Client, sub_id: str, territory: str) -> dict | No
     ref = ((current[-1].get("relationships") or {}).get("subscriptionPricePoint") or {}).get("data") or {}
     pp = points.get(ref.get("id"), {})
     return {"price": pp.get("customerPrice"), "proceeds": pp.get("proceeds")} if pp else None
+
+
+# --- apps on App Store Connect ↔ registry ----------------------------------------------------
+
+def find_repo_for_bundle(bundle_id: str) -> str | None:
+    """A checkout under ~/personal/Apps (or the workspace root) whose project declares this bundle id."""
+    needle = bundle_id.encode()
+    for group in ("Apps", ""):
+        base = repo.WORKSPACE / group
+        if not base.is_dir():
+            continue
+        for d in sorted(p for p in base.iterdir() if p.is_dir() and not p.name.startswith(".")):
+            files = [*d.glob("*.xcodeproj/project.pbxproj"), *d.glob("*/*.xcodeproj/project.pbxproj"),
+                     *d.glob("project.yml"), *d.glob("*/project.yml")]
+            if any(needle in f.read_bytes() for f in files):
+                return str(d.relative_to(repo.WORKSPACE))
+    return None
+
+
+def discover(client: Client) -> list[dict]:
+    """Every app of the team on App Store Connect, matched to the registry by App Store ID or bundle id."""
+    apps, _ = client.get_all("/v1/apps", {"limit": 200, "fields[apps]": "name,bundleId,primaryLocale,sku"})
+    by_store = {a.get("app_store_id"): k for k, a in repo.APPS.items() if a.get("app_store_id")}
+    by_bundle = {a.get("bundle_id"): k for k, a in repo.APPS.items() if a.get("bundle_id")}
+    out = []
+    for a in apps:
+        attrs = a["attributes"]
+        linked = by_store.get(a["id"])
+        match = linked or by_bundle.get(attrs.get("bundleId"))
+        out.append({"app_store_id": a["id"], "name": attrs.get("name"), "bundle_id": attrs.get("bundleId"),
+                    "registry_id": match, "linked": bool(linked),
+                    "repo": repo.APPS[match].get("repo") if match else find_repo_for_bundle(attrs.get("bundleId") or "")})
+    return sorted(out, key=lambda x: (x["linked"], x["name"] or ""))
+
+
+def slug(name: str) -> str:
+    base = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode().lower()
+    return "-".join(w for w in "".join(c if c.isalnum() else " " for c in base).split()) or "app"
+
+
+def link_app(client: Client, app_store_id: str) -> str:
+    """Adds an ASC app to the registry, or fills in the App Store ID of the matching registry entry."""
+    found = next((a for a in discover(client) if a["app_store_id"] == app_store_id), None)
+    if not found:
+        raise AscError(f"Không thấy app {app_store_id} trong tài khoản App Store Connect này", 404)
+    app_id = found["registry_id"] or slug(found["name"])
+    while not found["registry_id"] and app_id in repo.APPS:
+        app_id += "-app"
+    entry = {"app_store_id": app_store_id, "bundle_id": found["bundle_id"]}
+    if not found["registry_id"]:
+        entry.update(name=found["name"], repo=found["repo"], store=None)
+    repo.save_app(app_id, entry)
+    return app_id
+
+
+# --- import ASC → app repo -------------------------------------------------------------------
+
+IMPORT_STORE = {"locales": "AppStore/locales", "screenshots": "AppStore/screenshots"}
+
+
+def import_listing(app: str, remote: dict) -> dict:
+    """Writes `locales/<locale>/locale.json` in the app repo for every ASC locale that has no local file yet.
+
+    Never overwrites. For an app whose listing you localized by hand in App Store Connect, this makes the repo
+    the source of truth without retyping, and every imported field starts as `same` (nothing to push)."""
+    base = repo.app_repo(app)
+    if not base:
+        raise AscError(f"Không tìm thấy repo của {app} trong {repo.WORKSPACE} (registry: {repo.APPS[app].get('repo')})", 404)
+    if not repo.APPS[app].get("store"):
+        repo.save_app(app, {"store": dict(IMPORT_STORE)})
+    src = store_paths(app)
+    created, skipped = [], []
+    today = dt.date.today().isoformat()
+    for code, r in sorted(remote["locales"].items()):
+        target = src["locales"] / code / "locale.json"
+        if target.exists():
+            skipped.append(code)
+            continue
+        target.parent.mkdir(parents=True, exist_ok=True)
+        meta = {k: r.get(k) or "" for k in FIELDS}
+        target.write_text(json.dumps({"locale": code, "tier": None, "imported_from_asc": today,
+                                      "whats_new_version": (remote.get("version") or {}).get("version"),
+                                      "metadata": meta}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        created.append(code)
+    return {"created": created, "skipped": skipped, "folder": str(src["locales"].relative_to(repo.WORKSPACE))}

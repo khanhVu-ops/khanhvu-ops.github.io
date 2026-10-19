@@ -46,6 +46,19 @@ CREATE TABLE IF NOT EXISTS snapshots (
     {", ".join(f"{k} REAL" for k in METRICS)}
 );
 CREATE INDEX IF NOT EXISTS snapshots_url ON snapshots(url, captured_at);
+-- App Store listing: the last state both sides agreed on, per field. `local_hash` and `remote_hash` are
+-- hashes of the normalized text (or screenshot checksums). Lets the page tell "local changed since the last
+-- push" apart from "someone edited App Store Connect by hand", so nothing is pushed twice or overwritten blind.
+CREATE TABLE IF NOT EXISTS asc_sync (
+    app TEXT NOT NULL,
+    locale TEXT NOT NULL,
+    field TEXT NOT NULL,
+    local_hash TEXT NOT NULL,
+    remote_hash TEXT NOT NULL,
+    how TEXT NOT NULL,          -- pushed | accepted | matched
+    at TEXT NOT NULL,
+    PRIMARY KEY (app, locale, field)
+);
 """
 
 
@@ -152,3 +165,14 @@ def result_text(conn: sqlite3.Connection, url: str) -> str:
     if not parts:
         raise StoreError("chưa có số 24h hoặc 7d cho bài này")
     return " / ".join(parts) + " · " + "; ".join(dict.fromkeys(sources))
+
+
+def sync_marks(conn: sqlite3.Connection, app: str) -> dict[tuple[str, str], dict]:
+    rows = conn.execute("SELECT locale, field, local_hash, remote_hash, how, at FROM asc_sync WHERE app = ?", (app,))
+    return {(r[0], r[1]): {"local_hash": r[2], "remote_hash": r[3], "how": r[4], "at": r[5]} for r in rows}
+
+
+def set_sync_mark(conn: sqlite3.Connection, app: str, locale: str, field: str, local_hash: str, remote_hash: str,
+                  how: str) -> None:
+    conn.execute("INSERT OR REPLACE INTO asc_sync VALUES (?, ?, ?, ?, ?, ?, ?)",
+                 (app, locale, field, local_hash, remote_hash, how, dt.datetime.now(ICT).isoformat(timespec="seconds")))

@@ -1,0 +1,37 @@
+{
+  "_comment": "Danh sách app của studio. Dashboard đọc file này; trang App Store ghi thêm app khi bạn bấm Thêm. repo: đường dẫn trong ~/personal. store: nơi repo app giữ listing (locales/<locale>/locale.json, screenshots/<locale>/).",
+  "apps": [
+    {
+      "id": "veilnest",
+      "name": "Veilnest",
+      "bundle_id": "com.khanhvu.veilnest",
+      "app_store_id": "6813747332",
+      "repo": "Apps/IOS-Vault",
+      "store": {"locales": "Docs/ASO/locales", "screenshots": "Docs/ASO/screenshots"}
+    },
+    {
+      "id": "color-meter",
+      "name": "Color Meter",
+      "bundle_id": "com.khanhvu.ColorMeter",
+      "app_store_id": null,
+      "repo": "Apps/Color-Meter",
+      "store": null
+    },
+    {
+      "id": "paper-drift",
+      "name": "Paper Drift",
+      "bundle_id": "com.khanhvu.paperdrift",
+      "app_store_id": null,
+      "repo": "Apps/Offline Mini Arcade",
+      "store": null
+    },
+    {
+      "id": "veritas",
+      "name": "Veritas",
+      "bundle_id": "com.khanhvu.veritas",
+      "app_store_id": null,
+      "repo": "Apps/Veritas-LieDetector",
+      "store": null
+    }
+  ]
+}

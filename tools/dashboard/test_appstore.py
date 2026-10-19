@@ -15,6 +15,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import unicodedata
 import unittest
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -25,6 +26,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import appstore  # noqa: E402
 import repo  # noqa: E402
 import server  # noqa: E402
+import store  # noqa: E402
 
 
 def jpeg(w: int, h: int, payload: bytes = b"") -> bytes:
@@ -99,6 +101,11 @@ class FakeASC:
     def handle(self, method, path, query, body):
         self.calls.append((method, path, body))
         m = re.fullmatch
+        if method == "GET" and path == "/v1/apps":
+            return {"data": [self.res("apps", "6813747332", self.app),
+                             self.res("apps", "6700000001", {"name": "Color Meter: Pick Colors",
+                                                             "bundleId": "com.khanhvu.ColorMeter"}),
+                             self.res("apps", "6700000002", {"name": "Brand New", "bundleId": "com.khanhvu.brandnew"})]}
         if method == "GET" and path == "/v1/apps/6813747332":
             return {"data": self.res("apps", "6813747332", self.app)}
         if method == "GET" and path == "/v1/apps/6813747332/appStoreVersions":
@@ -231,36 +238,42 @@ def serve(fake: FakeASC):
     return httpd
 
 
+def make_key(folder: Path) -> tuple[Path, Path]:
+    """A throwaway P-256 key as App Store Connect hands it out (.p8), plus its public key for verifying."""
+    key = folder / "ec.pem"
+    subprocess.run(["openssl", "ecparam", "-name", "prime256v1", "-genkey", "-noout", "-out", key], check=True)
+    subprocess.run(["openssl", "pkcs8", "-topk8", "-nocrypt", "-in", key, "-out", folder / "AuthKey_TEST.p8"], check=True)
+    subprocess.run(["openssl", "ec", "-in", key, "-pubout", "-out", folder / "pub.pem"], check=True, capture_output=True)
+    return folder / "AuthKey_TEST.p8", folder / "pub.pem"
+
+
 class AppStoreTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.tmp = Path(tempfile.mkdtemp())
-        key = cls.tmp / "ec.pem"
-        subprocess.run(["openssl", "ecparam", "-name", "prime256v1", "-genkey", "-noout", "-out", key], check=True)
-        cls.p8 = cls.tmp / "AuthKey_TEST.p8"
-        subprocess.run(["openssl", "pkcs8", "-topk8", "-nocrypt", "-in", key, "-out", cls.p8], check=True)
-        cls.pub = cls.tmp / "pub.pem"
-        subprocess.run(["openssl", "ec", "-in", key, "-pubout", "-out", cls.pub], check=True, capture_output=True)
+        cls.p8, cls.pub = make_key(cls.tmp)
 
     @classmethod
     def tearDownClass(cls):
         shutil.rmtree(cls.tmp, ignore_errors=True)
 
     def setUp(self):
-        self.app_repo = Path(tempfile.mkdtemp())
-        make_app_repo(self.app_repo)
-        apps = {"veilnest": {"name": "Veilnest", "app_store_id": "6813747332", "store": {
-            "repo": str(self.app_repo), "locales": "Docs/ASO/locales", "screenshots": "Docs/ASO/screenshots"}}}
-        patcher = mock.patch.dict(repo.APPS, apps, clear=True)
-        patcher.start()
-        self.addCleanup(patcher.stop)
-        self.addCleanup(shutil.rmtree, self.app_repo, True)
+        use_workspace(self)
         self.fake = FakeASC()
         self.httpd = serve(self.fake)
         self.addCleanup(self.httpd.server_close)
         self.addCleanup(self.httpd.shutdown)
         self.client = appstore.Client(self.fake.base, {"key_id": "TEST", "issuer_id": "iss", "key_path": self.p8,
                                                        "ready": True})
+
+    def marks(self):
+        with store.session() as conn:
+            return store.sync_marks(conn, "veilnest")
+
+    def mark(self, rows, how="matched", remote=None):
+        with store.session() as conn:
+            for locale, field, lh in rows:
+                store.set_sync_mark(conn, "veilnest", locale, field, lh, (remote or {}).get((locale, field), lh), how)
 
     def test_token_verifies_with_openssl(self):
         for _ in range(10):  # r or s with a high bit / leading zero must still come out 32+32 bytes
@@ -302,20 +315,33 @@ class AppStoreTests(unittest.TestCase):
                                                          appstore.remote_listing(self.client, "veilnest"))["rows"]}
         en = rows["en-US"]["fields"]
         self.assertEqual(en["name"]["status"], "same")
-        self.assertEqual(en["subtitle"]["status"], "changed")
+        self.assertEqual(en["subtitle"]["status"], "differs")  # no mark: maybe edited by hand on ASC
         self.assertEqual(en["whats_new"]["status"], "new")
         self.assertFalse(rows["ja"]["remote_exists"])
         self.assertTrue(rows["ja"]["fields"]["subtitle"]["over"])
         self.assertEqual(rows["ja"]["fields"]["promotional_text"]["status"], "empty")
-        self.assertEqual(rows["en-US"]["shots_status"], "changed")
+        self.assertEqual(rows["en-US"]["shots_status"], "differs")
+        self.assertEqual(rows["de-DE"]["shots_status"], "new")
 
-    def test_metadata_plan_and_apply(self):
+    def test_hand_pasted_text_counts_as_same(self):
+        """CRLF, trailing spaces, NFD accents and spaces in keywords are what ASC does to pasted text."""
+        self.fake.version_locs["vl-de"].update(keywords=" geheim ", description="Desc DE  \r\n",
+                                               promotionalText=unicodedata.normalize("NFD", "Promo DE"))
+        rows = {r["locale"]: r for r in appstore.compare(appstore.local_listing("veilnest"),
+                                                         appstore.remote_listing(self.client, "veilnest"))["rows"]}
+        de = rows["de-DE"]["fields"]
+        self.assertEqual({k: de[k]["status"] for k in ("keywords", "description", "promotional_text")},
+                         {"keywords": "same", "description": "same", "promotional_text": "same"})
+
+    def test_metadata_needs_override_for_text_changed_on_asc(self):
         local = appstore.local_listing("veilnest")
         remote = appstore.remote_listing(self.client, "veilnest")
         with self.assertRaisesRegex(appstore.AscError, "Subtitle dài 31/30"):
             appstore.plan_metadata(local, remote, [{"locale": "ja", "fields": ["subtitle"]}])
+        with self.assertRaisesRegex(appstore.AscError, "en-US · Subtitle: khác ASC, chưa có mốc"):
+            appstore.plan_metadata(local, remote, [{"locale": "en-US", "fields": list(appstore.FIELDS)}])
         ops = appstore.plan_metadata(local, remote, [
-            {"locale": "en-US", "fields": list(appstore.FIELDS)},
+            {"locale": "en-US", "fields": list(appstore.FIELDS), "override": ["subtitle", "promotional_text"]},
             {"locale": "ja", "fields": ["name", "keywords", "description"]}])
         summary = [(o["locale"], o["resource"], o["op"], tuple(o["fields"])) for o in ops]
         self.assertEqual(summary, [
@@ -327,13 +353,52 @@ class AppStoreTests(unittest.TestCase):
         # New language copies the primary locale's URLs so ASC accepts it.
         self.assertEqual(ops[2]["attributes"]["privacyPolicyUrl"], "https://example.com/privacy")
         self.assertEqual(ops[3]["attributes"]["supportUrl"], "https://example.com/support")
-        done = appstore.apply_metadata(self.client, ops)
-        self.assertTrue(all(d["ok"] for d in done))
+        done = appstore.apply_metadata(self.client, ops, on_done=lambda op: self.mark(appstore.pushed_marks(op), "pushed"))
+        self.assertEqual(len(done), 4)
         self.assertEqual(self.fake.info_locs["il-en"]["subtitle"], "Hide Pictures & Videos")
-        self.assertEqual(self.fake.version_locs["vl-en"]["whatsNew"], "Fixes")
+        self.assertEqual(self.marks()[("en-US", "whats_new")]["how"], "pushed")
+        # Pushing the same selection again sends nothing.
         again = appstore.remote_listing(self.client, "veilnest")
-        self.assertEqual(again["locales"]["ja"]["keywords"], "電卓")
-        self.assertEqual(appstore.plan_metadata(local, again, [{"locale": "en-US", "fields": list(appstore.FIELDS)}]), [])
+        self.assertEqual(appstore.plan_metadata(local, again, [
+            {"locale": "en-US", "fields": list(appstore.FIELDS), "override": list(appstore.FIELDS)},
+            {"locale": "ja", "fields": ["name", "keywords", "description"]}]), [])
+
+    def test_marks_tell_local_edits_from_asc_edits(self):
+        local = appstore.local_listing("veilnest")
+        remote = appstore.remote_listing(self.client, "veilnest")
+        compared = appstore.compare(local, remote, self.marks())
+        self.mark(compared["matched"])  # what the server does after every read
+        self.assertIn(("de-DE", "keywords", appstore.digest("geheim")), compared["matched"])
+
+        # 1. Local edit after a match → ahead, pushed without override.
+        meta = self.app_repo / "Docs/ASO/locales/de-DE/locale.json"
+        data = json.loads(meta.read_text())
+        data["metadata"]["keywords"] = "geheim,tresor"
+        meta.write_text(json.dumps(data))
+        local = appstore.local_listing("veilnest")
+        row = next(r for r in appstore.compare(local, remote, self.marks())["rows"] if r["locale"] == "de-DE")
+        self.assertEqual(row["fields"]["keywords"]["status"], "ahead")
+        ops = appstore.plan_metadata(local, remote, [{"locale": "de-DE", "fields": ["keywords"]}], self.marks())
+        self.assertEqual(ops[0]["attributes"], {"keywords": "geheim,tresor"})
+
+        # 2. Someone edits ASC by hand after the match → conflict, refused without override.
+        self.fake.version_locs["vl-de"]["description"] = "Edited in App Store Connect"
+        remote = appstore.remote_listing(self.client, "veilnest")
+        row = next(r for r in appstore.compare(local, remote, self.marks())["rows"] if r["locale"] == "de-DE")
+        self.assertEqual(row["fields"]["description"]["status"], "conflict")
+        with self.assertRaisesRegex(appstore.AscError, "ASC đã sửa tay"):
+            appstore.plan_metadata(local, remote, [{"locale": "de-DE", "fields": ["description"]}], self.marks())
+
+        # 3. Keep the ASC text → accepted, nothing to push; a later local edit makes it ahead again.
+        self.mark([("de-DE", "description", appstore.digest("Desc DE"))], "accepted",
+                  {("de-DE", "description"): appstore.digest("Edited in App Store Connect")})
+        row = next(r for r in appstore.compare(local, remote, self.marks())["rows"] if r["locale"] == "de-DE")
+        self.assertEqual(row["fields"]["description"]["status"], "accepted")
+        data["metadata"]["description"] = "Desc DE v2"
+        meta.write_text(json.dumps(data))
+        row = next(r for r in appstore.compare(appstore.local_listing("veilnest"), remote, self.marks())["rows"]
+                   if r["locale"] == "de-DE")
+        self.assertEqual(row["fields"]["description"]["status"], "ahead")
 
     def test_only_promo_is_editable_on_a_live_version(self):
         del self.fake.versions["v-next"]
@@ -345,16 +410,20 @@ class AppStoreTests(unittest.TestCase):
         local = appstore.local_listing("veilnest")
         remote = appstore.remote_listing(self.client, "veilnest")
         self.assertFalse(remote["version"]["editable"])
-        ops = appstore.plan_metadata(local, remote, [{"locale": "en-US", "fields": ["promotional_text"]}])
+        ops = appstore.plan_metadata(local, remote, [{"locale": "en-US", "fields": ["promotional_text"],
+                                                      "override": ["promotional_text"]}])
         self.assertEqual([o["fields"] for o in ops], [["promotional_text"]])
         with self.assertRaisesRegex(appstore.AscError, "chưa có version mới"):
             appstore.plan_metadata(local, remote, [{"locale": "en-US", "fields": ["whats_new"]}])
         with self.assertRaisesRegex(appstore.AscError, "version mới đang chuẩn bị"):
-            appstore.plan_metadata(local, remote, [{"locale": "en-US", "fields": ["subtitle"]}])
+            appstore.plan_metadata(local, remote, [{"locale": "en-US", "fields": ["subtitle"],
+                                                    "override": ["subtitle"]}])
 
     def test_screenshots_replace_existing_set_in_order(self):
         remote = appstore.remote_listing(self.client, "veilnest")
-        plan = appstore.plan_screenshots("veilnest", remote, "en-US")
+        with self.assertRaisesRegex(appstore.AscError, "khác ASC, chưa có mốc"):
+            appstore.plan_screenshots("veilnest", remote, "en-US")
+        plan = appstore.plan_screenshots("veilnest", remote, "en-US", override=True)
         self.assertEqual(plan["delete"], ["s1", "s2"])
         self.assertEqual([s["file"] for s in plan["upload"]], ["01-shot.jpg", "02-shot.jpg"])
         result = appstore.apply_screenshots(self.client, "veilnest", plan)
@@ -368,19 +437,59 @@ class AppStoreTests(unittest.TestCase):
             parts = self.fake.uploads[f"/upload/{i}/0"][0] + self.fake.uploads[f"/upload/{i}/1"][0]
             self.assertEqual(parts, data)
             self.assertIsNone(self.fake.uploads[f"/upload/{i}/0"][1], "upload URLs must not get the ASC token")
-        # Same files again → nothing to do.
+        # Same files again (also when uploaded by hand: ASC keeps the MD5) → nothing to do, no override needed.
         again = appstore.plan_screenshots("veilnest", appstore.remote_listing(self.client, "veilnest"), "en-US")
         self.assertTrue(again["unchanged"])
+        self.assertEqual(again["status"], "same")
 
     def test_screenshots_create_set_and_refuse_unknown_language(self):
         remote = appstore.remote_listing(self.client, "veilnest")
         plan = appstore.plan_screenshots("veilnest", remote, "de-DE")
+        self.assertEqual(plan["status"], "new")
         self.assertIsNone(plan["set_id"])
         appstore.apply_screenshots(self.client, "veilnest", plan)
         new_set = next(v for v in self.fake.sets.values() if v["_parent"] == "vl-de")
         self.assertEqual(len(new_set["items"]), 2)
         with self.assertRaisesRegex(appstore.AscError, "chưa có ngôn ngữ này"):
             appstore.plan_screenshots("veilnest", remote, "ja")
+
+    def test_discover_and_link_apps(self):
+        found = {a["app_store_id"]: a for a in appstore.discover(self.client)}
+        self.assertTrue(found["6813747332"]["linked"])
+        color = found["6700000001"]
+        self.assertEqual((color["registry_id"], color["linked"]), ("color-meter", False))
+        self.assertEqual(found["6700000002"]["repo"], "Apps/BrandNew")  # found by bundle id in the project
+        self.assertEqual(appstore.link_app(self.client, "6700000001"), "color-meter")
+        self.assertEqual(repo.APPS["color-meter"]["app_store_id"], "6700000001")
+        self.assertEqual(repo.APPS["color-meter"]["name"], "Color Meter", "linking keeps the registry name")
+        self.assertEqual(appstore.link_app(self.client, "6700000002"), "brand-new")
+        self.assertEqual(repo.load_registry()["brand-new"]["repo"], "Apps/BrandNew")
+
+    def test_import_listing_never_overwrites(self):
+        appstore.link_app(self.client, "6700000001")
+        self.fake_app_as("6700000001")
+        local = appstore.local_listing("color-meter")
+        self.assertEqual(local["locales"], {})
+        remote = appstore.remote_listing(self.client, "color-meter")
+        result = appstore.import_listing("color-meter", remote)
+        self.assertEqual(result["created"], ["de-DE", "en-US"])
+        self.assertEqual(repo.APPS["color-meter"]["store"], appstore.IMPORT_STORE)
+        rows = appstore.compare(appstore.local_listing("color-meter"), remote)["rows"]
+        statuses = {f["status"] for r in rows for f in r["fields"].values()}
+        self.assertLessEqual(statuses, {"same", "empty"}, "imported text must not show up as something to push")
+        target = self.workspace / "Apps/Color-Meter/AppStore/locales/en-US/locale.json"
+        target.write_text(json.dumps({"metadata": {"name": "Mine"}}))
+        again = appstore.import_listing("color-meter", remote)
+        self.assertEqual((again["created"], again["skipped"]), ([], ["de-DE", "en-US"]))
+        self.assertEqual(json.loads(target.read_text())["metadata"]["name"], "Mine")
+
+    def fake_app_as(self, store_id):
+        """Serve the same fake listing under another App Store ID."""
+        handle = self.fake.handle
+
+        def patched(method, path, query, body):
+            return handle(method, path.replace(f"/v1/apps/{store_id}", "/v1/apps/6813747332"), query, body)
+        self.fake.handle = patched
 
     def test_products(self):
         p = appstore.products(self.client, "veilnest")
@@ -397,21 +506,48 @@ class AppStoreTests(unittest.TestCase):
             appstore.Client(self.fake.base, {"ready": False})
 
 
-class AppStoreServerTests(unittest.TestCase):
-    def setUp(self):
-        self.app_repo = Path(tempfile.mkdtemp())
-        make_app_repo(self.app_repo)
-        patcher = mock.patch.dict(repo.APPS, {"veilnest": {"name": "Veilnest", "app_store_id": "6813747332", "store": {
-            "repo": str(self.app_repo), "locales": "Docs/ASO/locales", "screenshots": "Docs/ASO/screenshots"}}},
-            clear=True)
+def use_workspace(test):
+    """Temp ~/personal: Apps/IOS-Vault with a listing, Apps/Color-Meter and Apps/BrandNew without, own registry
+    and own SQLite. Nothing touches the real registry, repos or .dashboard/."""
+    ws = Path(tempfile.mkdtemp())
+    test.addCleanup(shutil.rmtree, ws, True)
+    test.workspace = ws
+    test.app_repo = ws / "Apps/IOS-Vault"
+    make_app_repo(test.app_repo)
+    (ws / "Apps/Color-Meter").mkdir(parents=True)
+    (ws / "Apps/BrandNew").mkdir(parents=True)
+    (ws / "Apps/BrandNew/project.yml").write_text("targets:\n  App:\n    PRODUCT_BUNDLE_IDENTIFIER: com.khanhvu.brandnew\n")
+    registry = ws / "registry.json"
+    registry.write_text(json.dumps({"apps": [
+        {"id": "veilnest", "name": "Veilnest", "bundle_id": "com.khanhvu.veilnest", "app_store_id": "6813747332",
+         "repo": "Apps/IOS-Vault", "store": {"locales": "Docs/ASO/locales", "screenshots": "Docs/ASO/screenshots"}},
+        {"id": "color-meter", "name": "Color Meter", "bundle_id": "com.khanhvu.ColorMeter", "app_store_id": None,
+         "repo": "Apps/Color-Meter", "store": None}]}))
+    for patcher in (mock.patch.object(repo, "WORKSPACE", ws), mock.patch.object(repo, "REGISTRY", registry),
+                    mock.patch.dict(repo.APPS, {}, clear=True), mock.patch.object(store, "DB_PATH", ws / "d.db")):
         patcher.start()
-        self.addCleanup(patcher.stop)
-        self.addCleanup(shutil.rmtree, self.app_repo, True)
+        test.addCleanup(patcher.stop)
+    repo.APPS.update(repo.load_registry())
+
+
+class AppStoreServerTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = Path(tempfile.mkdtemp())
+        cls.p8, _ = make_key(cls.tmp)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def setUp(self):
+        use_workspace(self)
         self.httpd = ThreadingHTTPServer(("127.0.0.1", 0), server.Handler)
         self.port = self.httpd.server_address[1]
         threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
         self.addCleanup(self.httpd.server_close)
         self.addCleanup(self.httpd.shutdown)
+        self.addCleanup(server.ASC_CACHE.clear)
 
     def request(self, method, path, body=None):
         conn = http.client.HTTPConnection("127.0.0.1", self.port)
@@ -431,6 +567,8 @@ class AppStoreServerTests(unittest.TestCase):
         data = json.loads(body)
         self.assertIsNone(data["remote"])
         self.assertEqual(len(data["compare"]["rows"]), 3)
+        status, body = self.request("POST", "/api/appstore/listing", {"app": "color-meter"})
+        self.assertEqual((status, json.loads(body)["compare"]["rows"]), (200, []))
         self.assertEqual(self.request("GET", "/asc-shot?app=veilnest&locale=en-US&file=01-shot.jpg")[0], 200)
         self.assertEqual(self.request("GET", "/asc-shot?app=veilnest&locale=..&file=locales/en-US/locale.json")[0], 404)
         self.assertEqual(self.request("GET", "/asc-shot?app=veilnest&locale=../../..&file=etc/passwd")[0], 404)
@@ -438,6 +576,29 @@ class AppStoreServerTests(unittest.TestCase):
             status, body = self.request("POST", "/api/appstore/metadata", {"app": "veilnest", "items": []})
         self.assertEqual(status, 409)
         self.assertIn("Chưa cấu hình", json.loads(body)["error"])
+
+    def test_reading_records_matches_and_accept_keeps_asc_text(self):
+        fake = FakeASC()
+        httpd = serve(fake)
+        self.addCleanup(httpd.server_close)
+        self.addCleanup(httpd.shutdown)
+        cred = {"key_id": "T", "issuer_id": "i", "key_path": self.p8, "ready": True}
+        with mock.patch.object(appstore, "API", fake.base), mock.patch.object(appstore, "credentials", return_value=cred):
+            status, body = self.request("POST", "/api/appstore/listing", {"app": "veilnest", "refresh": True})
+            self.assertEqual(status, 200, body)
+            marks = json.loads(body)["marks"]
+            self.assertEqual(marks["de-DE|keywords"]["how"], "matched")
+            self.assertNotIn("en-US|subtitle", marks)
+            status, body = self.request("POST", "/api/appstore/accept",
+                                        {"app": "veilnest", "locale": "en-US", "fields": ["subtitle", "screenshots"]})
+            self.assertEqual(status, 200, body)
+            rows = json.loads(self.request("POST", "/api/appstore/listing", {"app": "veilnest"})[1])["compare"]["rows"]
+            en = next(r for r in rows if r["locale"] == "en-US")
+            self.assertEqual((en["fields"]["subtitle"]["status"], en["shots_status"]), ("accepted", "accepted"))
+            status, body = self.request("POST", "/api/appstore/metadata", {"app": "veilnest", "items": [
+                {"locale": "en-US", "fields": ["subtitle", "whats_new"]}]})
+            ops = json.loads(body)["ops"]
+            self.assertEqual([o["fields"] for o in ops], [["whats_new"]], "accepted field is skipped, not refused")
 
 
 if __name__ == "__main__":

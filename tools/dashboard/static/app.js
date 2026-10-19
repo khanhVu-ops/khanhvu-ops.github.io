@@ -69,10 +69,16 @@ const ui = {
   pub: { creative: null, variant: null, channels: new Set(["youtube", "tiktok"]) },
 };
 
+const OFFLINE = "Dashboard server đã dừng. Chạy lại trong Terminal: python3 tools/dashboard/server.py";
 async function api(path, { method = "GET", body } = {}) {
-  const res = await fetch(path, {
-    method, headers: body ? { "Content-Type": "application/json" } : {}, body: body ? JSON.stringify(body) : undefined,
-  });
+  let res;
+  try {
+    res = await fetch(path, {
+      method, headers: body ? { "Content-Type": "application/json" } : {}, body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    throw new Error(OFFLINE); // fetch only rejects when nothing answers, never on an HTTP error
+  }
   const data = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
   if (!res.ok || data.error) throw new Error(data.error || `HTTP ${res.status}`);
   return data;
@@ -88,7 +94,7 @@ async function load({ quiet = false } = {}) {
     $("#sync").textContent = "Đọc lúc " + new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
     if (!quiet) toast("Đã đọc lại repo", "ok");
   } catch (e) {
-    toast("Không đọc được dữ liệu", "err", e.message);
+    toast(e.message === OFFLINE ? "Mất kết nối tới dashboard" : "Không đọc được dữ liệu", "err", e.message);
   } finally {
     btn.innerHTML = icon("refresh");
   }
@@ -129,7 +135,10 @@ const dateVN = (iso) => {
 
 /* ---------- toast / tooltip ---------- */
 function toast(msg, kind = "ok", detail = "") {
+  // Same message again (e.g. pressing R while the server is down) replaces the old one instead of stacking.
+  $$(".toast").filter((t) => t.dataset.key === msg + detail).forEach((t) => t.remove());
   const el = document.createElement("div");
+  el.dataset.key = msg + detail;
   el.className = `toast ${kind}`;
   el.innerHTML = `${icon(kind === "ok" ? "checkCircle" : "xCircle")}<div><div>${esc(msg)}</div>${detail ? `<pre>${esc(detail)}</pre>` : ""}</div>`;
   $("#toasts").append(el);
@@ -601,9 +610,23 @@ function viewLinks() {
 /* ---------- views: app store ---------- */
 const FIELD_KEYS = ["name", "subtitle", "keywords", "promotional_text", "description", "whats_new"];
 const FIELD_SHORT = { name: "Tên", subtitle: "Sub", keywords: "Key", promotional_text: "Promo", description: "Mô tả", whats_new: "New" };
-const FIELD_LABEL = { name: "Tên app", subtitle: "Subtitle", keywords: "Keywords", promotional_text: "Promotional text", description: "Mô tả", whats_new: "What's New" };
-const STATUS_VI = { same: "Giống ASC", changed: "Khác ASC", new: "ASC đang trống", empty: "Local trống", local: "Chưa so với ASC" };
-ui.asc = { app: null, data: null, loading: false, error: null, filter: "all", q: "", sel: new Set(), fields: new Set(FIELD_KEYS), tab: "listing", products: null, pending: null };
+const FIELD_LABEL = { name: "Tên app", subtitle: "Subtitle", keywords: "Keywords", promotional_text: "Promotional text", description: "Mô tả", whats_new: "What's New", screenshots: "Screenshot" };
+// Mirrors appstore.py: AUTO goes out with "Chọn locale cần đẩy"; OVERRIDE needs a tick per field.
+const ST = {
+  same: ["Đã khớp", "Local và ASC giống nhau (kể cả khi bạn dán tay vào ASC)."],
+  new: ["ASC trống", "ASC chưa có nội dung này: đẩy được."],
+  ahead: ["Local mới hơn", "ASC vẫn đúng như lần khớp trước, chỉ local đổi: đẩy an toàn."],
+  conflict: ["ASC sửa tay", "ASC đã đổi sau lần khớp trước (sửa trong App Store Connect). Chỉ đẩy khi tick ghi đè."],
+  differs: ["Khác, chưa có mốc", "Khác nhau và chưa từng khớp: không rõ bên nào mới hơn. Chỉ đẩy khi tick ghi đè, hoặc bấm Giữ bản ASC."],
+  accepted: ["Giữ bản ASC", "Bạn đã chọn giữ nội dung trên ASC. Không đẩy cho tới khi local đổi tiếp."],
+  empty: ["Local trống", "Không có gì để đẩy."],
+  local: ["Chưa so", "Tải từ App Store Connect để so sánh."],
+  over: ["Vượt giới hạn", "Sửa trong locale.json của repo app."],
+  none: ["Không có ảnh", ""],
+};
+const AUTO = new Set(["new", "ahead"]);
+const OVERRIDE = new Set(["conflict", "differs", "accepted"]);
+ui.asc = { app: null, data: null, loading: false, error: null, filter: "all", q: "", sel: new Set(), fields: new Set(FIELD_KEYS), tab: "listing", products: null, pending: null, override: new Set(), discover: null };
 
 async function ascLoad(refresh = false, btn = null) {
   const app = ui.asc.app;
@@ -620,66 +643,91 @@ async function ascLoad(refresh = false, btn = null) {
     if (current().route.path === "store") render();
   }
 }
-const ascRemote = () => ui.asc.data?.remote;
+const ascKey = (loc, k) => `${loc}|${k}`;
+const fstate = (f) => (f.over ? "over" : f.status || "local");
 function ascVisible() {
   const rows = ui.asc.data?.compare.rows || [];
   const q = ui.asc.q.trim().toLowerCase();
   return rows.filter((r) => (!q || `${r.locale} ${r.fields.name.local}`.toLowerCase().includes(q)) &&
-    (ui.asc.filter === "all" || (ui.asc.filter === "changed" ? ascPushable(r).length || ["missing", "changed"].includes(r.shots_status)
-      : r.problems.length || Object.values(r.fields).some((f) => f.over))));
+    (ui.asc.filter === "all"
+      || (ui.asc.filter === "todo" && (ascAuto(r).length || AUTO.has(r.shots_status)))
+      || (ui.asc.filter === "check" && (FIELD_KEYS.some((k) => ["conflict", "differs"].includes(r.fields[k].status)) || ["conflict", "differs"].includes(r.shots_status)))
+      || (ui.asc.filter === "problems" && (r.problems.length || Object.values(r.fields).some((f) => f.over)))));
 }
-// Fields of a row that would actually be sent: chosen, changed, within limit, editable now.
-const ascPushable = (r) => FIELD_KEYS.filter((k) => ui.asc.fields.has(k) && ["changed", "new"].includes(r.fields[k].status) && !r.fields[k].over && r.fields[k].editable);
+const sendable = (f) => !f.over && f.editable;
+// Fields sent without asking: chosen, safe state, within limit, editable now.
+const ascAuto = (r) => FIELD_KEYS.filter((k) => ui.asc.fields.has(k) && AUTO.has(r.fields[k].status) && sendable(r.fields[k]));
+// Fields that will actually be sent: the safe ones plus those ticked for override.
+const ascPushable = (r) => FIELD_KEYS.filter((k) => ui.asc.fields.has(k) && sendable(r.fields[k]) &&
+  (AUTO.has(r.fields[k].status) || (OVERRIDE.has(r.fields[k].status) && ui.asc.override.has(ascKey(r.locale, k)))));
 
-function fchip(k, f) {
-  const st = f.over ? "over" : f.status || "local";
-  const tip = attr({ t: FIELD_LABEL[k], r: [["Độ dài", `${f.len} / ${f.limit}`], ["Trạng thái", f.over ? "Vượt giới hạn" : STATUS_VI[st]], ...(f.why ? [["Không sửa được", f.why]] : [])] });
-  return `<span class="fchip s-${st}${f.editable === false ? " locked" : ""}" data-tip="${tip}">${FIELD_SHORT[k]}</span>`;
+function fchip(r, k) {
+  const f = r.fields[k];
+  const st = fstate(f);
+  const ov = OVERRIDE.has(st) && ui.asc.override.has(ascKey(r.locale, k));
+  const tip = attr({ t: FIELD_LABEL[k], r: [["Độ dài", `${f.len} / ${f.limit}`], ["Trạng thái", ST[st][0]], ...(f.mark ? [["Mốc", `${f.mark.how} · ${dateVN(f.mark.at)}`]] : []), ...(ov ? [["Ghi đè", "sẽ thay bản trên ASC"]] : []), ...(f.why ? [["Không sửa được", f.why]] : [])] });
+  return `<span class="fchip s-${st}${f.editable === false ? " locked" : ""}${ov ? " ov" : ""}" data-tip="${tip}">${FIELD_SHORT[k]}</span>`;
 }
-const SHOTS_VI = { none: ["Không có ảnh", ""], missing: ["ASC chưa có", "warn"], changed: ["Khác ASC", "warn"], same_names: ["Cùng tên file", "good"] };
 
 function viewStore() {
   const st = S.appstore;
-  const apps = st.apps.filter((a) => a.has_source);
-  if (!apps.length) return `<div class="page-head"><div><div class="eyebrow">App Store</div><h1>Listing & screenshot</h1></div></div>${emptyState("bag", "Chưa có app nào có nguồn listing", "Thêm khoá store vào repo.APPS trong tools/dashboard/repo.py, trỏ tới thư mục locales/ và screenshots/ của repo app.")}`;
-  if (!apps.some((a) => a.id === ui.asc.app)) ui.asc.app = apps[0].id;
-  const appInfo = apps.find((a) => a.id === ui.asc.app);
+  const apps = st.apps;
+  if (!apps.some((a) => a.id === ui.asc.app)) ui.asc.app = (apps.find((a) => a.has_source) || apps[0])?.id;
+  const app = apps.find((a) => a.id === ui.asc.app);
+  if (!app) return emptyState("bag", "Chưa có app nào", "Thêm app vào docs/apps/registry.json.");
   if (!ui.asc.data && !ui.asc.loading && !ui.asc.error) setTimeout(() => ascLoad(false), 0);
   const d = ui.asc.data, remote = d?.remote;
+  const linked = !!app.app_store_id;
   const head = `<div class="page-head"><div><div class="eyebrow">App Store</div><h1>Listing & screenshot</h1>
-    <p>Copy theo locale đọc từ <code>${esc(appInfo.source)}</code>, so với App Store Connect rồi đẩy những gì bạn chọn. Không bao giờ tự submit review.</p></div>
-    <div class="actions">${apps.length > 1 ? `<div class="seg">${apps.map((a) => `<button class="${a.id === ui.asc.app ? "on" : ""}" data-act="asc-app" data-app="${a.id}">${esc(a.name)}</button>`).join("")}</div>` : ""}
-    <button class="btn primary" data-act="asc-refresh" ${st.configured ? "" : "disabled"} title="${st.configured ? "" : "Cần API key"}">${icon("refresh")}${remote ? "Tải lại từ ASC" : "Tải từ App Store Connect"}</button></div></div>`;
-  if (!d) return head + (ui.asc.error ? `<div class="callout bad">${icon("xCircle")}<div>${esc(ui.asc.error)}</div></div>` : `<div class="loading"><span class="spinner"></span>Đang đọc listing local…</div>`);
-  const rows = d.compare.rows;
-  const changed = remote ? rows.filter((r) => ascPushable(r).length).length : 0;
-  const over = rows.filter((r) => r.problems.length || Object.values(r.fields).some((f) => f.over)).length;
-  const shots = rows.reduce((a, r) => a + r.shots, 0);
-  const v = remote?.version;
-  return head + (st.configured ? "" : ascSetup(st)) + `
-  <div class="grid cols-4">
-    ${kpi("globe", "Locale local", rows.length, `${rows.filter((r) => r.tier === 1).length} tier 1 · ${remote ? rows.filter((r) => r.remote_exists).length + " đã có trên ASC" : "chưa so với ASC"}`)}
-    ${kpi("pen", "Cần đẩy", remote ? changed : "—", remote ? "locale có field khác ASC" : "Tải từ ASC để so sánh")}
-    ${kpi("alert", "Vượt giới hạn", over, over ? "sửa trong locale.json" : "mọi field trong giới hạn")}
-    ${kpi("image", "Screenshot", shots, `${rows.filter((r) => r.shots).length} locale có ảnh`)}
-  </div>
-  ${remote ? `<div class="card card-pad asc-status" style="margin-top:16px">
-    <div><span class="faint small">Version</span><b>${esc(v ? v.version : "—")}</b>${v ? stPill(v.state, v.editable) : ""}</div>
+    <p>Mỗi app lấy copy và ảnh từ repo của nó trong <code>~/personal</code>, so với App Store Connect rồi đẩy những gì bạn chọn. Không bao giờ tự submit review.</p></div>
+    <div class="actions"><button class="btn" data-act="asc-discover" ${st.configured ? "" : "disabled"} title="${st.configured ? "Các app của team trên App Store Connect" : "Cần API key"}">${icon("search")}App trên ASC</button>
+    <button class="btn primary" data-act="asc-refresh" ${st.configured && linked ? "" : "disabled"} title="${!st.configured ? "Cần API key" : linked ? "" : "App chưa liên kết App Store Connect"}">${icon("refresh")}${remote ? "Tải lại từ ASC" : "Tải từ App Store Connect"}</button></div></div>
+  <div class="app-pick">${apps.map((a) => `<button class="${a.id === app.id ? "on" : ""}" data-act="asc-app" data-app="${esc(a.id)}"><b>${esc(a.name)}</b>
+    <span><i class="${a.app_store_id ? "ok" : ""}" title="App Store Connect">ASC</i><i class="${a.has_source ? "ok" : ""}" title="Listing trong repo">listing</i><i class="${a.repo_path ? "ok" : "bad"}" title="${esc(a.repo_path || "không thấy repo " + (a.repo || ""))}">repo</i></span></button>`).join("")}</div>
+  ${st.configured ? "" : ascSetup(st)}
+  <div class="card card-pad asc-status">
+    <div><span class="faint small">Repo</span><b>${app.repo_path ? `<code>${esc(app.repo_path)}</code>` : `<span style="color:var(--bad)">không thấy ${esc(app.repo || "—")}</span>`}</b></div>
+    <div><span class="faint small">Listing local</span><b>${app.source ? `<code>${esc(app.source)}</code>` : '<span class="faint">chưa có</span>'}</b></div>
+    <div><span class="faint small">App Store Connect</span><b>${linked ? `<a href="https://appstoreconnect.apple.com/apps/${esc(app.app_store_id)}" target="_blank" rel="noreferrer">${esc(app.app_store_id)}</a>` : '<span class="faint">chưa liên kết</span>'}</b></div>
+    ${remote ? `<div><span class="faint small">Version</span><b>${esc(remote.version?.version || "—")}${remote.version ? stPill(remote.version.state, remote.version.editable) : ""}</b></div>
     <div><span class="faint small">App Information</span>${remote.info ? stPill(remote.info.state, remote.info.editable) : "—"}</div>
-    <div><span class="faint small">Primary locale</span><b>${esc(remote.app.primary_locale || "—")}</b></div>
-    <div><span class="faint small">Đọc lúc</span><b>${dateVN(remote.fetched_at)}</b></div>
-    ${d.compare.remote_only.length ? `<div><span class="faint small">Chỉ có trên ASC</span><b>${esc(d.compare.remote_only.join(", "))}</b></div>` : ""}
+    <div><span class="faint small">Đọc lúc</span><b>${dateVN(remote.fetched_at)}</b></div>` : ""}
+  </div>`;
+  if (!d) return head + (ui.asc.error ? `<div class="callout bad" style="margin-top:14px">${icon("xCircle")}<div>${esc(ui.asc.error)}</div></div>` : `<div class="loading"><span class="spinner"></span>Đang đọc listing local…</div>`);
+  const rows = d.compare.rows;
+  if (!rows.length) return head + ascNoSource(app, st, remote, d);
+  const todo = remote ? rows.filter((r) => ascAuto(r).length).length : 0;
+  const check = remote ? rows.filter((r) => FIELD_KEYS.some((k) => ["conflict", "differs"].includes(r.fields[k].status)) || ["conflict", "differs"].includes(r.shots_status)).length : 0;
+  const synced = remote ? rows.filter((r) => FIELD_KEYS.every((k) => ["same", "empty", "accepted"].includes(r.fields[k].status)) && ["same", "accepted", "none"].includes(r.shots_status)).length : 0;
+  const v = remote?.version;
+  return head + `
+  <div class="grid cols-4" style="margin-top:16px">
+    ${kpi("globe", "Locale local", rows.length, remote ? `${rows.filter((r) => r.remote_exists).length} đã có trên ASC` : "chưa so với ASC")}
+    ${kpi("checkCircle", "Đã khớp", remote ? synced : "—", remote ? "text và ảnh giống ASC" : "Tải từ ASC để so sánh")}
+    ${kpi("upload", "Cần đẩy", remote ? todo : "—", remote ? "có field ASC trống hoặc local mới hơn" : "")}
+    ${kpi("alert", "Cần xem", remote ? check : rows.filter((r) => r.problems.length).length, remote ? "ASC sửa tay hoặc khác chưa có mốc" : "lỗi giới hạn")}
   </div>
-  ${v && !v.editable ? `<div class="callout warn" style="margin-top:12px">${icon("info")}<div>Chưa có version mới ở <b>Prepare for Submission</b>. Lúc này chỉ <b>Promotional text</b> sửa được. Tạo version mới trong App Store Connect (hoặc upload build) rồi tải lại để sửa mô tả, keyword, What's New, screenshot. Tên và subtitle cần App Information ở trạng thái chuẩn bị.</div></div>` : ""}` : ""}
+  ${v && !v.editable ? `<div class="callout warn" style="margin-top:12px">${icon("info")}<div>Chưa có version mới ở <b>Prepare for Submission</b>, nên lúc này chỉ <b>Promotional text</b> sửa được. Tạo version mới trong App Store Connect rồi tải lại để sửa mô tả, keyword, What's New và screenshot. Tên và subtitle cần App Information ở trạng thái chuẩn bị.</div></div>` : ""}
+  ${d.compare.remote_only.length ? `<div class="callout" style="margin-top:12px">${icon("info")}<div>ASC có ${d.compare.remote_only.length} ngôn ngữ chưa có ở local: <b>${esc(d.compare.remote_only.join(", "))}</b>. <button class="btn sm" data-act="asc-import" style="margin-left:6px">${icon("download")}Nhập về repo</button></div></div>` : ""}
   <div class="toolbar" style="margin-top:20px">
     <div class="seg">${[["listing", "Listing theo locale"], ["products", "Gói giá"]].map(([k, l]) => `<button class="${ui.asc.tab === k ? "on" : ""}" data-act="asc-tab" data-tab="${k}">${l}</button>`).join("")}</div>
   </div>
-  ${ui.asc.tab === "products" ? ascProducts(st) : ascListing(rows, remote)}`;
+  ${ui.asc.tab === "products" ? ascProducts(st, linked) : ascListing(rows, remote)}`;
 }
 const stPill = (state, editable) => `<span class="pill ${editable ? "good" : ""}" style="margin-left:8px">${esc((state || "—").replaceAll("_", " ").toLowerCase())}${editable ? " · sửa được" : ""}</span>`;
 
+function ascNoSource(app, st, remote, d) {
+  const n = remote ? Object.keys(remote.locales).length : 0;
+  return `<div class="card" style="margin-top:16px">${emptyState("globe", `${app.name} chưa có listing trong repo`,
+    !app.app_store_id ? "Liên kết app với App Store Connect (nút App trên ASC), rồi nhập listing đang có trên ASC về repo. Hoặc tạo AppStore/locales/<locale>/locale.json trong repo app và khai store trong docs/apps/registry.json."
+    : !st.configured ? "Kết nối API key để đọc listing trên App Store Connect, rồi nhập về repo."
+    : remote ? `ASC đang có ${n} ngôn ngữ. Nhập về repo để quản lý từ đây; mỗi field nhập vào sẽ ở trạng thái Đã khớp, không có gì bị đẩy lại.`
+    : "Tải từ App Store Connect để xem listing hiện có, rồi nhập về repo.",
+    app.app_store_id && st.configured ? (remote ? `<button class="btn primary" data-act="asc-import">${icon("download")}Nhập ${n} ngôn ngữ vào ${esc(app.repo_path || app.repo)}/AppStore</button>` : `<button class="btn primary" data-act="asc-refresh">${icon("refresh")}Tải từ App Store Connect</button>`) : "")}</div>`;
+}
+
 function ascSetup(st) {
-  return `<div class="card card-pad stack" style="margin-bottom:16px"><div class="row"><b>Kết nối App Store Connect API</b><span class="spacer"></span><span class="pill warn">Chưa kết nối</span></div>
+  return `<div class="card card-pad stack" style="margin-top:16px"><div class="row"><b>Kết nối App Store Connect API</b><span class="spacer"></span><span class="pill warn">Chưa kết nối</span></div>
     <div class="small muted">Không có key vẫn xem và kiểm tra copy local được. Muốn so sánh và đẩy lên ASC, cần một API key của team <b>Van Khanh Vu</b>:</div>
     <ol class="small" style="margin:0;padding-left:18px;line-height:1.7">
       <li>App Store Connect → <b>Users and Access → Integrations → App Store Connect API → Team Keys</b> → Generate. Quyền: <b>App Manager</b>.</li>
@@ -693,28 +741,28 @@ function ascListing(rows, remote) {
   const list = ascVisible();
   const sel = ui.asc.sel;
   const pushable = [...sel].map((c) => rows.find((r) => r.locale === c)).filter((r) => r && ascPushable(r).length);
+  const filters = [["all", "Tất cả"], ...(remote ? [["todo", "Cần đẩy"], ["check", "Cần xem"]] : []), ["problems", "Có lỗi"]];
   return `<div class="toolbar">
-    <div class="seg" data-filter="asc">${[["all", "Tất cả"], ...(remote ? [["changed", "Khác ASC"]] : []), ["problems", "Có lỗi"]].map(([k, l]) => `<button class="${ui.asc.filter === k ? "on" : ""}" data-val="${k}">${l}</button>`).join("")}</div>
+    <div class="seg" data-filter="asc">${filters.map(([k, l]) => `<button class="${ui.asc.filter === k ? "on" : ""}" data-val="${k}">${l}</button>`).join("")}</div>
     <label class="search">${icon("search")}<input type="search" id="asc-q" placeholder="Locale hoặc tên…" value="${esc(ui.asc.q)}"></label>
     <span class="spacer"></span>
     <div class="row field-pick">${FIELD_KEYS.map((k) => `<label><input type="checkbox" data-asc-field="${k}" ${ui.asc.fields.has(k) ? "checked" : ""}>${FIELD_LABEL[k]}</label>`).join("")}</div>
   </div>
-  ${remote ? `<div class="card card-pad row asc-bulk"><span><b>${sel.size}</b> locale đã chọn${sel.size ? ` · <b>${pushable.length}</b> có field sẽ đẩy` : ""}</span>
-    <button class="btn sm ghost" data-act="asc-sel-changed">Chọn locale khác ASC</button><button class="btn sm ghost" data-act="asc-sel-all">Chọn tất cả đang hiện</button>${sel.size ? `<button class="btn sm ghost" data-act="asc-sel-none">Bỏ chọn</button>` : ""}
+  ${remote ? `<div class="card card-pad row asc-bulk"><span><b>${sel.size}</b> locale đã chọn${sel.size ? ` · <b>${pushable.length}</b> có field sẽ đẩy` : ""}${ui.asc.override.size ? ` · <b>${ui.asc.override.size}</b> field ghi đè` : ""}</span>
+    <button class="btn sm ghost" data-act="asc-sel-changed">Chọn locale cần đẩy</button><button class="btn sm ghost" data-act="asc-sel-all">Chọn tất cả đang hiện</button>${sel.size ? `<button class="btn sm ghost" data-act="asc-sel-none">Bỏ chọn</button>` : ""}
     <span class="spacer"></span><button class="btn sm primary" data-act="asc-push" ${pushable.length ? "" : "disabled"}>${icon("upload")}Xem trước & đẩy metadata</button></div>` : ""}
   <div class="card"><div class="table-wrap"><table class="asc-table"><thead><tr>${remote ? "<th></th>" : ""}<th>Locale</th><th>Tên app · Subtitle</th><th>Field</th><th>Ảnh</th><th></th></tr></thead><tbody>
   ${list.map((r) => {
     const f = r.fields;
-    const shot = remote ? SHOTS_VI[r.shots_status] : null;
     return `<tr class="${sel.has(r.locale) ? "on" : ""}">${remote ? `<td><input type="checkbox" data-asc-sel="${esc(r.locale)}" ${sel.has(r.locale) ? "checked" : ""}></td>` : ""}
-      <td class="nowrap"><b>${esc(r.locale)}</b> <span class="tag">T${r.tier ?? "?"}</span>${remote && !r.remote_exists ? ` <span class="pill warn" style="height:20px">mới</span>` : ""}</td>
-      <td style="max-width:340px"><div class="ellipsis">${esc(f.name.local)}</div><div class="small faint ellipsis">${esc(f.subtitle.local)}</div>${r.problems.length ? `<div class="small" style="color:var(--bad)">${esc(r.problems.join(" · "))}</div>` : ""}</td>
-      <td><div class="fchips">${FIELD_KEYS.map((k) => fchip(k, f[k])).join("")}</div></td>
-      <td class="nowrap small">${r.shots ? `${r.shots} ảnh` : "—"}${shot && shot[0] && r.shots ? `<div><span class="pill ${shot[1]}" style="height:20px">${shot[0]}</span></div>` : ""}</td>
+      <td class="nowrap"><b>${esc(r.locale)}</b>${r.tier ? ` <span class="tag">T${r.tier}</span>` : ""}${remote && !r.remote_exists ? ` <span class="pill warn" style="height:20px">mới</span>` : ""}</td>
+      <td style="max-width:320px"><div class="ellipsis">${esc(f.name.local)}</div><div class="small faint ellipsis">${esc(f.subtitle.local)}</div>${r.problems.length ? `<div class="small" style="color:var(--bad)">${esc(r.problems.join(" · "))}</div>` : ""}</td>
+      <td><div class="fchips">${FIELD_KEYS.map((k) => fchip(r, k)).join("")}</div></td>
+      <td class="nowrap small">${r.shots ? `${r.shots} ảnh` : "—"}${remote && r.shots ? `<div><span class="fchip s-${r.shots_status}" title="${esc(ST[r.shots_status]?.[1] || "")}">${esc(ST[r.shots_status]?.[0] || r.shots_status)}</span></div>` : ""}</td>
       <td class="nowrap"><a class="btn sm" href="#/store/${encodeURIComponent(r.locale)}">${icon("eye")}Chi tiết</a></td></tr>`;
   }).join("") || `<tr><td colspan="6">${emptyState("search", "Không có locale khớp bộ lọc", "Bỏ bớt bộ lọc.")}</td></tr>`}
   </tbody></table></div></div>
-  <div class="legend small" style="margin-top:10px"><span class="fchip s-same">Giống</span><span class="fchip s-changed">Khác ASC</span><span class="fchip s-new">ASC trống</span><span class="fchip s-over">Vượt giới hạn</span><span class="fchip s-local">Chưa so</span><span class="fchip s-changed locked">Khoá (version không sửa được)</span></div>`;
+  <div class="legend small asc-legend">${["same", "new", "ahead", "conflict", "differs", "accepted", "over", "local"].map((k) => `<span class="fchip s-${k}" title="${esc(ST[k][1])}">${ST[k][0]}</span>`).join("")}<span class="fchip s-ahead locked">Khoá: version không sửa được</span></div>`;
 }
 
 function openAscLocale(code) {
@@ -724,25 +772,32 @@ function openAscLocale(code) {
   const remote = d.remote;
   const local = d.local.locales[code];
   const rshots = remote ? Object.entries(remote.screenshots[code] || {}) : [];
+  const app = ui.asc.app;
+  const shotMark = d.marks?.[ascKey(code, "screenshots")];
   const layer = $("#drawer");
   layer.innerHTML = `<div class="drawer" role="dialog" aria-label="${esc(code)}">
-    <div class="drawer-head"><div style="min-width:0;flex:1"><div class="eyebrow">${esc(S.apps[ui.asc.app]?.name || ui.asc.app)} · tier ${r.tier ?? "?"}</div><h2 class="locale">${esc(code)}</h2>
+    <div class="drawer-head"><div style="min-width:0;flex:1"><div class="eyebrow">${esc(S.appstore.apps.find((a) => a.id === app)?.name || app)}${r.tier ? ` · tier ${r.tier}` : ""}</div><h2 class="locale">${esc(code)}</h2>
       <div class="row" style="margin-top:8px">${remote ? (r.remote_exists ? '<span class="pill good">Đã có trên ASC</span>' : '<span class="pill warn">ASC chưa có ngôn ngữ này</span>') : '<span class="pill">Chưa tải ASC</span>'}
       ${r.whats_new_version ? `<span class="tag">What's New cho ${esc(r.whats_new_version)}</span>` : ""}${remote?.version && r.whats_new_version && r.whats_new_version !== remote.version.version ? `<span class="pill warn">ASC đang ở ${esc(remote.version.version)}</span>` : ""}</div></div>
-      ${remote ? `<button class="btn sm primary" data-act="asc-push" data-locale="${esc(code)}" ${ascPushable(r).length ? "" : "disabled"}>${icon("upload")}Đẩy metadata</button>` : ""}
+      ${remote ? `<button class="btn sm primary" data-act="asc-push" data-locale="${esc(code)}" ${ascPushable(r).length ? "" : "disabled"}>${icon("upload")}Đẩy ${ascPushable(r).length || ""} field</button>` : ""}
       <button class="icon-btn" data-act="close-drawer" aria-label="Đóng">${icon("x")}</button></div>
     <div class="drawer-body">
       ${FIELD_KEYS.map((k) => {
         const f = r.fields[k];
-        const st = f.over ? "over" : f.status || "local";
-        return `<div class="asc-field"><div class="row"><b>${FIELD_LABEL[k]}</b><span class="fchip s-${st}">${f.over ? "Vượt giới hạn" : STATUS_VI[st]}</span><span class="spacer"></span><span class="small ${f.over ? "" : "faint"}" style="${f.over ? "color:var(--bad)" : ""}">${f.len} / ${f.limit}</span></div>
-          ${f.why ? `<div class="small faint">${icon("info").replace("<svg", '<svg style="width:13px;height:13px;vertical-align:-2px"')} ${esc(f.why)}</div>` : ""}
+        const st = fstate(f);
+        const canOverride = remote && OVERRIDE.has(st) && sendable(f);
+        return `<div class="asc-field"><div class="row"><b>${FIELD_LABEL[k]}</b><span class="fchip s-${st}">${ST[st][0]}</span>${f.mark ? `<span class="small faint">mốc: ${esc({ pushed: "đã đẩy", matched: "đã khớp", accepted: "giữ bản ASC" }[f.mark.how] || f.mark.how)} · ${dateVN(f.mark.at)}</span>` : ""}<span class="spacer"></span><span class="small ${f.over ? "" : "faint"}" style="${f.over ? "color:var(--bad)" : ""}">${f.len} / ${f.limit}</span></div>
+          ${remote && st !== "same" && st !== "local" ? `<div class="small faint">${esc(ST[st][1])}${f.why ? " " + esc(f.why) + "." : ""}</div>` : ""}
           <div class="${remote ? "asc-cmp" : ""}"><div><span class="faint small">Local</span><div class="asc-text">${esc(f.local) || '<span class="faint">trống</span>'}</div></div>
-          ${remote ? `<div><span class="faint small">App Store Connect</span><div class="asc-text ${st === "changed" ? "diff" : ""}">${esc(f.remote || "") || '<span class="faint">trống</span>'}</div></div>` : ""}</div></div>`;
+          ${remote ? `<div><span class="faint small">App Store Connect</span><div class="asc-text ${["conflict", "differs", "accepted"].includes(st) ? "diff" : ""}">${esc(f.remote || "") || '<span class="faint">trống</span>'}</div></div>` : ""}</div>
+          ${canOverride || (remote && ["conflict", "differs"].includes(st)) ? `<div class="row small">${canOverride ? `<label class="ov-pick"><input type="checkbox" data-asc-ov="${esc(ascKey(code, k))}" ${ui.asc.override.has(ascKey(code, k)) ? "checked" : ""}>Ghi đè bản trên ASC khi đẩy</label>` : ""}
+            ${["conflict", "differs"].includes(st) ? `<span class="spacer"></span><button class="btn sm" data-act="asc-accept" data-locale="${esc(code)}" data-fields="${k}">${icon("check")}Giữ bản ASC</button>` : ""}</div>` : ""}</div>`;
       }).join("")}
-      <div><div class="section-title" style="margin-top:0"><h2>Screenshot local</h2><span class="sub">${local.screenshots.length} ảnh${local.screenshots[0] ? ` · ${local.screenshots[0].width}×${local.screenshots[0].height}` : ""}</span>
-        ${remote && local.screenshots.length ? `<span class="spacer"></span><button class="btn sm" data-act="asc-shots" data-locale="${esc(code)}">${icon("upload")}Thay screenshot trên ASC</button>` : ""}</div>
-        ${local.screenshots.length ? `<div class="shot-strip">${local.screenshots.map((s) => `<a href="/asc-shot?app=${ui.asc.app}&locale=${encodeURIComponent(code)}&file=${encodeURIComponent(s.file)}" target="_blank"><img loading="lazy" src="/asc-shot?app=${ui.asc.app}&locale=${encodeURIComponent(code)}&file=${encodeURIComponent(s.file)}" alt="${esc(s.file)}"><span>${esc(s.file)}</span></a>`).join("")}</div>` : `<div class="small muted">Không có ảnh cho locale này.</div>`}</div>
+      <div><div class="section-title" style="margin-top:0"><h2>Screenshot</h2><span class="sub">${local.screenshots.length} ảnh local${local.screenshots[0] ? ` · ${local.screenshots[0].width}×${local.screenshots[0].height}` : ""}${remote && local.screenshots.length ? ` · <span class="fchip s-${r.shots_status}">${ST[r.shots_status][0]}</span>` : ""}${shotMark ? ` <span class="faint">mốc ${dateVN(shotMark.at)}</span>` : ""}</span>
+        <span class="spacer"></span>${remote && ["conflict", "differs"].includes(r.shots_status) ? `<button class="btn sm" data-act="asc-accept" data-locale="${esc(code)}" data-fields="screenshots">${icon("check")}Giữ ảnh ASC</button>` : ""}
+        ${remote && local.screenshots.length ? `<button class="btn sm" data-act="asc-shots" data-locale="${esc(code)}" ${r.shots_status === "same" ? "disabled" : ""}>${icon("upload")}${r.shots_status === "same" ? "Ảnh đã khớp" : "Thay screenshot trên ASC"}</button>` : ""}</div>
+        ${remote && ["conflict", "differs", "accepted"].includes(r.shots_status) ? `<div class="small faint" style="margin-bottom:8px">${esc(ST[r.shots_status][1])} So khớp bằng MD5: ảnh export lại, dù trông giống, vẫn tính là khác.</div>` : ""}
+        ${local.screenshots.length ? `<div class="shot-strip">${local.screenshots.map((s) => `<a href="/asc-shot?app=${esc(app)}&locale=${encodeURIComponent(code)}&file=${encodeURIComponent(s.file)}" target="_blank"><img loading="lazy" src="/asc-shot?app=${esc(app)}&locale=${encodeURIComponent(code)}&file=${encodeURIComponent(s.file)}" alt="${esc(s.file)}"><span>${esc(s.file)}</span></a>`).join("")}</div>` : `<div class="small muted">Không có ảnh local cho locale này.</div>`}</div>
       ${remote ? `<div><div class="section-title" style="margin-top:0"><h2>Screenshot trên ASC</h2><span class="sub">version ${esc(remote.version?.version || "—")}</span></div>
         ${rshots.length ? rshots.map(([t, set]) => `<div class="small faint" style="margin-bottom:6px">${esc(t)} · ${set.items.length} ảnh</div><div class="shot-strip">${set.items.map((i) => `<a ${i.url ? `href="${esc(i.url)}" target="_blank"` : ""}>${i.url ? `<img loading="lazy" src="${esc(i.url)}" alt="">` : `<div class="ph"></div>`}<span>${esc(i.file || "")}</span></a>`).join("")}</div>`).join("") : `<div class="small muted">Version này chưa có screenshot cho ${esc(code)}.</div>`}</div>` : ""}
     </div></div>`;
@@ -751,49 +806,83 @@ function openAscLocale(code) {
 
 async function ascPush(locales, btn) {
   const rows = ui.asc.data.compare.rows;
-  const items = locales.map((c) => rows.find((r) => r.locale === c)).filter(Boolean).map((r) => ({ locale: r.locale, fields: ascPushable(r) })).filter((i) => i.fields.length);
-  if (!items.length) return toast("Không có field nào cần đẩy", "err", "Field phải khác ASC, trong giới hạn và đang sửa được.");
+  const items = locales.map((c) => rows.find((r) => r.locale === c)).filter(Boolean).map((r) => {
+    const fields = ascPushable(r);
+    return { locale: r.locale, fields, override: fields.filter((k) => OVERRIDE.has(r.fields[k].status)) };
+  }).filter((i) => i.fields.length);
+  if (!items.length) return toast("Không có field nào cần đẩy", "err", "Field phải ASC trống hoặc local mới hơn (hoặc được tick ghi đè), trong giới hạn và đang sửa được.");
   const r = await busy(btn, () => api("/api/appstore/metadata", { method: "POST", body: { app: ui.asc.app, items, dry_run: true } }));
+  if (!r.ops.length) return toast("ASC đã khớp, không còn gì để đẩy");
   ui.asc.pending = items;
   const create = r.ops.filter((o) => o.op === "create").length;
+  const overrides = items.reduce((a, i) => a + i.override.length, 0);
   openModal(`<div class="modal-head"><h2>Đẩy metadata lên App Store Connect</h2><button type="button" class="icon-btn" data-act="close-modal">${icon("x")}</button></div>
     <div class="modal-body stack">
-      <div class="small muted">Version <b>${esc(r.version?.version || "—")}</b> (${esc(r.version?.state || "")}). ${r.ops.length} lệnh${create ? `, trong đó <b>${create}</b> tạo ngôn ngữ mới` : ""}. Đọc lại ASC ngay trước khi lập danh sách này.</div>
+      <div class="small muted">Version <b>${esc(r.version?.version || "—")}</b> (${esc(r.version?.state || "")}). ${r.ops.length} lệnh${create ? `, trong đó <b>${create}</b> tạo ngôn ngữ mới` : ""}. Danh sách lập từ lần đọc ASC ngay lúc này; field đã khớp được bỏ qua.</div>
       <div class="table-wrap" style="max-height:46vh"><table><thead><tr><th>Locale</th><th>Phần</th><th>Lệnh</th><th>Field</th></tr></thead><tbody>
-      ${r.ops.map((o) => `<tr><td><b>${esc(o.locale)}</b></td><td class="small">${o.resource === "info" ? "App Information" : "Version"}</td><td>${o.op === "create" ? '<span class="pill warn" style="height:20px">Tạo</span>' : '<span class="pill" style="height:20px">Sửa</span>'}</td><td class="small">${o.fields.map((k) => FIELD_LABEL[k]).join(", ")}</td></tr>`).join("")}
+      ${r.ops.map((o) => { const item = items.find((i) => i.locale === o.locale); return `<tr><td><b>${esc(o.locale)}</b></td><td class="small">${o.resource === "info" ? "App Information" : "Version"}</td><td>${o.op === "create" ? '<span class="pill warn" style="height:20px">Tạo</span>' : '<span class="pill" style="height:20px">Sửa</span>'}</td><td class="small">${o.fields.map((k) => FIELD_LABEL[k] + (item?.override.includes(k) ? ' <b style="color:var(--warn)">(ghi đè)</b>' : "")).join(", ")}</td></tr>`; }).join("")}
       </tbody></table></div>
+      ${overrides ? `<div class="callout warn">${icon("alert")}<div><b>${overrides}</b> field sẽ thay nội dung đang có trên ASC mà không do dashboard đẩy (có thể bạn đã sửa tay).</div></div>` : ""}
       <div class="callout">${icon("info")}<div>Chỉ ghi nội dung listing. Không submit review, không đổi giá, không phát hành.</div></div></div>
     <div class="modal-foot"><button type="button" class="btn ghost" data-act="close-modal">Huỷ</button><button class="btn primary" data-act="asc-push-go">${icon("upload")}Đẩy ${r.ops.length} thay đổi</button></div>`);
 }
 async function ascPushGo(btn) {
   const r = await busy(btn, () => api("/api/appstore/metadata", { method: "POST", body: { app: ui.asc.app, items: ui.asc.pending, dry_run: false } }));
-  closeLayer("#modal"); ui.asc.sel.clear();
+  closeLayer("#modal"); ui.asc.sel.clear(); ui.asc.override.clear();
   toast(`Đã đẩy ${r.done.length} thay đổi lên App Store Connect`);
   await ascLoad(false);
 }
 async function ascShots(locale, btn) {
-  const r = await busy(btn, () => api("/api/appstore/screenshots", { method: "POST", body: { app: ui.asc.app, locale, dry_run: true } }));
+  const row = ui.asc.data.compare.rows.find((r) => r.locale === locale);
+  const override = OVERRIDE.has(row?.shots_status);
+  const r = await busy(btn, () => api("/api/appstore/screenshots", { method: "POST", body: { app: ui.asc.app, locale, dry_run: true, override } }));
   const p = r.plan;
   if (p.unchanged) return toast(`${locale}: screenshot trên ASC đã giống hệt local`);
   openModal(`<div class="modal-head"><h2>Thay screenshot · ${esc(locale)}</h2><button type="button" class="icon-btn" data-act="close-modal">${icon("x")}</button></div>
     <div class="modal-body stack">
       <div>Bộ <b>${esc(p.label)}</b> (${esc(p.display_type)}): ${p.delete.length ? `xoá <b>${p.delete.length}</b> ảnh đang có trên ASC, ` : ""}upload <b>${p.upload.length}</b> ảnh local theo đúng thứ tự.</div>
       ${p.remote_files.length ? `<div class="small faint">Đang có: ${esc(p.remote_files.join(", "))}</div>` : ""}
-      <div class="shot-strip">${p.upload.map((s) => `<a><img src="/asc-shot?app=${ui.asc.app}&locale=${encodeURIComponent(locale)}&file=${encodeURIComponent(s.file)}" alt=""><span>${esc(s.file)}</span></a>`).join("")}</div>
+      <div class="shot-strip">${p.upload.map((s) => `<a><img src="/asc-shot?app=${esc(ui.asc.app)}&locale=${encodeURIComponent(locale)}&file=${encodeURIComponent(s.file)}" alt=""><span>${esc(s.file)}</span></a>`).join("")}</div>
+      ${override ? `<div class="callout warn">${icon("alert")}<div>Ảnh trên ASC <b>${esc(ST[p.status][0].toLowerCase())}</b>: không do dashboard đẩy, có thể bạn đã upload tay. Bấm thay là ghi đè.</div></div>` : ""}
       <div class="callout warn">${icon("alert")}<div>Ảnh cũ bị xoá trước (mỗi bộ tối đa 10 ảnh). Nếu upload hỏng giữa chừng, bấm lại để chạy tiếp; bản gốc vẫn ở repo app.</div></div></div>
-    <div class="modal-foot"><button type="button" class="btn ghost" data-act="close-modal">Huỷ</button><button class="btn primary" data-act="asc-shots-go" data-locale="${esc(locale)}">${icon("upload")}Thay ${p.upload.length} ảnh</button></div>`);
+    <div class="modal-foot"><button type="button" class="btn ghost" data-act="close-modal">Huỷ</button><button class="btn primary" data-act="asc-shots-go" data-locale="${esc(locale)}" data-override="${override ? 1 : ""}">${icon("upload")}Thay ${p.upload.length} ảnh</button></div>`);
 }
-async function ascShotsGo(locale, btn) {
-  const r = await busy(btn, () => api("/api/appstore/screenshots", { method: "POST", body: { app: ui.asc.app, locale, dry_run: false } }));
+async function ascShotsGo(locale, override, btn) {
+  const r = await busy(btn, () => api("/api/appstore/screenshots", { method: "POST", body: { app: ui.asc.app, locale, dry_run: false, override } }));
   closeLayer("#modal");
   toast(`${locale}: đã upload ${r.uploaded} ảnh, xoá ${r.deleted} ảnh cũ`, "ok", "Apple còn xử lý ảnh vài phút trước khi hiện trong App Store Connect.");
   await ascLoad(false);
 }
+async function ascAccept(locale, fields, btn) {
+  await busy(btn, () => api("/api/appstore/accept", { method: "POST", body: { app: ui.asc.app, locale, fields } }));
+  fields.forEach((k) => ui.asc.override.delete(ascKey(locale, k)));
+  toast(`${locale}: giữ bản ASC cho ${fields.map((k) => FIELD_LABEL[k]).join(", ")}`);
+  await ascLoad(false);
+}
+async function ascImport(btn) {
+  const app = S.appstore.apps.find((a) => a.id === ui.asc.app);
+  if (!confirm(`Ghi listing đang có trên App Store Connect vào repo ${app.repo_path || app.repo}?\nChỉ tạo file cho ngôn ngữ chưa có; không ghi đè file nào.`)) return;
+  const r = await busy(btn, () => api("/api/appstore/import", { method: "POST", body: { app: ui.asc.app } }));
+  toast(`Đã nhập ${r.created.length} ngôn ngữ vào ${r.folder}`, "ok", r.skipped.length ? `Giữ nguyên ${r.skipped.length} file đã có: ${r.skipped.join(", ")}` : "");
+  ui.asc.data = null;
+  await load({ quiet: true });
+}
+async function ascDiscover(btn) {
+  const r = await busy(btn, () => api("/api/appstore/discover", { method: "POST", body: {} }));
+  openModal(`<div class="modal-head"><h2>App trên App Store Connect</h2><button type="button" class="icon-btn" data-act="close-modal">${icon("x")}</button></div>
+    <div class="modal-body stack"><div class="small muted">Mọi app của team. Liên kết để quản lý listing trên dashboard; repo được đoán theo bundle id trong <code>~/personal/Apps</code>.</div>
+    <div class="table-wrap"><table><thead><tr><th>App</th><th>Bundle ID</th><th>Repo</th><th></th></tr></thead><tbody>
+    ${r.apps.map((a) => `<tr><td><b>${esc(a.name)}</b><div class="small faint">${esc(a.app_store_id)}</div></td><td><code class="small">${esc(a.bundle_id)}</code></td>
+      <td class="small">${a.repo ? `<code>${esc(a.repo)}</code>` : '<span class="faint">không thấy</span>'}</td>
+      <td class="nowrap">${a.linked ? '<span class="pill good">Đã liên kết</span>' : `<button class="btn sm ${a.registry_id ? "primary" : ""}" data-act="asc-link" data-id="${esc(a.app_store_id)}">${icon(a.registry_id ? "link" : "plus")}${a.registry_id ? "Liên kết " + esc(a.registry_id) : "Thêm"}</button>`}</td></tr>`).join("")}
+    </tbody></table></div></div>
+    <div class="modal-foot"><button type="button" class="btn ghost" data-act="close-modal">Đóng</button></div>`);
+}
 
-function ascProducts(st) {
+function ascProducts(st, linked) {
   const p = ui.asc.products;
   const intro = `<div class="callout" style="margin-bottom:14px">${icon("info")}<div>Chỉ đọc: gói subscription và IAP của app, giá ở storefront Mỹ. Tạo gói và đổi giá theo nước chưa làm ở đây; làm trong App Store Connect.</div></div>`;
-  if (!st.configured) return intro + `<div class="card">${emptyState("tag2", "Cần API key", "Kết nối App Store Connect API ở trên để xem gói giá.")}</div>`;
+  if (!st.configured || !linked) return intro + `<div class="card">${emptyState("tag2", st.configured ? "App chưa liên kết App Store Connect" : "Cần API key", st.configured ? "Liên kết app qua nút App trên ASC." : "Kết nối App Store Connect API ở trên để xem gói giá.")}</div>`;
   if (!p) return intro + `<div class="card">${emptyState("tag2", "Chưa tải gói giá", "Đọc subscription group, subscription và IAP từ App Store Connect.", `<button class="btn primary" data-act="asc-products">${icon("download")}Tải gói giá</button>`)}</div>`;
   const price = (x) => x?.price ? `$${esc(x.price)}<div class="small faint">bạn nhận $${esc(x.proceeds ?? "—")}</div>` : '<span class="faint">—</span>';
   return intro + `<div class="row" style="margin-bottom:10px"><span class="spacer"></span><button class="btn sm" data-act="asc-products">${icon("refresh")}Tải lại</button></div>
@@ -925,15 +1014,23 @@ document.addEventListener("click", async (e) => {
     switch (a.act) {
       case "close-drawer": location.hash = `#/${current().route.path}`; break;
       case "asc-refresh": await ascLoad(true, btn); break;
-      case "asc-app": ui.asc.app = a.app; ui.asc.data = null; ui.asc.products = null; ui.asc.sel.clear(); render(); break;
+      case "asc-app": ui.asc.app = a.app; ui.asc.data = null; ui.asc.error = null; ui.asc.products = null; ui.asc.sel.clear(); ui.asc.override.clear(); render(); break;
       case "asc-tab": ui.asc.tab = a.tab; render(); break;
       case "asc-sel-all": ascVisible().forEach((r) => ui.asc.sel.add(r.locale)); render(); break;
       case "asc-sel-none": ui.asc.sel.clear(); render(); break;
-      case "asc-sel-changed": ui.asc.sel = new Set(ascVisible().filter((r) => ascPushable(r).length).map((r) => r.locale)); render(); break;
+      case "asc-sel-changed": ui.asc.sel = new Set(ascVisible().filter((r) => ascAuto(r).length).map((r) => r.locale)); render(); break;
       case "asc-push": await ascPush(a.locale ? [a.locale] : [...ui.asc.sel], btn); break;
       case "asc-push-go": await ascPushGo(btn); break;
       case "asc-shots": await ascShots(a.locale, btn); break;
-      case "asc-shots-go": await ascShotsGo(a.locale, btn); break;
+      case "asc-shots-go": await ascShotsGo(a.locale, !!a.override, btn); break;
+      case "asc-accept": await ascAccept(a.locale, a.fields.split(","), btn); break;
+      case "asc-import": await ascImport(btn); break;
+      case "asc-discover": await ascDiscover(btn); break;
+      case "asc-link": {
+        const r = await busy(btn, () => api("/api/appstore/link", { method: "POST", body: { app_store_id: a.id } }));
+        closeLayer("#modal"); S.appstore = r.status; ui.asc.app = r.app; ui.asc.data = null; render();
+        toast(`Đã liên kết ${r.app} với App Store Connect`, "ok", "Đã ghi docs/apps/registry.json"); break;
+      }
       case "asc-products": {
         ui.asc.products = await busy(btn, () => api("/api/appstore/products", { method: "POST", body: { app: ui.asc.app } }));
         render(); break;
@@ -989,6 +1086,14 @@ document.addEventListener("input", (e) => {
 });
 document.addEventListener("change", (e) => {
   if (e.target.dataset.ascSel) { e.target.checked ? ui.asc.sel.add(e.target.dataset.ascSel) : ui.asc.sel.delete(e.target.dataset.ascSel); render(); }
+  if (e.target.dataset.ascOv) {
+    e.target.checked ? ui.asc.override.add(e.target.dataset.ascOv) : ui.asc.override.delete(e.target.dataset.ascOv);
+    const top = $(".drawer-body")?.scrollTop || 0;
+    render();
+    const body = $(".drawer-body");
+    if (body) body.scrollTop = top;
+    return;
+  }
   if (e.target.dataset.ascField) { e.target.checked ? ui.asc.fields.add(e.target.dataset.ascField) : ui.asc.fields.delete(e.target.dataset.ascField); render(); }
   if (e.target.id === "pub-creative") { ui.pub.creative = e.target.value; ui.pub.variant = null; render(); }
   if (e.target.id === "pub-variant") { ui.pub.variant = e.target.value; render(); }

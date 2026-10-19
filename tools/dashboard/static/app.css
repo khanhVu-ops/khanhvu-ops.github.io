@@ -584,10 +584,26 @@ kbd { font: 600 11px var(--mono); padding: 1px 5px; border-radius: 5px; border: 
 .fchip.s-changed { color: var(--warn); background: color-mix(in oklab, var(--warn) 11%, transparent); border-color: color-mix(in oklab, var(--warn) 30%, transparent); }
 .fchip.s-new { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in oklab, var(--accent) 30%, transparent); }
 .fchip.s-over { color: var(--bad); background: color-mix(in oklab, var(--bad) 12%, transparent); border-color: color-mix(in oklab, var(--bad) 32%, transparent); }
-.fchip.s-local { color: var(--text-2); }
+.fchip.s-local, .fchip.s-none { color: var(--text-2); }
+.fchip.s-ahead { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in oklab, var(--accent) 30%, transparent); }
+.fchip.s-conflict { color: var(--serious, var(--bad)); background: color-mix(in oklab, var(--serious, var(--bad)) 12%, transparent); border-color: color-mix(in oklab, var(--serious, var(--bad)) 34%, transparent); }
+.fchip.s-differs { color: var(--warn); background: color-mix(in oklab, var(--warn) 11%, transparent); border-color: color-mix(in oklab, var(--warn) 30%, transparent); }
+.fchip.s-accepted, .fchip.s-empty { color: var(--text-3); background: transparent; }
+.fchip.ov { box-shadow: 0 0 0 2px color-mix(in oklab, var(--warn) 55%, transparent); }
+.asc-legend { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+.ov-pick { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: var(--warn); font-weight: 600; }
+.app-pick { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.app-pick button { display: grid; gap: 6px; text-align: left; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--card, var(--inset)); color: var(--text); cursor: pointer; min-width: 150px; font: inherit; }
+.app-pick button:hover { border-color: var(--border-strong); }
+.app-pick button.on { border-color: color-mix(in oklab, var(--accent) 55%, transparent); background: var(--accent-soft); }
+.app-pick button b { font-size: 14px; }
+.app-pick span { display: flex; gap: 4px; }
+.app-pick i { font-style: normal; font-size: 10.5px; font-weight: 650; padding: 1px 6px; border-radius: 5px; border: 1px solid var(--border); color: var(--text-3); }
+.app-pick i.ok { color: var(--good); border-color: color-mix(in oklab, var(--good) 30%, transparent); }
+.app-pick i.bad { color: var(--bad); border-color: color-mix(in oklab, var(--bad) 30%, transparent); }
 .fchip.locked { border-style: dashed; opacity: 0.7; }
 .legend .fchip { margin-right: 2px; }
-.asc-status { display: flex; flex-wrap: wrap; gap: 14px 32px; align-items: center; }
+.asc-status { margin-top: 0; display: flex; flex-wrap: wrap; gap: 14px 32px; align-items: center; }
 .asc-status > div { display: flex; flex-direction: column; gap: 3px; }
 .asc-status > div > b, .asc-status > div > .pill { margin-left: 0 !important; }
 .asc-bulk { margin-bottom: 12px; gap: 10px; flex-wrap: wrap; }
