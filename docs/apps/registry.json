@@ -7,7 +7,10 @@
       "bundle_id": "com.khanhvu.veilnest",
       "app_store_id": "6813747332",
       "repo": "Apps/IOS-Vault",
-      "store": {"locales": "Docs/ASO/locales", "screenshots": "Docs/ASO/screenshots"}
+      "store": {
+        "locales": "Docs/ASO/locales",
+        "screenshots": "Docs/ASO/screenshots"
+      }
     },
     {
       "id": "color-meter",
@@ -21,9 +24,12 @@
       "id": "paper-drift",
       "name": "Paper Drift",
       "bundle_id": "com.khanhvu.paperdrift",
-      "app_store_id": null,
+      "app_store_id": "6820811705",
       "repo": "Apps/Offline Mini Arcade",
-      "store": null
+      "store": {
+        "locales": "AppStore/locales",
+        "screenshots": "AppStore/screenshots"
+      }
     },
     {
       "id": "veritas",

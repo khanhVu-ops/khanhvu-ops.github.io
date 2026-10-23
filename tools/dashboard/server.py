@@ -184,14 +184,16 @@ def asc_metadata(body: dict) -> dict:
 
 def asc_screenshots(body: dict) -> dict:
     app, locale = str(body.get("app", "")), str(body.get("locale", ""))
+    display_type = body.get("display_type") or None
     with ASC_LOCK:
         client = appstore.Client()
         remote = ASC_CACHE[app] = appstore.remote_listing(client, app)
-        plan = appstore.plan_screenshots(app, remote, locale, asc_marks(app), bool(body.get("override")))
+        plan = appstore.plan_screenshots(app, remote, locale, asc_marks(app), bool(body.get("override")), display_type)
         if body.get("dry_run", True):
             return {"dry_run": True, "plan": plan}
         result = appstore.apply_screenshots(client, app, plan)
-        asc_mark(app, [(locale, "screenshots", plan["key"])], "pushed")
+        mark_key = f"screenshots:{plan['display_type']}"
+        asc_mark(app, [(locale, mark_key, plan["key"]), (locale, "screenshots", plan["key"])], "pushed")
         ASC_CACHE[app] = appstore.remote_listing(client, app)
         return {"dry_run": False, "plan": plan, **result}
 
@@ -234,11 +236,20 @@ def asc_shot_file(query: dict) -> Path | None:
     src = appstore.store_paths(query.get("app", [""])[0])
     if not src:
         return None
-    root = src["screenshots"].resolve()
-    target = (root / query.get("locale", [""])[0] / query.get("file", [""])[0]).resolve()
-    if root not in target.parents or target.suffix.lower() not in appstore.IMAGE_EXT:
+    locale = query.get("locale", [""])[0]
+    file = query.get("file", [""])[0]
+    if not locale or not file or ".." in Path(locale).parts or ".." in Path(file).parts:
         return None
-    return target if target.is_file() else None
+    candidate = src["screenshots"] / locale / file
+    if not candidate.is_file():
+        return None
+    target = candidate.resolve()
+    app_repo = src["repo"].resolve()
+    if app_repo not in target.parents and src["screenshots"].resolve() not in target.parents:
+        return None
+    if target.suffix.lower() not in appstore.IMAGE_EXT:
+        return None
+    return target
 
 
 def reveal(path: str) -> dict:

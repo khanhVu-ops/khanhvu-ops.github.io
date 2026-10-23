@@ -101,7 +101,7 @@ class CampaignTests(TempChannels):
 
     def test_validation_and_cpp(self):
         for bad in ({"app": "veilnest", "ct": "has space"}, {"app": "veilnest", "ct": "x" * 41},
-                    {"app": "paper-drift", "ct": "ok"}, {"app": "veilnest", "ct": "ok", "ppid": "not a uuid!"}):
+                    {"app": "color-meter", "ct": "ok"}, {"app": "veilnest", "ct": "ok", "ppid": "not a uuid!"}):
             with self.assertRaises(repo.RepoError):
                 repo.add_campaign(bad)
         with self.assertRaises(repo.RepoError):

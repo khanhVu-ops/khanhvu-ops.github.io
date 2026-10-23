@@ -169,18 +169,28 @@ def md5(path: Path) -> str:
     return _MD5_CACHE[key]
 
 
-def local_screenshots(app: str, locale: str, checksum: bool = False) -> list[dict]:
+def local_screenshots(app: str, locale: str, checksum: bool = False, display_type: str | None = None) -> list[dict]:
     src = store_paths(app)
     folder = src["screenshots"] / locale if src else None
     if not folder or not folder.is_dir():
         return []
-    shots = []
+    candidates = []
     for p in sorted(folder.iterdir()):
-        if p.suffix.lower() not in IMAGE_EXT or p.name.startswith("."):
+        if p.name.startswith("."):
             continue
+        if p.is_file() and p.suffix.lower() in IMAGE_EXT:
+            candidates.append((p.name, p))
+        elif p.is_dir():
+            for sub in sorted(p.iterdir()):
+                if sub.is_file() and sub.suffix.lower() in IMAGE_EXT and not sub.name.startswith("."):
+                    candidates.append((f"{p.name}/{sub.name}", sub))
+    shots = []
+    for rel_name, p in candidates:
         size = image_size(p)
         dtype = DISPLAY_TYPES.get(tuple(sorted(size))) if size else None
-        shots.append({"file": p.name, "bytes": p.stat().st_size, "width": size[0] if size else None,
+        if display_type and dtype != display_type:
+            continue
+        shots.append({"file": rel_name, "bytes": p.stat().st_size, "width": size[0] if size else None,
                       "height": size[1] if size else None, "display_type": dtype,
                       **({"checksum": md5(p)} if checksum else {})})
     return shots
@@ -203,16 +213,23 @@ def local_listing(app: str) -> dict:
         fields = {k: (meta.get(k) or "").strip() for k in FIELDS}
         problems = [f"{FIELDS[k][3]} {len(v)}/{FIELDS[k][2]}" for k, v in fields.items() if len(v) > FIELDS[k][2]]
         shots = local_screenshots(app, path.parent.name, checksum=True)
-        sizes = {(s["width"], s["height"]) for s in shots}
-        if shots and len(sizes) > 1:
-            problems.append("ảnh khác kích thước nhau")
-        if shots and not all(s["display_type"] for s in shots):
+        by_type: dict[str, list] = {}
+        for s in shots:
+            if s.get("display_type"):
+                by_type.setdefault(s["display_type"], []).append(s)
+        for dt, g in by_type.items():
+            dt_sizes = {(s["width"], s["height"]) for s in g}
+            label = DISPLAY_LABELS.get(dt, dt)
+            if len(dt_sizes) > 1:
+                problems.append(f"ảnh {label} khác kích thước nhau")
+            if len(g) > 10:
+                problems.append(f"{len(g)} ảnh {label}, tối đa 10")
+        if shots and any(not s.get("display_type") for s in shots):
             problems.append("ảnh có kích thước App Store không nhận")
-        if len(shots) > 10:
-            problems.append(f"{len(shots)} ảnh, tối đa 10")
         locales[path.parent.name] = {"fields": fields, "tier": data.get("tier"),
                                      "whats_new_version": data.get("whats_new_version"),
-                                     "screenshots": shots, "problems": problems}
+                                     "screenshots": shots, "screenshots_by_type": by_type,
+                                     "problems": problems}
     return {"app": app, "source": str(src["locales"]), "locales": locales}
 
 
@@ -519,18 +536,47 @@ def compare(local: dict, remote: dict | None, marks: dict | None = None) -> dict
                 if st == "same" and (not mark or mark["local_hash"] != digest(normalize(key, value))):
                     matched.append((code, key, digest(normalize(key, value))))
             fields[key] = entry
+        by_type = l.get("screenshots_by_type") or {}
+        if not by_type and l["screenshots"]:
+            for s in l["screenshots"]:
+                if s.get("display_type"):
+                    by_type.setdefault(s["display_type"], []).append(s)
+        main_dtype = next((s["display_type"] for s in l["screenshots"] if s.get("display_type")), None)
         row = {"locale": code, "tier": l["tier"], "fields": fields, "problems": l["problems"],
                "whats_new_version": l["whats_new_version"], "shots": len(l["screenshots"]),
-               "display_type": next((s["display_type"] for s in l["screenshots"] if s["display_type"]), None)}
+               "display_type": main_dtype, "shots_by_type": {}}
         if remote is not None:
             row["remote_exists"] = bool(r)
-            remote_items = remote_shots(remote, code, row["display_type"])
-            lk, rk = shots_key(l["screenshots"]), shots_key(remote_items)
-            mark = marks.get((code, "screenshots"))
-            row["shots_status"] = "none" if not l["screenshots"] else state(lk, rk, mark)
+            remote_shots_map = remote.get("screenshots", {}).get(code) or {}
+            all_types = sorted(set(by_type.keys()) | set(remote_shots_map.keys()))
+            if not main_dtype and all_types:
+                main_dtype = all_types[0]
+                row["display_type"] = main_dtype
+            remote_items = remote_shots(remote, code, main_dtype) if main_dtype else []
+            main_local = by_type.get(main_dtype, l["screenshots"])
+            lk, rk = shots_key(main_local), shots_key(remote_items)
+            mark = marks.get((code, f"screenshots:{main_dtype}")) or marks.get((code, "screenshots"))
+            row["shots_status"] = "none" if not main_local else state(lk, rk, mark)
             row["shots_remote"] = len(remote_items)
             if row["shots_status"] == "same" and (not mark or mark["local_hash"] != digest(lk)):
-                matched.append((code, "screenshots", digest(lk)))
+                matched.append((code, f"screenshots:{main_dtype}" if len(all_types) > 1 else "screenshots", digest(lk)))
+
+            for dt in all_types:
+                loc_dt = by_type.get(dt, [])
+                rem_dt = (remote_shots_map.get(dt) or {}).get("items") or []
+                lk_dt, rk_dt = shots_key(loc_dt), shots_key(rem_dt)
+                m_dt = marks.get((code, f"screenshots:{dt}")) or (marks.get((code, "screenshots")) if len(all_types) == 1 else None)
+                st_dt = "none" if not loc_dt else state(lk_dt, rk_dt, m_dt)
+                row["shots_by_type"][dt] = {
+                    "display_type": dt, "label": DISPLAY_LABELS.get(dt, dt),
+                    "local_count": len(loc_dt), "remote_count": len(rem_dt),
+                    "status": st_dt,
+                    "local_shots": loc_dt,
+                    "remote_shots": rem_dt,
+                    "mark": m_dt
+                }
+                if st_dt == "same" and (not m_dt or m_dt["local_hash"] != digest(lk_dt)):
+                    matched.append((code, f"screenshots:{dt}", digest(lk_dt)))
         rows.append(row)
     extra = sorted(set((remote or {}).get("locales", {})) - set(local["locales"]))
     return {"rows": rows, "remote_only": extra, "matched": matched}
@@ -616,6 +662,25 @@ def apply_metadata(client: Client, ops: list[dict], on_done=None) -> list[dict]:
                     "type": kind, "attributes": op["attributes"],
                     "relationships": {rel: {"data": {"type": parent_type, "id": op["parent"]}}}}})
         except AscError as exc:
+            # If creating failed because the entity already exists on ASC (e.g. Apple auto-created it
+            # or it was created previously), recover gracefully by finding the existing record and updating it.
+            if op["op"] == "create" and exc.status == 409 and "already exists" in str(exc).lower():
+                try:
+                    existing = client.get_all(f"/v1/{parent_type}/{op['parent']}/{kind}",
+                                              {"filter[locale]": op["locale"]})[0]
+                    if existing:
+                        target_id = existing[0]["id"]
+                        patch_attrs = {k: v for k, v in op["attributes"].items() if k != "locale"}
+                        client.request("PATCH", f"/v1/{kind}/{target_id}", body={"data": {
+                            "type": kind, "id": target_id, "attributes": patch_attrs}})
+                        op["id"] = target_id
+                        op["op"] = "update"
+                        done.append({**op, "ok": True})
+                        if on_done:
+                            on_done(op)
+                        continue
+                except Exception:
+                    pass
             raise AscError(f"Dừng ở {op['locale']} ({op['resource']}): {exc}. {len(done)} lệnh trước đó đã xong.",
                            exc.status) from None
         done.append({**op, "ok": True})
@@ -630,10 +695,12 @@ def pushed_marks(op: dict) -> list[tuple[str, str, str]]:
 
 # --- screenshots push ----------------------------------------------------------------------
 
-def plan_screenshots(app: str, remote: dict, code: str, marks: dict | None = None, override: bool = False) -> dict:
-    shots = local_screenshots(app, code, checksum=True)
+def plan_screenshots(app: str, remote: dict, code: str, marks: dict | None = None, override: bool = False,
+                     display_type: str | None = None) -> dict:
+    shots = local_screenshots(app, code, checksum=True, display_type=display_type)
     if not shots:
-        raise AscError(f"{code}: không có ảnh local", 404)
+        label = DISPLAY_LABELS.get(display_type, display_type) if display_type else ""
+        raise AscError(f"{code}: không có ảnh local {label}".strip(), 404)
     types = {s["display_type"] for s in shots}
     if None in types or len(types) != 1:
         sizes = ", ".join("%s %s×%s" % (s["file"], s["width"], s["height"]) for s in shots)
@@ -650,9 +717,11 @@ def plan_screenshots(app: str, remote: dict, code: str, marks: dict | None = Non
         raise AscError(f"{code}: version chưa có ngôn ngữ này. Đẩy metadata của locale trước.", 409)
     dtype = types.pop()
     current = remote.get("screenshots", {}).get(code, {}).get(dtype) or {"set_id": None, "items": []}
-    st = state(shots_key(shots), shots_key(current["items"]), (marks or {}).get((code, "screenshots")))
+    mark = (marks or {}).get((code, f"screenshots:{dtype}")) or (marks or {}).get((code, "screenshots"))
+    st = state(shots_key(shots), shots_key(current["items"]), mark)
     if st in OVERRIDE and not override:
-        raise AscError(f"{code}: ảnh trên ASC {STATE_VI[st]}. Xác nhận ghi đè nếu muốn thay.", 409)
+        label = DISPLAY_LABELS.get(dtype, dtype)
+        raise AscError(f"{code} ({label}): ảnh trên ASC {STATE_VI[st]}. Xác nhận ghi đè nếu muốn thay.", 409)
     same = st == "same"
     return {"locale": code, "display_type": dtype, "label": DISPLAY_LABELS.get(dtype, dtype), "status": st,
             "version_loc_id": loc["version_loc_id"], "set_id": current["set_id"],
@@ -678,7 +747,7 @@ def apply_screenshots(client: Client, app: str, plan: dict) -> dict:
     for shot in plan["upload"]:
         data = (folder / shot["file"]).read_bytes()
         res = client.request("POST", "/v1/appScreenshots", body={"data": {
-            "type": "appScreenshots", "attributes": {"fileName": shot["file"], "fileSize": len(data)},
+            "type": "appScreenshots", "attributes": {"fileName": Path(shot["file"]).name, "fileSize": len(data)},
             "relationships": {"appScreenshotSet": {"data": {"type": "appScreenshotSets", "id": set_id}}}}})["data"]
         for op in res["attributes"].get("uploadOperations") or []:
             client.upload(op, data[op["offset"]:op["offset"] + op["length"]])

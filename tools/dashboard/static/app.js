@@ -761,7 +761,7 @@ function ascListing(rows, remote) {
       <td class="nowrap"><b>${esc(r.locale)}</b>${r.tier ? ` <span class="tag">T${r.tier}</span>` : ""}${remote && !r.remote_exists ? ` <span class="pill warn" style="height:20px">mới</span>` : ""}</td>
       <td style="max-width:320px"><div class="ellipsis">${esc(f.name.local)}</div><div class="small faint ellipsis">${esc(f.subtitle.local)}</div>${r.problems.length ? `<div class="small" style="color:var(--bad)">${esc(r.problems.join(" · "))}</div>` : ""}</td>
       <td><div class="fchips">${FIELD_KEYS.map((k) => fchip(r, k)).join("")}</div></td>
-      <td class="nowrap small">${r.shots ? `${r.shots} ảnh` : "—"}${remote && r.shots ? `<div><span class="fchip s-${r.shots_status}" title="${esc(ST[r.shots_status]?.[1] || "")}">${esc(ST[r.shots_status]?.[0] || r.shots_status)}</span></div>` : ""}</td>
+      <td class="nowrap small">${r.shots_by_type && Object.keys(r.shots_by_type).length ? Object.values(r.shots_by_type).map((t) => `<div>${esc(t.label)}: ${t.local_count} ảnh <span class="fchip s-${t.status}" title="${esc(ST[t.status]?.[1] || '')}">${esc(ST[t.status]?.[0] || t.status)}</span></div>`).join("") : (r.shots ? `${r.shots} ảnh` : "—")}${remote && r.shots && (!r.shots_by_type || !Object.keys(r.shots_by_type).length) ? `<div><span class="fchip s-${r.shots_status}" title="${esc(ST[r.shots_status]?.[1] || "")}">${esc(ST[r.shots_status]?.[0] || r.shots_status)}</span></div>` : ""}</td>
       <td class="nowrap"><a class="btn sm" href="#/store/${encodeURIComponent(r.locale)}">${icon("eye")}Chi tiết</a></td></tr>`;
   }).join("") || `<tr><td colspan="6">${emptyState("search", "Không có locale khớp bộ lọc", "Bỏ bớt bộ lọc.")}</td></tr>`}
   </tbody></table></div></div>
@@ -796,13 +796,26 @@ function openAscLocale(code) {
           ${canOverride || (remote && ["conflict", "differs"].includes(st)) ? `<div class="row small">${canOverride ? `<label class="ov-pick"><input type="checkbox" data-asc-ov="${esc(ascKey(code, k))}" ${ui.asc.override.has(ascKey(code, k)) ? "checked" : ""}>Ghi đè bản trên ASC khi đẩy</label>` : ""}
             ${["conflict", "differs"].includes(st) ? `<span class="spacer"></span><button class="btn sm" data-act="asc-accept" data-locale="${esc(code)}" data-fields="${k}">${icon("check")}Giữ bản ASC</button>` : ""}</div>` : ""}</div>`;
       }).join("")}
+      ${r.shots_by_type && Object.keys(r.shots_by_type).length ? Object.entries(r.shots_by_type).map(([dt, info]) => `
+      <div class="asc-shot-block" style="margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
+        <div class="section-title" style="margin-top:0"><h2>Screenshot ${esc(info.label)}</h2>
+          <span class="sub">${info.local_count} ảnh local${remote ? ` · <span class="fchip s-${info.status}">${ST[info.status]?.[0] || info.status}</span>` : ""}${info.mark ? ` <span class="faint">mốc ${dateVN(info.mark.at)}</span>` : ""}</span>
+          <span class="spacer"></span>
+          ${remote && ["conflict", "differs"].includes(info.status) ? `<button class="btn sm" data-act="asc-accept" data-locale="${esc(code)}" data-fields="screenshots:${esc(dt)}">${icon("check")}Giữ ảnh ASC</button>` : ""}
+          ${remote && info.local_count ? `<button class="btn sm" data-act="asc-shots" data-locale="${esc(code)}" data-display-type="${esc(dt)}" ${info.status === "same" ? "disabled" : ""}>${icon("upload")}${info.status === "same" ? "Ảnh đã khớp" : `Thay screenshot ${esc(info.label)}`}</button>` : ""}
+        </div>
+        ${remote && ["conflict", "differs", "accepted"].includes(info.status) ? `<div class="small faint" style="margin-bottom:8px">${esc(ST[info.status]?.[1] || "")} So khớp bằng MD5.</div>` : ""}
+        ${info.local_shots && info.local_shots.length ? `<div class="shot-strip">${info.local_shots.map((s) => `<a href="/asc-shot?app=${esc(app)}&locale=${encodeURIComponent(code)}&file=${encodeURIComponent(s.file)}" target="_blank"><img loading="lazy" src="/asc-shot?app=${esc(app)}&locale=${encodeURIComponent(code)}&file=${encodeURIComponent(s.file)}" alt="${esc(s.file)}"><span>${esc(s.file)}</span></a>`).join("")}</div>` : `<div class="small muted">Chưa có ảnh local cho ${esc(info.label)}.</div>`}
+        ${remote && info.remote_shots && info.remote_shots.length ? `<div class="small faint" style="margin:8px 0 4px">Đang có trên ASC (${info.remote_shots.length} ảnh):</div><div class="shot-strip">${info.remote_shots.map((i) => `<a ${i.url ? `href="${esc(i.url)}" target="_blank"` : ""}>${i.url ? `<img loading="lazy" src="${esc(i.url)}" alt="">` : `<div class="ph"></div>`}<span>${esc(i.file || "")}</span></a>`).join("")}</div>` : ""}
+      </div>`).join("") : `
       <div><div class="section-title" style="margin-top:0"><h2>Screenshot</h2><span class="sub">${local.screenshots.length} ảnh local${local.screenshots[0] ? ` · ${local.screenshots[0].width}×${local.screenshots[0].height}` : ""}${remote && local.screenshots.length ? ` · <span class="fchip s-${r.shots_status}">${ST[r.shots_status][0]}</span>` : ""}${shotMark ? ` <span class="faint">mốc ${dateVN(shotMark.at)}</span>` : ""}</span>
         <span class="spacer"></span>${remote && ["conflict", "differs"].includes(r.shots_status) ? `<button class="btn sm" data-act="asc-accept" data-locale="${esc(code)}" data-fields="screenshots">${icon("check")}Giữ ảnh ASC</button>` : ""}
         ${remote && local.screenshots.length ? `<button class="btn sm" data-act="asc-shots" data-locale="${esc(code)}" ${r.shots_status === "same" ? "disabled" : ""}>${icon("upload")}${r.shots_status === "same" ? "Ảnh đã khớp" : "Thay screenshot trên ASC"}</button>` : ""}</div>
         ${remote && ["conflict", "differs", "accepted"].includes(r.shots_status) ? `<div class="small faint" style="margin-bottom:8px">${esc(ST[r.shots_status][1])} So khớp bằng MD5: ảnh export lại, dù trông giống, vẫn tính là khác.</div>` : ""}
-        ${local.screenshots.length ? `<div class="shot-strip">${local.screenshots.map((s) => `<a href="/asc-shot?app=${esc(app)}&locale=${encodeURIComponent(code)}&file=${encodeURIComponent(s.file)}" target="_blank"><img loading="lazy" src="/asc-shot?app=${esc(app)}&locale=${encodeURIComponent(code)}&file=${encodeURIComponent(s.file)}" alt="${esc(s.file)}"><span>${esc(s.file)}</span></a>`).join("")}</div>` : `<div class="small muted">Không có ảnh local cho locale này.</div>`}</div>
-      ${remote ? `<div><div class="section-title" style="margin-top:0"><h2>Screenshot trên ASC</h2><span class="sub">version ${esc(remote.version?.version || "—")}</span></div>
+        ${local.screenshots.length ? `<div class="shot-strip">${local.screenshots.map((s) => `<a href="/asc-shot?app=${esc(app)}&locale=${encodeURIComponent(code)}&file=${encodeURIComponent(s.file)}" target="_blank"><img loading="lazy" src="/asc-shot?app=${esc(app)}&locale=${encodeURIComponent(code)}&file=${encodeURIComponent(s.file)}" alt="${esc(s.file)}"><span>${esc(s.file)}</span></a>`).join("")}</div>` : `<div class="small muted">Không có ảnh local cho locale này.</div>`}
+        ${remote ? `<div><div class="section-title" style="margin-top:12px"><h2>Screenshot trên ASC</h2><span class="sub">version ${esc(remote.version?.version || "—")}</span></div>
         ${rshots.length ? rshots.map(([t, set]) => `<div class="small faint" style="margin-bottom:6px">${esc(t)} · ${set.items.length} ảnh</div><div class="shot-strip">${set.items.map((i) => `<a ${i.url ? `href="${esc(i.url)}" target="_blank"` : ""}>${i.url ? `<img loading="lazy" src="${esc(i.url)}" alt="">` : `<div class="ph"></div>`}<span>${esc(i.file || "")}</span></a>`).join("")}</div>`).join("") : `<div class="small muted">Version này chưa có screenshot cho ${esc(code)}.</div>`}</div>` : ""}
+      </div>`}
     </div></div>`;
   layer.hidden = false;
 }
@@ -835,23 +848,24 @@ async function ascPushGo(btn) {
   toast(`Đã đẩy ${r.done.length} thay đổi lên App Store Connect`);
   await ascLoad(false);
 }
-async function ascShots(locale, btn) {
+async function ascShots(locale, btn, displayType) {
   const row = ui.asc.data.compare.rows.find((r) => r.locale === locale);
-  const override = OVERRIDE.has(row?.shots_status);
-  const r = await busy(btn, () => api("/api/appstore/screenshots", { method: "POST", body: { app: ui.asc.app, locale, dry_run: true, override } }));
+  const stInfo = displayType && row?.shots_by_type ? row.shots_by_type[displayType] : null;
+  const override = OVERRIDE.has(stInfo?.status || row?.shots_status);
+  const r = await busy(btn, () => api("/api/appstore/screenshots", { method: "POST", body: { app: ui.asc.app, locale, display_type: displayType || null, dry_run: true, override } }));
   const p = r.plan;
-  if (p.unchanged) return toast(`${locale}: screenshot trên ASC đã giống hệt local`);
-  openModal(`<div class="modal-head"><h2>Thay screenshot · ${esc(locale)}</h2><button type="button" class="icon-btn" data-act="close-modal">${icon("x")}</button></div>
+  if (p.unchanged) return toast(`${locale} (${p.label}): screenshot trên ASC đã giống hệt local`);
+  openModal(`<div class="modal-head"><h2>Thay screenshot · ${esc(locale)} (${esc(p.label)})</h2><button type="button" class="icon-btn" data-act="close-modal">${icon("x")}</button></div>
     <div class="modal-body stack">
       <div>Bộ <b>${esc(p.label)}</b> (${esc(p.display_type)}): ${p.delete.length ? `xoá <b>${p.delete.length}</b> ảnh đang có trên ASC, ` : ""}upload <b>${p.upload.length}</b> ảnh local theo đúng thứ tự.</div>
       ${p.remote_files.length ? `<div class="small faint">Đang có: ${esc(p.remote_files.join(", "))}</div>` : ""}
       <div class="shot-strip">${p.upload.map((s) => `<a><img src="/asc-shot?app=${esc(ui.asc.app)}&locale=${encodeURIComponent(locale)}&file=${encodeURIComponent(s.file)}" alt=""><span>${esc(s.file)}</span></a>`).join("")}</div>
       ${override ? `<div class="callout warn">${icon("alert")}<div>Ảnh trên ASC <b>${esc(ST[p.status][0].toLowerCase())}</b>: không do dashboard đẩy, có thể bạn đã upload tay. Bấm thay là ghi đè.</div></div>` : ""}
       <div class="callout warn">${icon("alert")}<div>Ảnh cũ bị xoá trước (mỗi bộ tối đa 10 ảnh). Nếu upload hỏng giữa chừng, bấm lại để chạy tiếp; bản gốc vẫn ở repo app.</div></div></div>
-    <div class="modal-foot"><button type="button" class="btn ghost" data-act="close-modal">Huỷ</button><button class="btn primary" data-act="asc-shots-go" data-locale="${esc(locale)}" data-override="${override ? 1 : ""}">${icon("upload")}Thay ${p.upload.length} ảnh</button></div>`);
+    <div class="modal-foot"><button type="button" class="btn ghost" data-act="close-modal">Huỷ</button><button class="btn primary" data-act="asc-shots-go" data-locale="${esc(locale)}" data-display-type="${esc(p.display_type)}" data-override="${override ? 1 : ""}">${icon("upload")}Thay ${p.upload.length} ảnh ${esc(p.label)}</button></div>`);
 }
-async function ascShotsGo(locale, override, btn) {
-  const r = await busy(btn, () => api("/api/appstore/screenshots", { method: "POST", body: { app: ui.asc.app, locale, dry_run: false, override } }));
+async function ascShotsGo(locale, override, btn, displayType) {
+  const r = await busy(btn, () => api("/api/appstore/screenshots", { method: "POST", body: { app: ui.asc.app, locale, display_type: displayType || null, dry_run: false, override } }));
   closeLayer("#modal");
   toast(`${locale}: đã upload ${r.uploaded} ảnh, xoá ${r.deleted} ảnh cũ`, "ok", "Apple còn xử lý ảnh vài phút trước khi hiện trong App Store Connect.");
   await ascLoad(false);
@@ -1024,8 +1038,8 @@ document.addEventListener("click", async (e) => {
       case "asc-sel-changed": ui.asc.sel = new Set(ascVisible().filter((r) => ascAuto(r).length).map((r) => r.locale)); render(); break;
       case "asc-push": await ascPush(a.locale ? [a.locale] : [...ui.asc.sel], btn); break;
       case "asc-push-go": await ascPushGo(btn); break;
-      case "asc-shots": await ascShots(a.locale, btn); break;
-      case "asc-shots-go": await ascShotsGo(a.locale, !!a.override, btn); break;
+      case "asc-shots": await ascShots(a.locale, btn, a.displayType); break;
+      case "asc-shots-go": await ascShotsGo(a.locale, !!a.override, btn, a.displayType); break;
       case "asc-accept": await ascAccept(a.locale, a.fields.split(","), btn); break;
       case "asc-import": await ascImport(btn); break;
       case "asc-discover": await ascDiscover(btn); break;
