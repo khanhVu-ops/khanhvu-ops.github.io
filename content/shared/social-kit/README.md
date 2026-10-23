@@ -97,6 +97,25 @@ Paper Drift: a calm paper-boat puzzle game (in development).
 Support: khanhvu.dev@gmail.com
 ```
 
+### Reddit — tài khoản cá nhân của developer
+
+Reddit dùng tài khoản cá nhân, không làm profile thương hiệu (xem [kênh Reddit](../../../docs/social/channels/reddit/README.md)). Username Reddit không đổi được sau khi tạo; ghi username thật vào sổ tài khoản.
+
+Vào **Settings → Profile** (hoặc **Edit profile** trên trang hồ sơ):
+
+1. Display name (≤ 30 ký tự): `Khanh Vu`.
+2. About (≤ 200 ký tự):
+
+```text
+Solo dev behind KV Apps: practical iOS apps & offline games (Veilnest, Color Meter). Here for SwiftUI, indie dev and app marketing talk. I always say when I made something.
+```
+
+3. Avatar: `../logo/avatar-light-1024.png`, hoặc ảnh cá nhân nếu muốn trông như người thật hơn. Banner để trống.
+4. Social links: Website `https://khanhvu-ops.github.io/` (tiêu đề “KV Apps”), YouTube `https://www.youtube.com/@khanhvuapps`. Không thêm App Store vào profile.
+5. NSFW: tắt. Giữ hiển thị bài và comment trên profile để mod và người đọc kiểm tra được lịch sử.
+
+Lưu xong thì mở profile ở cửa sổ ẩn danh để kiểm tra, rồi ghi username và ngày vào sổ tài khoản.
+
 ## Sau khi xong
 
 Kiểm tra từng profile ở chế độ chưa đăng nhập, ghi ngày và URL vào [ACCOUNTS.md](../../../docs/social/ACCOUNTS.md). Chỉ thêm link kênh lên website sau khi URL public đã kiểm tra.

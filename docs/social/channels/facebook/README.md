@@ -2,7 +2,7 @@
 
 Trạng thái đăng ký cá nhân/Page: [sổ tài khoản](../../ACCOUNTS.md). Nhật ký Page: [POSTS.md](POSTS.md).
 
-Facebook cá nhân thật đã đăng ký xong và đang đăng nhập; tài khoản này sẽ quản trị **Facebook Page KV Apps**. Không dùng tên thương hiệu để thay tên cá nhân trong bước đăng ký. Chỉ công khai Page trong website; không cần công khai profile cá nhân trong tài liệu này.
+**Tạm dừng (19/10/2026):** chủ studio báo Facebook cá nhân dùng để quản trị Page đã bị khoá vĩnh viễn; Page chưa được tạo. Kênh này chờ kết quả kháng nghị, không tạo tài khoản mới để lách khoá. Các bước dưới chỉ áp dụng khi có lại tài khoản quản trị hợp lệ. Không dùng tên thương hiệu để thay tên cá nhân trong bước đăng ký. Chỉ công khai Page trong website; không cần công khai profile cá nhân trong tài liệu này.
 
 ## Hoàn tất và vận hành
 

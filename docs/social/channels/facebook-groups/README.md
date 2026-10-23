@@ -1,6 +1,6 @@
 # Nhóm Facebook "Thủ thuật iPhone" (VN)
 
-Đăng bằng **Facebook cá nhân thật** của chủ studio, sau khi tài khoản đã hoàn tất (xem [sổ tài khoản](../../ACCOUNTS.md)). Đây là kênh cộng đồng, khác với [Facebook Page](../facebook/README.md). Nhật ký: [POSTS.md](POSTS.md).
+**Tạm dừng (19/10/2026):** Facebook cá nhân của chủ studio đã bị khoá, nên chưa thể đăng ở nhóm. Đăng bằng **Facebook cá nhân thật** của chủ studio, sau khi tài khoản đã hoàn tất (xem [sổ tài khoản](../../ACCOUNTS.md)). Đây là kênh cộng đồng, khác với [Facebook Page](../facebook/README.md). Nhật ký: [POSTS.md](POSTS.md).
 
 ## Chọn nhóm
 

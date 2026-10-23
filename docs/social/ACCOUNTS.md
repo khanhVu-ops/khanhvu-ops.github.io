@@ -9,10 +9,10 @@ Cập nhật **19/10/2026**. Google chủ sở hữu studio: **`khanhvu.dev@gmai
 | Instagram | [KV Apps · @khanhvuapps](https://www.instagram.com/khanhvuapps/) | Đã chuyển Business, category Software; logo mới và bio đã lưu | Email studio đã đối chiếu trong Accounts Center | Website trong trường Links đã lưu qua Meta Business Suite và xác nhận trên profile sau reload; nút contact cần kiểm tra trong app mobile |
 | Threads | [KV Apps · @khanhvuapps](https://www.threads.com/@khanhvuapps) | Đã tạo profile public; bio, logo mới kế thừa từ Instagram và link website riêng đã kiểm tra sau reload (18/10) | Instagram `khanhvuapps` | Bài đầu tiên |
 | Meta Business Suite | [Business Suite](https://business.facebook.com/) | Đã đăng nhập bằng Instagram studio và thấy dashboard @khanhvuapps | Instagram `khanhvuapps` | Chưa có Facebook Page được kết nối; luồng Connect Facebook Page chưa hoàn tất |
-| Meta for Developers | [Cổng ứng dụng](https://developers.facebook.com/apps/) cho Instagram/Threads | Chưa tạo app; chủ studio đã thực hiện bước truy cập nhưng cổng Developers vẫn chưa cho vào (19/10) | Facebook cá nhân của chủ studio; email liên hệ dự kiến `khanhvu.dev@gmail.com` | Chờ thông báo cho phép truy cập từ Meta rồi kiểm tra lại; sau đó tạo app theo use case được hỗ trợ và kết nối dashboard. Xem [checklist](META_SETUP.md) |
-| Facebook cá nhân | Tài khoản thật của chủ studio | Chủ studio đã hoàn tất đăng ký; phiên Facebook đang đăng nhập đã kiểm tra (18/10) | Chủ studio | Dùng tài khoản này quản trị Page; không công khai thông tin xác minh cá nhân |
-| Facebook Page | Tên dự kiến KV Apps; `facebook.com/khanhvuapps` chưa có trang public (18/10) | Chưa tạo | Sẽ do Facebook cá nhân quản trị | Đã được chủ studio chấp nhận chính sách và thử tạo; vẫn chưa thành công. Chủ studio nhận định có thể do tài khoản mới; chưa có thông báo Facebook xác nhận nguyên nhân hoặc thời điểm thử lại |
-| Reddit | Tài khoản cá nhân của chủ studio (chưa ghi username) | Chưa kiểm tra | Chủ studio | Kiểm tra tuổi tài khoản/karma trước bài đầu; xem [hướng dẫn](channels/reddit/README.md) |
+| Meta for Developers | [Cổng ứng dụng](https://developers.facebook.com/apps/) cho Instagram/Threads | Tạm dừng: chưa tạo app; Facebook cá nhân dùng để vào cổng đã bị khoá (19/10) | Chưa có tài khoản quản trị khả dụng; email liên hệ dự kiến `khanhvu.dev@gmail.com` | Chờ kết quả kháng nghị Facebook. Không tạo Facebook mới để lách khoá. Xem [checklist](META_SETUP.md) |
+| Facebook cá nhân | Tài khoản thật của chủ studio | Đăng ký 18/10; chủ studio báo tài khoản đã bị khoá vĩnh viễn (19/10). Chưa ghi nhận lý do Facebook nêu hay kết quả kháng nghị | Chủ studio | Kháng nghị nếu Facebook còn cho phép; kiểm tra Instagram/Threads vẫn hoạt động. Không công khai thông tin xác minh cá nhân |
+| Facebook Page | Tên dự kiến KV Apps; `facebook.com/khanhvuapps` chưa có trang public (18/10) | Tạm dừng, chưa tạo | Không còn tài khoản quản trị khả dụng | Các lần tạo 18/10 không thành công; Facebook cá nhân sau đó bị khoá vĩnh viễn (19/10). Chỉ quay lại khi khôi phục được tài khoản quản trị hợp lệ |
+| Reddit | Tài khoản cá nhân của chủ studio (chưa ghi username) | Chủ studio báo đã đăng ký (19/10); profile chưa thiết lập, chưa kiểm tra public | Chủ studio | Điền profile theo [social kit](../../content/shared/social-kit/README.md#reddit--tài-khoản-cá-nhân-của-developer), ghi username; tham gia thảo luận vài ngày trước bài đầu; xem [hướng dẫn](channels/reddit/README.md) |
 | Google Cloud (YouTube API) | Project `kvapps-studio`; app `KV Apps Studio Tools`; client `KV Apps Studio Desktop` | Đã bật cả hai API, app External/Testing với test user studio; OAuth hoàn tất, `upload.py channel` trả đúng KV Apps `UC7kW-0SrYs4FGm1LFT9zJRw`; dashboard hiện Đã kết nối (19/10) | `khanhvu.dev@gmail.com` | Client, token và `.env` chỉ lưu local; chưa thử upload thật hoặc đồng bộ Analytics. Cần bản render được duyệt cho lần upload private đầu. [Thiết lập tool](../../tools/youtube/README.md) |
 | Apple Developer | Email studio | Người dùng xác nhận đang dùng email này; chưa audit quyền | `khanhvu.dev@gmail.com` | Kiểm tra lại trong Apple khi thay đổi quyền |
 | AdMob | Email studio | Người dùng xác nhận đang dùng email này; chưa audit quyền | `khanhvu.dev@gmail.com` | Giữ seller file hiện có; kiểm tra quyền trực tiếp khi cần |
@@ -63,6 +63,10 @@ Solo dev building iOS apps & offline games. Notes on shipping, privacy and app m
 ```
 
 Đã kiểm tra trực quan avatar mảnh ghép mới, kế thừa từ Instagram, cùng bio và link website sau reload.
+
+## Facebook cá nhân — bị khoá (19/10)
+
+Chủ studio báo ngày 19/10/2026 tài khoản Facebook cá nhân đã bị khoá vĩnh viễn. Chưa ghi lý do hay hạn kháng nghị vì chưa thấy thông báo gốc. Hệ quả: Facebook Page, nhóm Facebook VN và Meta for Developers tạm dừng. Instagram, Threads và Meta Business Suite đăng nhập bằng Instagram; cần kiểm tra lại xem việc khoá có ảnh hưởng tới chúng không. Không tạo tài khoản Facebook mới để thay thế: điều khoản Meta cấm việc này sau khi tài khoản bị vô hiệu hoá, và có thể kéo theo các tài khoản liên kết.
 
 ## Facebook Page — chưa tạo thành công
 

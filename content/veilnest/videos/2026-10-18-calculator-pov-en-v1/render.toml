@@ -34,11 +34,11 @@ meta = "youtube-c.toml"
 
 [[text]]
 text = "Still a calculator. Still private."
-start = 9.2
-end = 12.8
+start = 7.0
+end = 9.8
 
 [end_card]
-start = 13.0
+start = 10.0
 title = "Veilnest"
 subtitle = "Private photo vault"
 cta = "Search “Veilnest” on the App Store"

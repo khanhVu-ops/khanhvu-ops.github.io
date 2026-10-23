@@ -1,6 +1,6 @@
 # Kết nối Meta cho dashboard studio
 
-Cập nhật **19/10/2026**. Chưa có Meta app hoặc token được tạo trong phiên thiết lập. Chủ studio đã thực hiện bước truy cập; kiểm tra lại [Meta for Developers](https://developers.facebook.com/apps/) vẫn chưa vào được danh sách ứng dụng. Chờ thông báo từ Meta trước khi tiếp tục. Trạng thái trong [ACCOUNTS.md](ACCOUNTS.md) là nguồn sự thật; Business Suite đã đăng nhập không đồng nghĩa với app Developer đã được tạo. Không lưu ảnh hoặc dữ liệu xác minh cá nhân trong repo.
+Cập nhật **19/10/2026**. **Tạm dừng:** Facebook cá nhân dùng để vào cổng Developers đã bị khoá vĩnh viễn theo chủ studio (19/10); chờ kết quả kháng nghị trước khi làm tiếp. Chưa có Meta app hoặc token được tạo trong phiên thiết lập. Chủ studio đã thực hiện bước truy cập; kiểm tra lại [Meta for Developers](https://developers.facebook.com/apps/) vẫn chưa vào được danh sách ứng dụng. Chờ thông báo từ Meta trước khi tiếp tục. Trạng thái trong [ACCOUNTS.md](ACCOUNTS.md) là nguồn sự thật; Business Suite đã đăng nhập không đồng nghĩa với app Developer đã được tạo. Không lưu ảnh hoặc dữ liệu xác minh cá nhân trong repo.
 
 ## Cấu hình dự kiến
 
