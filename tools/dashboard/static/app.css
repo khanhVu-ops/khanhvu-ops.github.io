@@ -419,6 +419,10 @@ select { appearance: none; padding-right: 30px; background-image: url("data:imag
     position: absolute; left: 50%; top: 8vh; transform: translateX(-50%); width: min(620px, 94vw); max-height: 84vh; overflow: auto;
     background: var(--panel); border-radius: var(--r-xl); box-shadow: var(--shadow-pop); animation: pop 0.25s var(--ease);
 }
+.modal.wide { width: min(860px, 95vw); }
+.bulk-progress { padding: 14px 16px; background: var(--card); border-radius: var(--r-md); border: 1px solid var(--border); display: grid; gap: 8px; margin-bottom: 12px; }
+.progress-track { height: 8px; background: var(--inset); border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent); transition: width 0.25s ease; }
 @keyframes pop { from { opacity: 0; transform: translate(-50%, 8px) scale(0.98); } }
 .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 22px 4px; }
 .modal-head h2 { font-size: 18px; }

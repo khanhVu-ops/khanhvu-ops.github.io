@@ -627,7 +627,7 @@ const ST = {
 };
 const AUTO = new Set(["new", "ahead"]);
 const OVERRIDE = new Set(["conflict", "differs", "accepted"]);
-ui.asc = { app: null, data: null, loading: false, error: null, filter: "all", q: "", sel: new Set(), fields: new Set(FIELD_KEYS), tab: "listing", products: null, pending: null, override: new Set(), discover: null };
+ui.asc = { app: null, data: null, loading: false, error: null, filter: "all", q: "", sel: new Set(), fields: new Set(FIELD_KEYS), tab: "listing", products: null, pending: null, override: new Set(), discover: null, bulkRunning: false, bulkCancel: false, bulkSets: [] };
 
 async function ascLoad(refresh = false, btn = null) {
   const app = ui.asc.app;
@@ -646,13 +646,33 @@ async function ascLoad(refresh = false, btn = null) {
 }
 const ascKey = (loc, k) => `${loc}|${k}`;
 const fstate = (f) => (f.over ? "over" : f.status || "local");
+
+const hasTodoShots = (r) => {
+  if (r.shots_by_type && Object.keys(r.shots_by_type).length) {
+    return Object.values(r.shots_by_type).some((t) => AUTO.has(t.status));
+  }
+  return AUTO.has(r.shots_status);
+};
+const hasCheckShots = (r) => {
+  if (r.shots_by_type && Object.keys(r.shots_by_type).length) {
+    return Object.values(r.shots_by_type).some((t) => ["conflict", "differs"].includes(t.status));
+  }
+  return ["conflict", "differs"].includes(r.shots_status);
+};
+const isSyncedShots = (r) => {
+  if (r.shots_by_type && Object.keys(r.shots_by_type).length) {
+    return Object.values(r.shots_by_type).every((t) => ["same", "accepted", "none"].includes(t.status));
+  }
+  return ["same", "accepted", "none"].includes(r.shots_status);
+};
+
 function ascVisible() {
   const rows = ui.asc.data?.compare.rows || [];
   const q = ui.asc.q.trim().toLowerCase();
   return rows.filter((r) => (!q || `${r.locale} ${r.fields.name.local}`.toLowerCase().includes(q)) &&
     (ui.asc.filter === "all"
-      || (ui.asc.filter === "todo" && (ascAuto(r).length || AUTO.has(r.shots_status)))
-      || (ui.asc.filter === "check" && (FIELD_KEYS.some((k) => ["conflict", "differs"].includes(r.fields[k].status)) || ["conflict", "differs"].includes(r.shots_status)))
+      || (ui.asc.filter === "todo" && (ascAuto(r).length || hasTodoShots(r)))
+      || (ui.asc.filter === "check" && (FIELD_KEYS.some((k) => ["conflict", "differs"].includes(r.fields[k].status)) || hasCheckShots(r)))
       || (ui.asc.filter === "problems" && (r.problems.length || Object.values(r.fields).some((f) => f.over)))));
 }
 const sendable = (f) => !f.over && f.editable;
@@ -661,6 +681,43 @@ const ascAuto = (r) => FIELD_KEYS.filter((k) => ui.asc.fields.has(k) && AUTO.has
 // Fields that will actually be sent: the safe ones plus those ticked for override.
 const ascPushable = (r) => FIELD_KEYS.filter((k) => ui.asc.fields.has(k) && sendable(r.fields[k]) &&
   (AUTO.has(r.fields[k].status) || (OVERRIDE.has(r.fields[k].status) && ui.asc.override.has(ascKey(r.locale, k)))));
+
+function ascShotsSets(rows, targetLocales = null) {
+  const list = [];
+  const target = targetLocales && targetLocales.size ? rows.filter((r) => targetLocales.has(r.locale)) : rows;
+  for (const r of target) {
+    if (r.shots_by_type && Object.keys(r.shots_by_type).length) {
+      for (const [dt, info] of Object.entries(r.shots_by_type)) {
+        if (info.local_count > 0) {
+          list.push({
+            key: `${r.locale}:${dt}`,
+            locale: r.locale,
+            tier: r.tier,
+            display_type: dt,
+            label: info.label || dt,
+            local_count: info.local_count,
+            remote_count: info.remote_count || 0,
+            status: info.status || "new",
+            remote_exists: !!r.remote_exists,
+          });
+        }
+      }
+    } else if (r.shots > 0) {
+      list.push({
+        key: `${r.locale}:${r.display_type || "default"}`,
+        locale: r.locale,
+        tier: r.tier,
+        display_type: r.display_type || null,
+        label: "Screenshot",
+        local_count: r.shots,
+        remote_count: r.shots_remote || 0,
+        status: r.shots_status || "new",
+        remote_exists: !!r.remote_exists,
+      });
+    }
+  }
+  return list;
+}
 
 function fchip(r, k) {
   const f = r.fields[k];
@@ -698,9 +755,9 @@ function viewStore() {
   if (!d) return head + (ui.asc.error ? `<div class="callout bad" style="margin-top:14px">${icon("xCircle")}<div>${esc(ui.asc.error)}</div></div>` : `<div class="loading"><span class="spinner"></span>Đang đọc listing local…</div>`);
   const rows = d.compare.rows;
   if (!rows.length) return head + ascNoSource(app, st, remote, d);
-  const todo = remote ? rows.filter((r) => ascAuto(r).length).length : 0;
-  const check = remote ? rows.filter((r) => FIELD_KEYS.some((k) => ["conflict", "differs"].includes(r.fields[k].status)) || ["conflict", "differs"].includes(r.shots_status)).length : 0;
-  const synced = remote ? rows.filter((r) => FIELD_KEYS.every((k) => ["same", "empty", "accepted"].includes(r.fields[k].status)) && ["same", "accepted", "none"].includes(r.shots_status)).length : 0;
+  const todo = remote ? rows.filter((r) => ascAuto(r).length || hasTodoShots(r)).length : 0;
+  const check = remote ? rows.filter((r) => FIELD_KEYS.some((k) => ["conflict", "differs"].includes(r.fields[k].status)) || hasCheckShots(r)).length : 0;
+  const synced = remote ? rows.filter((r) => FIELD_KEYS.every((k) => ["same", "empty", "accepted"].includes(r.fields[k].status)) && isSyncedShots(r)).length : 0;
   const v = remote?.version;
   return head + `
   <div class="grid cols-4" style="margin-top:16px">
@@ -744,6 +801,8 @@ function ascListing(rows, remote) {
   const list = ascVisible();
   const sel = ui.asc.sel;
   const pushable = [...sel].map((c) => rows.find((r) => r.locale === c)).filter((r) => r && ascPushable(r).length);
+  const shotsSets = ascShotsSets(rows, sel.size ? sel : null);
+  const shotsPushable = shotsSets.filter((s) => s.status !== "same" && s.remote_exists);
   const filters = [["all", "Tất cả"], ...(remote ? [["todo", "Cần đẩy"], ["check", "Cần xem"]] : []), ["problems", "Có lỗi"]];
   return `<div class="toolbar">
     <div class="seg" data-filter="asc">${filters.map(([k, l]) => `<button class="${ui.asc.filter === k ? "on" : ""}" data-val="${k}">${l}</button>`).join("")}</div>
@@ -753,7 +812,9 @@ function ascListing(rows, remote) {
   </div>
   ${remote ? `<div class="card card-pad row asc-bulk"><span><b>${sel.size}</b> locale đã chọn${sel.size ? ` · <b>${pushable.length}</b> có field sẽ đẩy` : ""}${ui.asc.override.size ? ` · <b>${ui.asc.override.size}</b> field ghi đè` : ""}</span>
     <button class="btn sm ghost" data-act="asc-sel-changed">Chọn locale cần đẩy</button><button class="btn sm ghost" data-act="asc-sel-all">Chọn tất cả đang hiện</button>${sel.size ? `<button class="btn sm ghost" data-act="asc-sel-none">Bỏ chọn</button>` : ""}
-    <span class="spacer"></span><button class="btn sm primary" data-act="asc-push" ${pushable.length ? "" : "disabled"}>${icon("upload")}Xem trước & đẩy metadata</button></div>` : ""}
+    <span class="spacer"></span>
+    <button class="btn sm" data-act="asc-bulk-shots" ${shotsPushable.length ? "" : "disabled"} title="${shotsPushable.length} bộ screenshot cần đẩy">${icon("upload")}Đẩy screenshot hàng loạt${shotsPushable.length ? ` (${shotsPushable.length} bộ)` : ""}</button>
+    <button class="btn sm primary" data-act="asc-push" ${pushable.length ? "" : "disabled"}>${icon("upload")}Xem trước & đẩy metadata</button></div>` : ""}
   <div class="card"><div class="table-wrap"><table class="asc-table"><thead><tr>${remote ? "<th></th>" : ""}<th>Locale</th><th>Tên app · Subtitle</th><th>Field</th><th>Ảnh</th><th></th></tr></thead><tbody>
   ${list.map((r) => {
     const f = r.fields;
@@ -870,6 +931,230 @@ async function ascShotsGo(locale, override, btn, displayType) {
   toast(`${locale}: đã upload ${r.uploaded} ảnh, xoá ${r.deleted} ảnh cũ`, "ok", "Apple còn xử lý ảnh vài phút trước khi hiện trong App Store Connect.");
   await ascLoad(false);
 }
+
+function ascBulkShots() {
+  const d = ui.asc.data;
+  if (!d?.remote) return toast("Cần tải dữ liệu từ App Store Connect trước", "err");
+  const rows = d.compare.rows;
+  const targetLocales = ui.asc.sel.size ? ui.asc.sel : null;
+  const sets = ascShotsSets(rows, targetLocales);
+  if (!sets.length) return toast("Không có bộ screenshot local nào để đẩy", "err");
+
+  ui.asc.bulkSets = sets;
+  const v = d.remote.version;
+  const app = S.appstore.apps.find((a) => a.id === ui.asc.app);
+
+  const initialCheckedCount = sets.filter((s) => s.status !== "same" && s.remote_exists).length;
+  const hasOverride = sets.some((s) => OVERRIDE.has(s.status));
+
+  const html = `
+    <div class="modal-head">
+      <h2>Đẩy screenshot hàng loạt</h2>
+      <button type="button" class="icon-btn" data-act="close-modal" id="bulk-close-btn">${icon("x")}</button>
+    </div>
+    <div class="modal-body stack">
+      <div class="small muted">
+        App <b>${esc(app?.name || ui.asc.app)}</b> · Version <b>${esc(v?.version || "—")}</b> (${esc(v?.state || "")}). 
+        Upload lần lượt từng bộ ảnh (5–15 giây/bộ do Apple xử lý). Có thể bấm <b>Dừng lại</b> bất kỳ lúc nào mà không mất các bộ đã đẩy xong.
+      </div>
+
+      <div class="row small" style="gap:8px;flex-wrap:wrap">
+        <button type="button" class="btn sm ghost" data-act="bulk-sel" data-which="all">Chọn tất cả</button>
+        <button type="button" class="btn sm ghost" data-act="bulk-sel" data-which="todo">Chỉ bộ cần đẩy</button>
+        <button type="button" class="btn sm ghost" data-act="bulk-sel" data-which="iphone">Chỉ iPhone</button>
+        <button type="button" class="btn sm ghost" data-act="bulk-sel" data-which="ipad">Chỉ iPad</button>
+        <button type="button" class="btn sm ghost" data-act="bulk-sel" data-which="none">Bỏ chọn</button>
+        <span class="spacer"></span>
+        <label class="ov-pick small"><input type="checkbox" id="bulk-override-toggle" ${hasOverride ? "checked" : ""}> Ghi đè bộ ASC khác biệt</label>
+      </div>
+
+      <div id="bulk-progress-wrap" class="bulk-progress" style="display:none">
+        <div class="row small"><b id="bulk-status-text">Đang chuẩn bị...</b><span class="spacer"></span><span id="bulk-count-text" class="faint">0 / 0</span></div>
+        <div class="progress-track"><div id="bulk-progress-bar" class="progress-fill" style="width:0%"></div></div>
+      </div>
+
+      <div class="table-wrap" style="max-height:48vh;border:1px solid var(--border);border-radius:var(--r-md)">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:36px"><input type="checkbox" id="bulk-check-all" ${initialCheckedCount === sets.filter(s => s.remote_exists).length && initialCheckedCount > 0 ? "checked" : ""}></th>
+              <th>Locale</th>
+              <th>Thiết bị</th>
+              <th>Ảnh local</th>
+              <th>Trạng thái ASC</th>
+              <th style="width:140px">Tiến trình</th>
+            </tr>
+          </thead>
+          <tbody id="bulk-tbody">
+            ${sets.map((s) => {
+              const checked = s.status !== "same" && s.remote_exists;
+              return `<tr data-bulk-key="${esc(s.key)}" class="${checked ? "on" : ""}">
+                <td><input type="checkbox" class="bulk-item-check" data-key="${esc(s.key)}" ${checked ? "checked" : ""} ${s.remote_exists ? "" : "disabled"}></td>
+                <td><b>${esc(s.locale)}</b>${s.tier ? ` <span class="tag">T${s.tier}</span>` : ""}</td>
+                <td>${esc(s.label)}</td>
+                <td class="small">${s.local_count} ảnh</td>
+                <td>${s.remote_exists ? `<span class="fchip s-${s.status}">${esc(ST[s.status]?.[0] || s.status)}</span>` : '<span class="pill warn" style="height:20px" title="Version trên ASC chưa có locale này. Cần đẩy metadata trước.">Chưa có metadata</span>'}</td>
+                <td class="small bulk-item-status" data-key="${esc(s.key)}"><span class="faint">Chờ</span></td>
+              </tr>`;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout small" style="margin-top:2px">
+        ${icon("info")}<div>Ảnh cũ của bộ được thay sẽ xoá trước khi upload ảnh mới. Bản gốc luôn an toàn trong repo máy bạn.</div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <span id="bulk-summary" class="small faint" style="margin-right:auto">Đã chọn <b>${initialCheckedCount}</b> / ${sets.length} bộ</span>
+      <button type="button" class="btn ghost" data-act="close-modal" id="bulk-cancel-btn">Huỷ</button>
+      <button type="button" class="btn bad" data-act="asc-bulk-stop" id="bulk-stop-btn" style="display:none">${icon("x")}Dừng lại</button>
+      <button type="button" class="btn primary" data-act="asc-bulk-start" id="bulk-start-btn" ${initialCheckedCount ? "" : "disabled"}>${icon("upload")}Bắt đầu đẩy (${initialCheckedCount} bộ)</button>
+      <button type="button" class="btn primary" data-act="asc-bulk-done" id="bulk-done-btn" style="display:none">${icon("check")}Đóng & Cập nhật</button>
+    </div>
+  `;
+  openModal(html, "wide");
+}
+
+function updateBulkSummary() {
+  const checks = Array.from(document.querySelectorAll(".bulk-item-check:not(:disabled)"));
+  const checked = checks.filter((c) => c.checked);
+  const n = checked.length;
+  const total = ui.asc.bulkSets ? ui.asc.bulkSets.length : checks.length;
+  const sumEl = $("#bulk-summary");
+  if (sumEl) sumEl.innerHTML = `Đã chọn <b>${n}</b> / ${total} bộ`;
+  const btn = $("#bulk-start-btn");
+  if (btn) {
+    btn.innerHTML = `${icon("upload")}Bắt đầu đẩy (${n} bộ)`;
+    btn.disabled = n === 0;
+  }
+  const allBox = $("#bulk-check-all");
+  if (allBox && checks.length) {
+    allBox.checked = n === checks.length;
+    allBox.indeterminate = n > 0 && n < checks.length;
+  }
+  document.querySelectorAll("#bulk-tbody tr").forEach((tr) => {
+    const ch = tr.querySelector(".bulk-item-check");
+    if (ch) tr.classList.toggle("on", ch.checked);
+  });
+}
+
+function ascBulkSelect(which) {
+  if (ui.asc.bulkRunning) return;
+  const sets = ui.asc.bulkSets || [];
+  document.querySelectorAll(".bulk-item-check").forEach((ch) => {
+    if (ch.disabled) return;
+    const key = ch.dataset.key;
+    const s = sets.find((item) => item.key === key);
+    if (!s) return;
+    let ok = false;
+    if (which === "all") ok = true;
+    else if (which === "none") ok = false;
+    else if (which === "todo") ok = s.status !== "same";
+    else if (which === "iphone") ok = s.display_type === "APP_IPHONE_67";
+    else if (which === "ipad") ok = s.display_type === "APP_IPAD_PRO_3GEN_129";
+    ch.checked = ok;
+  });
+  updateBulkSummary();
+}
+
+async function ascBulkStart(btn) {
+  const checks = Array.from(document.querySelectorAll(".bulk-item-check:checked"));
+  const sets = ui.asc.bulkSets || [];
+  const queue = checks.map((c) => sets.find((s) => s.key === c.dataset.key)).filter(Boolean);
+  if (!queue.length) return toast("Chưa chọn bộ screenshot nào", "err");
+
+  ui.asc.bulkRunning = true;
+  ui.asc.bulkCancel = false;
+
+  const closeBtn = $("#bulk-close-btn");
+  if (closeBtn) closeBtn.disabled = true;
+  const cancelBtn = $("#bulk-cancel-btn");
+  if (cancelBtn) cancelBtn.style.display = "none";
+  if (btn) btn.style.display = "none";
+  const stopBtn = $("#bulk-stop-btn");
+  if (stopBtn) {
+    stopBtn.style.display = "";
+    stopBtn.disabled = false;
+    stopBtn.innerHTML = `${icon("x")}Dừng lại`;
+  }
+  document.querySelectorAll(".bulk-item-check, [data-act='bulk-sel'], #bulk-check-all, #bulk-override-toggle").forEach((el) => { el.disabled = true; });
+  const progWrap = $("#bulk-progress-wrap");
+  if (progWrap) progWrap.style.display = "";
+
+  const override = $("#bulk-override-toggle")?.checked ?? true;
+  let success = 0, failed = 0;
+  const total = queue.length;
+
+  for (let i = 0; i < total; i++) {
+    if (ui.asc.bulkCancel) break;
+
+    const item = queue[i];
+    const rowEl = document.querySelector(`tr[data-bulk-key="${item.key}"]`);
+    const statusCell = document.querySelector(`td.bulk-item-status[data-key="${item.key}"]`);
+
+    const pct = Math.round((i / total) * 100);
+    const bar = $("#bulk-progress-bar");
+    if (bar) bar.style.width = `${pct}%`;
+    const countText = $("#bulk-count-text");
+    if (countText) countText.textContent = `${i + 1} / ${total} (${pct}%)`;
+    const statusText = $("#bulk-status-text");
+    if (statusText) statusText.innerHTML = `<span class="spinner"></span>Đang upload <b>${esc(item.locale)}</b> · ${esc(item.label)}…`;
+    if (statusCell) statusCell.innerHTML = `<span class="pill" style="color:var(--accent)"><span class="spinner"></span>Upload…</span>`;
+    if (rowEl) rowEl.scrollIntoView({ block: "nearest", behavior: "smooth" });
+
+    try {
+      const res = await api("/api/appstore/screenshots", {
+        method: "POST",
+        body: {
+          app: ui.asc.app,
+          locale: item.locale,
+          display_type: item.display_type,
+          dry_run: false,
+          override: override,
+        },
+      });
+      success++;
+      if (statusCell) statusCell.innerHTML = `<span class="pill good">${icon("check")}Xong (${res.uploaded || item.local_count})</span>`;
+    } catch (err) {
+      failed++;
+      if (statusCell) statusCell.innerHTML = `<span class="pill bad" title="${esc(err.message)}">${icon("x")}Lỗi: ${esc(err.message)}</span>`;
+    }
+
+    if (i < total - 1 && !ui.asc.bulkCancel) {
+      await new Promise((r) => setTimeout(r, 400));
+    }
+  }
+
+  ui.asc.bulkRunning = false;
+  if (stopBtn) stopBtn.style.display = "none";
+  const doneBtn = $("#bulk-done-btn");
+  if (doneBtn) doneBtn.style.display = "";
+  if (closeBtn) closeBtn.disabled = false;
+
+  const bar = $("#bulk-progress-bar");
+  const countText = $("#bulk-count-text");
+  const statusText = $("#bulk-status-text");
+
+  if (ui.asc.bulkCancel) {
+    if (statusText) statusText.innerHTML = `Đã dừng. Đã upload <b>${success}</b> / ${total} bộ.${failed ? ` (${failed} lỗi)` : ""}`;
+    toast(`Đã dừng upload: ${success} bộ thành công`, "warn");
+  } else {
+    if (bar) bar.style.width = "100%";
+    if (countText) countText.textContent = `${total} / ${total} (100%)`;
+    if (statusText) statusText.innerHTML = `Hoàn tất! Đã upload <b>${success}</b> / ${total} bộ.${failed ? ` (${failed} lỗi)` : ""}`;
+    toast(`Đã đẩy ${success}/${total} bộ screenshot`, failed ? "warn" : "ok", "Apple mất vài phút để xử lý và hiện ảnh trên store.");
+  }
+}
+
+function ascBulkStop() {
+  ui.asc.bulkCancel = true;
+  const btn = $("#bulk-stop-btn");
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner"></span>Đang dừng...`;
+  }
+}
 async function ascAccept(locale, fields, btn) {
   await busy(btn, () => api("/api/appstore/accept", { method: "POST", body: { app: ui.asc.app, locale, fields } }));
   fields.forEach((k) => ui.asc.override.delete(ascKey(locale, k)));
@@ -941,9 +1226,9 @@ function emptyState(ic, h, p, cta = "") {
 }
 
 /* ---------- modals ---------- */
-function openModal(html) {
+function openModal(html, cls = "") {
   const m = $("#modal");
-  m.innerHTML = `<div class="modal" role="dialog">${html}</div>`;
+  m.innerHTML = `<div class="modal ${cls}" role="dialog">${html}</div>`;
   m.hidden = false;
   setTimeout(() => $("input,select,textarea", m)?.focus(), 30);
 }
@@ -1022,7 +1307,7 @@ document.addEventListener("click", async (e) => {
     return render();
   }
   if (e.target.classList.contains("drawer-layer")) { location.hash = `#/${current().route.path}`; return; }
-  if (e.target.classList.contains("modal-layer")) return closeLayer("#modal");
+  if (e.target.classList.contains("modal-layer")) { if (!ui.asc.bulkRunning) closeLayer("#modal"); return; }
   const btn = e.target.closest("[data-act]");
   if (!btn) return;
   const a = btn.dataset;
@@ -1031,7 +1316,7 @@ document.addEventListener("click", async (e) => {
     switch (a.act) {
       case "close-drawer": location.hash = `#/${current().route.path}`; break;
       case "asc-refresh": await ascLoad(true, btn); break;
-      case "asc-app": ui.asc.app = a.app; ui.asc.data = null; ui.asc.error = null; ui.asc.products = null; ui.asc.sel.clear(); ui.asc.override.clear(); render(); break;
+      case "asc-app": ui.asc.app = a.app; ui.asc.data = null; ui.asc.error = null; ui.asc.products = null; ui.asc.sel.clear(); ui.asc.override.clear(); ui.asc.bulkRunning = false; ui.asc.bulkCancel = false; render(); break;
       case "asc-tab": ui.asc.tab = a.tab; render(); break;
       case "asc-sel-all": ascVisible().forEach((r) => ui.asc.sel.add(r.locale)); render(); break;
       case "asc-sel-none": ui.asc.sel.clear(); render(); break;
@@ -1040,6 +1325,11 @@ document.addEventListener("click", async (e) => {
       case "asc-push-go": await ascPushGo(btn); break;
       case "asc-shots": await ascShots(a.locale, btn, a.displayType); break;
       case "asc-shots-go": await ascShotsGo(a.locale, !!a.override, btn, a.displayType); break;
+      case "asc-bulk-shots": ascBulkShots(); break;
+      case "asc-bulk-start": await ascBulkStart(btn); break;
+      case "asc-bulk-stop": ascBulkStop(); break;
+      case "asc-bulk-done": closeLayer("#modal"); await ascLoad(false); break;
+      case "bulk-sel": ascBulkSelect(btn.dataset.which); break;
       case "asc-accept": await ascAccept(a.locale, a.fields.split(","), btn); break;
       case "asc-import": await ascImport(btn); break;
       case "asc-discover": await ascDiscover(btn); break;
@@ -1052,7 +1342,12 @@ document.addEventListener("click", async (e) => {
         ui.asc.products = await busy(btn, () => api("/api/appstore/products", { method: "POST", body: { app: ui.asc.app } }));
         render(); break;
       }
-      case "close-modal": closeLayer("#modal"); break;
+      case "close-modal":
+        if (!ui.asc.bulkRunning) {
+          closeLayer("#modal");
+          if ($("#bulk-done-btn") && $("#bulk-done-btn").style.display !== "none") await ascLoad(false);
+        }
+        break;
       case "copy": await navigator.clipboard.writeText(a.text); toast("Đã copy"); break;
       case "copy-area": await navigator.clipboard.writeText(btn.closest(".field").querySelector("textarea").value); toast("Đã copy caption"); break;
       case "reveal": await api("/api/reveal", { method: "POST", body: { path: a.path } }); break;
@@ -1102,6 +1397,16 @@ document.addEventListener("input", (e) => {
   }
 });
 document.addEventListener("change", (e) => {
+  if (e.target.id === "bulk-check-all") {
+    const val = e.target.checked;
+    document.querySelectorAll(".bulk-item-check:not(:disabled)").forEach((ch) => { ch.checked = val; });
+    updateBulkSummary();
+    return;
+  }
+  if (e.target.classList.contains("bulk-item-check")) {
+    updateBulkSummary();
+    return;
+  }
   if (e.target.dataset.ascSel) { e.target.checked ? ui.asc.sel.add(e.target.dataset.ascSel) : ui.asc.sel.delete(e.target.dataset.ascSel); render(); }
   if (e.target.dataset.ascOv) {
     e.target.checked ? ui.asc.override.add(e.target.dataset.ascOv) : ui.asc.override.delete(e.target.dataset.ascOv);
@@ -1167,7 +1472,13 @@ document.addEventListener("submit", async (e) => {
 });
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") { if (!$("#modal").hidden) closeLayer("#modal"); else if (!$("#drawer").hidden) location.hash = `#/${current().route.path}`; }
+  if (e.key === "Escape") {
+    if (!$("#modal").hidden) {
+      if (!ui.asc.bulkRunning) closeLayer("#modal");
+    } else if (!$("#drawer").hidden) {
+      location.hash = `#/${current().route.path}`;
+    }
+  }
   if (e.key === "r" && !e.metaKey && !e.ctrlKey && !e.target.closest("input,textarea,select")) load();
 });
 
