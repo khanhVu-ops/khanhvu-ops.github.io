@@ -28,6 +28,8 @@ Các đường dẫn giữ nguyên để app đã phát hành không cần đổ
 
 ### URL dùng cho Paper Drift
 
+Từ bản 1.1 (28/10/2026), game đổi tên thành **Paper Lagoon** (tên App Store `Paper Lagoon: Logic Puzzle`, app id 6820811705). Copy trên website đã dùng tên mới; trang game ghi "Formerly Paper Drift" một lần. URL, anchor `#paper-drift`, thư mục `assets/paper-drift/` và `app-ads.txt` giữ nguyên.
+
 | Mục đích | URL |
 |---|---|
 | Marketing URL | https://khanhvu-ops.github.io/paper-drift.html |
