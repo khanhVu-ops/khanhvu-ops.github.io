@@ -7,7 +7,7 @@ Website tĩnh của Khanh Vu, dùng chung cho các ứng dụng liên kết tớ
 - Thương hiệu: **KV Apps**; slogan **Small apps. Everyday joy.**; liên hệ công khai `khanhvu.dev@gmail.com`.
 - **Veilnest:** App Store US lookup xác nhận version 1.3, seller Van Khanh Vu và ID `6813747332` ngày 18/10/2026. Trang chủ dùng link tải chính xác; support và privacy có anchor `#veilnest`. Copy về vault/PIN/calculator dựa trên listing này; thông tin Firebase dựa trên bootstrap, analytics service và package configuration của repo IOS-Vault.
 - **Color Meter:** thêm icon gốc, mô tả chức năng và anchor hỗ trợ `#color-meter`. Chưa xác nhận listing App Store riêng, nên không tạo link tải hoặc nhãn đã phát hành.
-- **Paper Drift:** giữ trạng thái đang phát triển và trang riêng. Support, terms và marketing phân biệt gameplay offline với các dịch vụ ads, purchases và analytics đã mô tả trong privacy.
+- **Paper Lagoon:** đã có trên App Store cho iPhone/iPad, ID `6820811705`. Apple US Lookup ngày 17/11/2026 xác nhận bản **1.3, 600 màn và 20 đảo**. Trang chủ và trang game có CTA tải trực tiếp; marketing, support, terms và privacy đã bỏ trạng thái đang phát triển cùng nội dung kinh tế/ảnh v5 cũ. [Hồ sơ app](../apps/paper-drift.md).
 - Icon sản phẩm được sao chép từ asset catalog của app. `assets/kv-apps.svg` là favicon studio trên cả 6 trang, cùng apple-touch icon `assets/kv-apps-avatar.png`. Logo mảnh ghép mới xuất hiện ở header/back-link và hero trang chủ; Paper Drift giữ icon sản phẩm riêng trong nội dung. Ảnh chia sẻ studio dùng `assets/kv-apps-social-cover.jpg` từ bộ social-kit; trang game giữ ảnh chia sẻ sản phẩm.
 
 Thông tin tài khoản/chủ sở hữu và các bước social còn lại được quản lý tại [sổ tài khoản](../social/ACCOUNTS.md), không cập nhật song song trong hướng dẫn website.
@@ -26,9 +26,9 @@ Thông tin tài khoản/chủ sở hữu và các bước social còn lại đư
 
 Các đường dẫn giữ nguyên để app đã phát hành không cần đổi link. Các trang public viết bằng tiếng Anh; hỗ trợ qua email nhận tiếng Anh hoặc tiếng Việt.
 
-### URL dùng cho Paper Drift
+### URL dùng cho Paper Lagoon
 
-Từ bản 1.1 (28/10/2026), game đổi tên thành **Paper Lagoon** (tên App Store `Paper Lagoon: Logic Puzzle`, app id 6820811705). Copy trên website đã dùng tên mới; trang game ghi "Formerly Paper Drift" một lần. URL, anchor `#paper-drift`, thư mục `assets/paper-drift/` và `app-ads.txt` giữ nguyên.
+Từ bản 1.1, game đổi tên thành **Paper Lagoon** (tên App Store `Paper Lagoon: Logic Puzzle`, app ID `6820811705`). Bản 1.3 đã phát hành ngày 17/11/2026. URL, anchor `#paper-drift`, thư mục `assets/paper-drift/` và `app-ads.txt` giữ nguyên để các app đã cài tiếp tục dùng được link cũ.
 
 | Mục đích | URL |
 |---|---|
@@ -37,11 +37,13 @@ Từ bản 1.1 (28/10/2026), game đổi tên thành **Paper Lagoon** (tên App 
 | Support URL | https://khanhvu-ops.github.io/support.html#paper-drift |
 | Terms | https://khanhvu-ops.github.io/terms.html#paper-drift |
 
-Paper Drift 1.0.0 đang phát triển: save local, không account/cloud sync; AdMob/UMP và StoreKit đã tích hợp, cả hai config ads bật Google test IDs. Đã thêm cấu hình Firebase và bật Analytics ngày 09/10; ATT dùng hộp thoại iOS sau opening, trước khi khởi tạo quảng cáo. Firebase ad storage/user data/personalization bị từ chối trong integration hiện tại; Analytics đo usage độc lập ATT. SDK đã ghi nhận upload thành công trong QA Debug. Privacy đã nêu các provider, dữ liệu/choices thật, nhắc thư local, purchase ledger và giới hạn khôi phục. Không có analytics opt-out trong app hiện tại. App Store privacy answers và privacy report phải đối chiếu archive sẽ phát hành; cập nhật privacy không tự bật cấu hình production. Support/Terms/marketing đã bỏ các khẳng định cũ rằng app chưa tích hợp ads/purchases và website có language switch. Vẫn cần đối chiếu lựa chọn sản phẩm và giá theo archive phát hành. Không thay seller ID trong `app-ads.txt`.
+Paper Lagoon 1.3: save local, không account/cloud sync; AdMob/UMP, StoreKit, Firebase Analytics và Firebase Remote Config. Bản Debug dùng test ads, bản Release dùng cấu hình quảng cáo phát hành và Remote Config. Privacy mô tả dữ liệu lưu trên máy, lựa chọn quảng cáo/ATT, analytics, cấu hình từ xa và giới hạn khôi phục. Không có analytics opt-out trong app hiện tại; mua No Ads hoặc từ chối ATT không tự tắt usage analytics. Gameplay không cần mạng; video thưởng và IAP cần mạng. Việc cập nhật website không thay đổi App Store Connect hoặc cấu hình provider. Không thay seller ID trong `app-ads.txt`.
+
+**Ảnh cập nhật 17/11/2026:** `assets/paper-drift/icon-1.3.png`, `gameplay-1.3.webp` và `journey-1.3.webp` lấy từ icon/capture tiếng Anh của repo PaperLagoon (`store-assets/screenshots/source/art/v6/` và `raw-v6/`). Các asset cũ vẫn được giữ để URL đã chia sẻ tiếp tục tồn tại. Không thêm trang public hoặc thay cách deploy.
 
 **Thiết kế (18/10/2026):** các trang studio (index, support, privacy, terms, how-to) dùng chung `assets/site.css`: màu lấy từ logo KV, tự đổi sáng/tối theo hệ thống, header/footer chung, chuyển trang bằng CSS View Transitions, hiện dần khi cuộn bằng scroll-driven animations. Tất cả là CSS, không có JavaScript, font web hay CDN; trình duyệt không hỗ trợ chỉ bỏ qua hiệu ứng, và `prefers-reduced-motion` tắt mọi chuyển động. Paper Drift giữ CSS riêng theo nhận diện game, chỉ thêm cùng kiểu chuyển trang và hiệu ứng nhẹ. Khi thêm trang studio mới: dùng header/footer giống các trang hiện có, nội dung đặt trong `<main class="doc"><div class="container">`.
 
-`index.html` giới thiệu Veilnest, Color Meter và Paper Drift; `paper-drift.html` là trang marketing riêng với icon và ảnh native từ project game. Asset được giữ local trong `assets/`; site không thêm script analytics, font/CDN hay embed bên thứ ba.
+`index.html` giới thiệu Veilnest, Color Meter và Paper Lagoon; `paper-drift.html` là trang marketing riêng với icon và ảnh native từ project game. Asset được giữ local trong `assets/`; site không thêm script analytics, font/CDN hay embed bên thứ ba.
 
 ## Phạm vi nội dung
 
