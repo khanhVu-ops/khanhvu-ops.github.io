@@ -5,10 +5,11 @@ Website tĩnh của Khanh Vu, dùng chung cho các ứng dụng liên kết tớ
 ## Nhận diện và danh mục
 
 - Thương hiệu: **KV Apps**; slogan **Small apps. Everyday joy.**; liên hệ công khai `khanhvu.dev@gmail.com`.
+- **Paper Lagoon là sản phẩm chủ đạo từ 17/11/2026:** hero trang chủ dùng icon, gameplay thật và CTA App Store của game. Card game đứng đầu danh sách; link game đứng trước Veilnest ở footer toàn site. Title, mô tả SEO và ảnh chia sẻ trang chủ cũng ưu tiên Paper Lagoon.
 - **Veilnest:** App Store US lookup xác nhận version 1.3, seller Van Khanh Vu và ID `6813747332` ngày 18/10/2026. Trang chủ dùng link tải chính xác; support và privacy có anchor `#veilnest`. Copy về vault/PIN/calculator dựa trên listing này; thông tin Firebase dựa trên bootstrap, analytics service và package configuration của repo IOS-Vault.
-- **Color Meter:** thêm icon gốc, mô tả chức năng và anchor hỗ trợ `#color-meter`. Chưa xác nhận listing App Store riêng, nên không tạo link tải hoặc nhãn đã phát hành.
+- **Color Meter:** chưa phát hành; đã gỡ khỏi website công khai theo yêu cầu chủ app ngày 17/11/2026, gồm card, icon giới thiệu, navigation, footer, FAQ và mục privacy riêng. Hai anchor rỗng `support.html#color-meter` / `privacy.html#color-meter` giữ tương thích link cũ. Hồ sơ nội bộ và asset cũ vẫn còn trong repo.
 - **Paper Lagoon:** đã có trên App Store cho iPhone/iPad, ID `6820811705`. Apple US Lookup ngày 17/11/2026 xác nhận bản **1.3, 600 màn và 20 đảo**. Trang chủ và trang game có CTA tải trực tiếp; marketing, support, terms và privacy đã bỏ trạng thái đang phát triển cùng nội dung kinh tế/ảnh v5 cũ. [Hồ sơ app](../apps/paper-drift.md).
-- Icon sản phẩm được sao chép từ asset catalog của app. `assets/kv-apps.svg` là favicon studio trên cả 6 trang, cùng apple-touch icon `assets/kv-apps-avatar.png`. Logo mảnh ghép mới xuất hiện ở header/back-link và hero trang chủ; Paper Drift giữ icon sản phẩm riêng trong nội dung. Ảnh chia sẻ studio dùng `assets/kv-apps-social-cover.jpg` từ bộ social-kit; trang game giữ ảnh chia sẻ sản phẩm.
+- Icon sản phẩm được sao chép từ asset catalog của app. `assets/kv-apps.svg` là favicon studio trên cả 6 trang, cùng apple-touch icon `assets/kv-apps-avatar.png`. Logo studio xuất hiện ở header/back-link. Trang chủ và trang game dùng icon Paper Lagoon làm ảnh chia sẻ; các trang hỗ trợ/pháp lý/how-to dùng studio avatar. Cover cũ có Color Meter không còn được tham chiếu trong HTML.
 
 Thông tin tài khoản/chủ sở hữu và các bước social còn lại được quản lý tại [sổ tài khoản](../social/ACCOUNTS.md), không cập nhật song song trong hướng dẫn website.
 
@@ -43,15 +44,15 @@ Paper Lagoon 1.3: save local, không account/cloud sync; AdMob/UMP, StoreKit, Fi
 
 **Thiết kế (18/10/2026):** các trang studio (index, support, privacy, terms, how-to) dùng chung `assets/site.css`: màu lấy từ logo KV, tự đổi sáng/tối theo hệ thống, header/footer chung, chuyển trang bằng CSS View Transitions, hiện dần khi cuộn bằng scroll-driven animations. Tất cả là CSS, không có JavaScript, font web hay CDN; trình duyệt không hỗ trợ chỉ bỏ qua hiệu ứng, và `prefers-reduced-motion` tắt mọi chuyển động. Paper Drift giữ CSS riêng theo nhận diện game, chỉ thêm cùng kiểu chuyển trang và hiệu ứng nhẹ. Khi thêm trang studio mới: dùng header/footer giống các trang hiện có, nội dung đặt trong `<main class="doc"><div class="container">`.
 
-`index.html` giới thiệu Veilnest, Color Meter và Paper Lagoon; `paper-drift.html` là trang marketing riêng với icon và ảnh native từ project game. Asset được giữ local trong `assets/`; site không thêm script analytics, font/CDN hay embed bên thứ ba.
+`index.html` giới thiệu Paper Lagoon trước, sau đó Veilnest; `paper-drift.html` là trang marketing riêng với icon và ảnh native từ project game. Asset được giữ local trong `assets/`; site không thêm script analytics, font/CDN hay embed bên thứ ba.
 
 ## Phạm vi nội dung
 
 - **how-to-hide-photos-iphone.html** (18/10/2026): hướng dẫn Hidden album theo [Apple](https://support.apple.com/en-us/104987), giới hạn của nó, rồi Veilnest. Claim Veilnest chỉ lấy từ listing **1.3 đang live** (không nhắc Share extension hay backup cho tới khi bản đó phát hành). Ảnh là screenshot store en-US thu nhỏ trong `assets/veilnest/`. Có JSON-LD `Article` (dữ liệu, không phải script chạy). Thêm trang mới thì thêm vào `sitemap.xml`; `check-site.py` báo lỗi nếu thiếu.
 
-- **privacy.html**: nội dung local và permission; Apple IAP; AdMob/ATT/consent; email hỗ trợ/hosting; retention, deletion và quyền người dùng. Những tính năng tuỳ chọn chỉ áp dụng cho app có tính năng đó. Có mục riêng `#color-meter` dựa trên implementation đã kiểm tra.
+- **privacy.html**: nội dung local và permission; Apple IAP; AdMob/ATT/consent; email hỗ trợ/hosting; retention, deletion và quyền người dùng. Những tính năng tuỳ chọn chỉ áp dụng cho app có tính năng đó. Có notice riêng Paper Lagoon và Veilnest.
 - **terms.html**: cho phép công việc cá nhân và thương mại, quyền với nội dung đầu ra, IAP/subscription/lifetime, restore/refund, quảng cáo, consumer rights. Apple Standard EULA là mặc định trừ khi app có custom EULA được cấu hình riêng.
-- **support.html**: hướng dẫn liên hệ, restore/cancel/refund, local data/backup, permissions, PIN chỉ nếu app có, FAQ riêng Color Meter.
+- **support.html**: FAQ Paper Lagoon đứng trước Veilnest, cùng hướng dẫn liên hệ, restore/cancel/refund, local data/backup, permissions và PIN nếu app có.
 - **index.html**: giới thiệu studio, không khẳng định mọi app là vault, dùng SwiftUI, mã hoá riêng hoặc không có tracking. Không dùng badge tải app dẫn tới trang App Store chung khi chưa có listing cụ thể được xác nhận.
 - **app-ads.txt**: thông tin seller hiện có; không đổi trong lần sửa nội dung này.
 
@@ -102,7 +103,7 @@ Sau deploy, kiểm tra HTTPS và nội dung mới tại ba URL pháp lý/hỗ tr
 
 Các nội dung này không phải xác nhận Apple/Google đã duyệt ứng dụng. Khi tính năng hoặc SDK thay đổi, kiểm tra lại chính sách và khai báo tương ứng.
 
-Color Meter privacy notice also covers Firebase Analytics, Crashlytics and Remote Config, including in-app usage/crash opt-out controls. Publish the updated policy together with the app version that enables Firebase.
+Color Meter chưa phát hành và đã được gỡ khỏi website ngày 17/11/2026. Khi app được giới thiệu lại, phải đối chiếu notice với bản phát hành thực, gồm Firebase Analytics, Crashlytics, Remote Config và các lựa chọn analytics/diagnostics nếu có.
 
 ## Website language
 
